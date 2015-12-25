@@ -15,10 +15,9 @@ var config = {
                             case 2 : monsterConfig.pos = [1280 - monsterConfig.sprite[2][0], Math.round( Math.random() * 720)]; break;
                             case 3 : monsterConfig.pos = [Math.round(  Math.random() * 1280), 720 - monsterConfig.sprite[2][1]]; break;
                         }
-                        monsterConfig.id = 'monster' + this.parameters.monsterSpawned;
+                        monsterConfig.id = 'monster' + this.parameters.monsterSpawned++;
                         monsterConfig.layer = this.context;
                         this.context.addObject(monsterConfig);
-                        this.parameters.monsterSpawned++;
 
                         this.parameters.currentMonsterCooldown = this.parameters.monsterCooldown;
 
@@ -26,13 +25,12 @@ var config = {
                         this.parameters.currentMonsterCooldown--;
                     }
                 }
-
             },
             parameters : {
                 currentMonsterCooldown : 0,
-                monsterCooldown : 10,
+                monsterCooldown : 5,
                 monsterSpawned : 0,
-                totalMonsters : 100
+                totalMonsters : 500
             }
         },
         playerDeath: {

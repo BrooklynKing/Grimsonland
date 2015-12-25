@@ -43,7 +43,7 @@ var config = {
 				degreeRotation : 1,
 				bulletsFired : 0,
 				cooldown : 70 ,
-				fireCooldown : 10,
+				fireCooldown : 20,
 				power : 5,
 				health : 30
 			},

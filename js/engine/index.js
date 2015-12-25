@@ -50,9 +50,6 @@ function createGame(config) {
         game.update(dt);
         game.render(dt);
 
-        /*ctx.font = 'bold 30px sans-serif';
-        ctx.fillStyle = "#FFF";
-        ctx.fillText(score, 10, 35);*/
         lastTime = now;
         requestAnimFrame(gameTimer);
     }
