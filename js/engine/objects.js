@@ -1,0 +1,387 @@
+import resources from './resources';
+import utils from './utils';
+import Sprite from './sprite';
+
+function GameObject(config) {
+	this.pos = utils.clone(config.pos);
+	this.id = config.id || 'object' + this.pos[0] + this.pos[1];
+	this.sprite = new Sprite(config.sprite[0], config.sprite[1],config.sprite[2],config.sprite[3],config.sprite[4],config.sprite[5],config.sprite[6],config.sprite[7]);
+	this.type = config.type;
+	this.size = config.size || this.sprite.size;
+
+	this.callbacks = config.callbacks || {};
+	this.zIndex = config.zIndex || 0;
+	this.parameters = (config.parameters && utils.clone(config.parameters)) || {};
+	this._parameters = utils.clone(this.parameters);
+
+	this.rules = config.rules || [];
+	this._update = config.update;
+	this.customRender = config.render;
+	this._init = config.init;
+
+	this.inited = false;
+
+}
+GameObject.prototype.render = function(dt){
+	var ctx = this.layer.ctx;
+	ctx.save();
+	if (this.customRender ) {
+		this.customRender(dt);
+	} else {
+		ctx.translate(this.pos[0], this.pos[1]);
+		dt && this.sprite.update(dt);
+		this.sprite.render(ctx);
+	}
+	ctx.restore();
+};
+GameObject.prototype.init = function() {
+	if (!this.inited) {
+		this._init && this._init();
+
+		var rules = this.rules;
+		this.rules = [];
+
+		for (var i = 0, l = rules.length; i < l; i++) {
+			this.addRule(this.layer.game.rulesDefinition[rules[i]]);
+		}
+
+		this.inited = true;
+	}
+};
+GameObject.prototype.setLayer = function(layer){
+	this.layer = layer;
+};
+GameObject.prototype.update = function(dt){
+	this._update && this._update();
+	for (var i = 0; i < this.rules.length; i++) {
+		this.rules[i].update(dt, this);
+	}
+	if (this._removeInNextTick) {
+		this.layer.removeObject(this.id);
+		this._removeInNextTick = false;
+	}
+};
+GameObject.prototype.setPosition = function(point) {
+	this.pos[0] = point[0];
+	this.pos[1] = point[1];
+};
+GameObject.prototype.triggerAction = function(action, event, mouse) {
+	function checkHitBox(mouse) {
+		var flag = false;
+		(pos[0] < mouse.x) && (pos[0] + sprite.size[0] > mouse.x) && (pos[1] < mouse.y) && (pos[1] + sprite.size[1] > mouse.y) && (flag = true);
+		return flag;
+	}
+	switch(action) {
+		case 'click':
+			checkHitBox(mouse) && this.callbacks['click'] && this.callbacks['click'](this, event);
+			break;
+		case 'mousemove' :
+			checkHitBox(mouse) && this.callbacks['mousemove'] && this.callbacks['mousemove'](this, event);
+			!checkHitBox(mouse) && this.callbacks['mouseleave'] && this.callbacks['mouseleave'](this, event);
+			break;
+		default:
+			this.callbacks.hasOwnProperty(action) && this.callbacks[action](this, event)
+	}
+};
+GameObject.prototype.removeRule = function(id) {
+	if (this.rules.hasOwnProperty(id)){
+		this.rules[id].layer = null;
+		delete this.rules[id];
+	}
+};
+GameObject.prototype.addRule = function(config) {
+	if (this.rules.hasOwnProperty(config.id)) {
+		console.error('Rule with such id already exist in this layer');
+		return false;
+	} else {
+		var rule = new GameRule(config);
+		rule.setContext(this);
+		this.rules.push(rule);
+	}
+
+	return this.rules[config.id];
+}
+GameObject.prototype.addRules = function(configs) {
+	if (Array.isArray(configs)) {
+		for(var i = 0, j = configs.length; i < j; i++) {
+			this.addRule(configs[i]);
+		}
+	} else {
+		console.error('addRules expect array in parameters');
+	}
+}
+
+function GameRule(config) {
+	this.id = config.id;
+	this._update = config.update;
+	this.parameters = (config.parameters && utils.clone(config.parameters)) || {};
+	this._parameters = utils.clone(this.parameters);
+}
+GameRule.prototype.update = function(dt, obj) {
+	this._update && this._update(dt, obj);
+};
+GameRule.prototype.setContext = function(context) {
+	this.context = context;
+};
+
+function GameLayer(config) {
+	this.id = config.id;
+	this.ctx = config.ctx;
+	this.game = config.game;
+	this.background = this.ctx.createPattern(resources.get(config.background), 'repeat');
+	this.pos = config.pos || [0,0];
+	this.size = config.size || [config.ctx.canvas.width, config.ctx.canvas.height];
+	this.sortedObjects = {
+		'default' : []
+	};
+	//ctx = config.ctx,
+	this.objects = {};
+	this._rules = config.rules || [];
+	this.map = [];
+	this._init = config.init;
+	this.inited = false;
+}
+GameLayer.prototype.init = function() {
+	if (!this.inited) {
+		this._init && this._init();
+
+		var rules = this._rules;
+		this.rules = [];
+
+		for (var i = 0, l = rules.length; i < l; i++) {
+			this.addRule(this.game.rulesDefinition[rules[i]]);
+		}
+
+		this.inited = true;
+	}
+};
+GameLayer.prototype.render = function(dt){
+	var arr = [],
+		ctx = this.ctx,
+		canvas = ctx.canvas;
+
+	ctx.save();
+	ctx.beginPath();
+	ctx.rect(this.pos[0], this.pos[1], this.size[0], this.size[1]);
+	ctx.clip();
+	ctx.fillStyle = this.background;
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+	for (var i in this.objects) {
+		if (this.objects.hasOwnProperty(i)) {
+			(arr[this.objects[i].zIndex]) || (arr[this.objects[i].zIndex] = []);
+			arr[this.objects[i].zIndex].push(this.objects[i]);
+		}
+	}
+	for (var i = 0, l = arr.length; i < l; i++) {
+		if (arr[i]){
+			for (var j = 0, k = arr[i].length; j < k; j++) {
+				arr[i][j].render(dt);
+			}
+		}
+	}
+	ctx.beginPath();
+	ctx.strokeStyle = 'black';
+	ctx.shadowBlur = 15;
+	ctx.shadowColor = 'black';
+	ctx.lineWidth = 2;
+	ctx.shadowOffsetX = 0;
+	ctx.shadowOffsetY = 0;
+	ctx.rect(this.pos[0], this.pos[1], this.size[0], this.size[1]);
+	ctx.stroke();
+	ctx.restore();
+};
+GameLayer.prototype.update = function(dt){
+	for (var i in this.rules) {
+		this.rules.hasOwnProperty(i) && this.rules[i].update(dt, this);
+	}
+	for (var i in this.objects) {
+		var object = this.objects[i];
+
+		object.update(dt);
+	}
+};
+GameLayer.prototype.removeRule = function(id) {
+	if (this.rules.hasOwnProperty(id)){
+		this.rules[id].layer = null;
+		delete this.rules[id];
+	}
+}
+GameLayer.prototype.addRule = function(config) {
+	if (this.rules.hasOwnProperty(config.id)) {
+		console.error('Rule with such id already exist in this layer');
+		return false;
+	} else {
+		var rule = new GameRule(config);
+		rule.setContext(this);
+		this.rules.push(rule);
+	}
+	return this.rules[config.id];
+};
+GameLayer.prototype.addRules = function(rule) {
+	if (Array.isArray(rule)) {
+		for(var i = 0, j = rule.length; i < j; i++) {
+			this.addRule(rule[i]);
+		}
+	} else {
+		console.error('addRules expect array in parameters');
+	}
+};
+GameLayer.prototype.removeObject = function(id) {
+	if (this.objects.hasOwnProperty(id)){
+		this.objects[id].layer = null;
+		if (this.objects[id].type && this.objects[id].type != 'default') {
+			this.sortedObjects[this.objects[id].type].splice(this.sortedObjects[this.objects[id].type].indexOf(id), 1);
+		} else {
+			this.sortedObjects['default'].splice(this.sortedObjects['default'].indexOf(id), 1);
+		}
+		delete this.objects[id];
+	}
+};
+GameLayer.prototype.addObject = function(config) {
+	if (this.objects.hasOwnProperty(config.id)) {
+		console.error('Object with such id already exist in this layer: ', config.id);
+		return false;
+	}
+	config.id = config.id + Math.round(Date.now() + Math.random() * 1000001);
+
+		var _obj = new GameObject(config);
+		_obj.setLayer(this);
+		_obj.init();
+		if (config.type && config.type != 'default') {
+			(!this.sortedObjects[config.type]) && (this.sortedObjects[config.type] = []);
+			this.sortedObjects[config.type].push(config.id);
+		} else {
+			this.sortedObjects['default'].push(config.id);
+		}
+		this.objects[config.id] = _obj;
+
+
+	return this.objects[config.id];
+};
+GameLayer.prototype.addObjects = function(obj) {
+	if (Array.isArray(obj)) {
+		for(var i = 0, j = obj.length; i < j; i++) {
+			this.addObject(obj[i]);
+		}
+	} else {
+		console.error('addObjects expect array in parameters');
+	}
+};
+GameLayer.prototype.getObjectsByType = function(type) {
+	var objectsId = this.sortedObjects[type] || [],
+		result = [];
+	for (var i = 0, l = objectsId.length; i < l; i++){
+		result.push(this.objects[objectsId[i]]);
+	}
+	return result;
+};
+GameLayer.prototype.triggerAction = function(action, event, mouse) {
+	for (var i in this.objects) {
+		this.objects.hasOwnProperty(i) && this.objects[i].triggerAction(action, event, mouse);
+	}
+};
+GameLayer.prototype.clearLayer = function() {
+	for (var i in this.objects) {
+		this.objects.hasOwnProperty(i) && delete this.objects[i];
+	}
+	this.sortedObjects = {
+		'default' : [],
+	};
+	for (var i in this.rules) {
+		this.rules.hasOwnProperty(i) && delete this.rules[i];
+	}
+	this.inited = false;
+};
+GameLayer.prototype.getCoordinates = function() {
+	return [this.pos[0], this.pos[1], this.pos[0] + this.size[0], this.pos[1] + this.size[1]];
+};
+
+function GameWindow(config) {
+	this.layers = {};
+	this.ctx = config.ctx;
+	this.objectsDefinition = config.objects;
+	this.logicDefinition = config.logic;
+	this.rulesDefinition = config.rules;
+	this.layersDefinition = config.layers;
+	this._handlers = {};
+	this.parameters = {};
+	this._init = config.init;
+}
+GameWindow.prototype.init = function() {
+	this._init && this._init();
+};
+
+GameWindow.prototype.bindGlobalEvent = function(eventName, handler) {
+	(!this._handlers[eventName]) && (this._handlers[eventName] = []);
+	this._handlers[eventName].push(handler);
+
+	return this;
+};
+GameWindow.prototype.triggerGlobalEvent = function(eventName, eventObject) {
+	for ( var i = 0, l = (this._handlers[eventName])?this._handlers[eventName].length:0 ; i < l; i++) {
+		this._handlers[eventName][i].apply(this, Array.prototype.slice.call(arguments, 1));
+	}
+
+	return this;
+};
+GameWindow.prototype.triggerAction = function(action, event, mouse) {
+	for (var i in this.layers){
+		this.layers.hasOwnProperty(i) && this.layers[i].triggerAction(action, event, mouse);
+	}
+};
+GameWindow.prototype.getLayer = function() {
+	return this.layers;
+};
+GameWindow.prototype.update = function(dt) {
+	for (var i in this.layers) {
+		this.layers.hasOwnProperty(i) && this.layers[i].update(dt);
+	}
+};
+GameWindow.prototype.render = function(dt) {
+	for (var i in this.layers) {
+		this.layers.hasOwnProperty(i) && this.layers[i].render(dt);
+	}
+};
+GameWindow.prototype.removeLayer = function(id) {
+	this.layers.hasOwnProperty(id) && delete this.layers[id];
+};
+GameWindow.prototype.addLayers = function(obj) {
+	var arr = [];
+	if (Array.isArray(obj)) {
+		for(var i = 0, j = obj.length; i < j; i++) {
+			arr.push(this.addLayer(obj[i]));
+		}
+	} else {
+		console.error('addLayers expect array in parameters');
+	}
+	return arr;
+};
+GameWindow.prototype.addLayer = function(obj) {
+	if (this.layers.hasOwnProperty(obj.id)) {
+		console.error('Layer with such id already exist in this window');
+		return false;
+	} else {
+		obj.ctx = this.ctx;
+		obj.game = this;
+		this.layers[obj.id] = new GameLayer(obj);
+	}
+
+	return this.layers[obj.id];
+};
+GameWindow.prototype.getConfig = function(id) {
+	var obj = utils.clone(this.objectsDefinition[id]),
+		logic = this.logicDefinition[id];
+
+	for (var i in logic) {
+		logic.hasOwnProperty(i) && (obj[i] = logic[i]);
+	}
+
+	return obj;
+};
+GameWindow.prototype.getLayerConfig = function(id) {
+	var layer = this.layersDefinition[id];
+
+	return layer;
+};
+export default GameWindow
