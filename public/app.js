@@ -33,32 +33,33 @@ webpackJsonp_name_([0],[
 	canvas.width = 600;
 	canvas.height = 600;
 
-	var game = engine.default({
-		objects: _objectsConfig2.default,
-		logic: _logicConfig2.default,
-		rules: _rulesConfig2.default,
-		layers: _layerConfig2.default,
-		resources: _resourceList2.default,
-		canvas: canvas,
-		ctx: ctx,
-		init: function init() {
-			var game = this;
-			var mainLayer = game.addLayer(this.getLayerConfig('mainLayer'));
 
-			mainLayer.init();
-			game.bindGlobalEvent('player_dead', function (e) {
-				mainLayer.clearLayer();
-				mainLayer.init();
-			});
-		}
-	});
 
 	document.addEventListener("DOMContentLoaded",function () {
-		document.body.appendChild(canvas);
-		canvas = document.getElementsByTagName('canvas')[0];
-		canvas.focus();
+        document.body.appendChild(canvas);
+        canvas = document.getElementsByTagName('canvas')[0];
+        canvas.focus();
 
-		game.init();
+        var game = engine.default({
+            objects: _objectsConfig2.default,
+            logic: _logicConfig2.default,
+            rules: _rulesConfig2.default,
+            layers: _layerConfig2.default,
+            resources: _resourceList2.default,
+            canvas: canvas,
+            ctx: ctx,
+            init: function init() {
+                var game = this;
+                var mainLayer = game.addLayer(this.getLayerConfig('mainLayer'));
+                mainLayer.init();
+                game.bindGlobalEvent('player_dead', function (e) {
+                    mainLayer.clearLayer();
+                    mainLayer.init();
+                });
+            }
+        });
+
+        game.init();
 	});
 
 /***/ },

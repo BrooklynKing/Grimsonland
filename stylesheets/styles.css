@@ -322,3 +322,26 @@ footer {
     color:#444;
   }
 }
+
+canvas {
+  display: block;
+  margin: auto;
+  cursor: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.wrapper {
+  width: 512px;
+  margin: 0 auto;
+  margin-top: 2em;
+}
+
+#instructions {
+  float: left;
+  font-family: sans-serif;
+  color: #757575;
+}
