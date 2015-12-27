@@ -10,32 +10,32 @@ var canvas = document.createElement("canvas"),
 canvas.width = 600;
 canvas.height = 600;
 
-var game = engine.default({
-	objects: objects,
-	logic: logic,
-	rules: rules,
-	layers: layers,
-	resources: resources,
-	canvas: canvas,
-	ctx: ctx,
-	init: function() {
-		var game = this;
-		var mainLayer = game.addLayer(this.getLayerConfig('mainLayer'));
-
-		mainLayer.init();
-		game.bindGlobalEvent('player_dead', function(e) {
-			mainLayer.clearLayer();
-			mainLayer.init();
-		});
-	}
-});
-
-window.onload = function() {
+document.addEventListener("DOMContentLoaded", function() {
 	document.body.appendChild(canvas);
 	canvas = document.getElementsByTagName('canvas')[0];
 	canvas.focus();
 
+	var game = engine.default({
+		objects: objects,
+		logic: logic,
+		rules: rules,
+		layers: layers,
+		resources: resources,
+		canvas: canvas,
+		ctx: ctx,
+		init: function() {
+			var game = this;
+			var mainLayer = game.addLayer(this.getLayerConfig('mainLayer'));
+
+			mainLayer.init();
+			game.bindGlobalEvent('player_dead', function(e) {
+				mainLayer.clearLayer();
+				mainLayer.init();
+			});
+		}
+	});
+
 	game.init();
-}
+});
 
 

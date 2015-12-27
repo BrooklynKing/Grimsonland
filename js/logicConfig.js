@@ -4,9 +4,7 @@ var config = {
 	player : {
 		callbacks : {
 			'damage' : function(obj, event) {
-				console.log(event);
 				obj.parameters.health -= event.damage;
-				console.log(obj.parameters.health, event.damage);
 			},
 			'eclick' : function(obj, event){
 				if (obj.parameters.fireCooldown == 0) {

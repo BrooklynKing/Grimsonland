@@ -132,7 +132,6 @@ var config = {
         monsterHealthStatus : {
             update : function(dt, obj) {
                 if (obj.parameters.health <= 0 ) {
-                    console.log('DAMAGE');
                     obj._removeInNextTick = true;
                     obj.layer.game.triggerGlobalEvent(obj.type + '_killed');
                 }
