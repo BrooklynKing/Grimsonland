@@ -53,13 +53,13 @@ webpackJsonp_name_([0],[
 		}
 	});
 
-	window.onload = function () {
+	document.addEventListener("DOMContentLoaded",function () {
 		document.body.appendChild(canvas);
 		canvas = document.getElementsByTagName('canvas')[0];
 		canvas.focus();
 
 		game.init();
-	};
+	});
 
 /***/ },
 /* 1 */
