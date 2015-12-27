@@ -61,7 +61,6 @@ var config = {
 			}
 			if (this.parameters.direction.down) {
 				pos[1] = this.pos[1] + 1;
-				pos[0] = this.pos[0] - 0.01;
 			}
 			if (this.parameters.direction.up) {
 				pos[1] = this.pos[1] - 1;

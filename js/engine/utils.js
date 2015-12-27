@@ -45,18 +45,20 @@ function getMovedPointByDegree(point1, point2, degree) {
     return getDestination(point1, direction, Math.sqrt(Math.pow(point2[0] - point1[0], 2) + Math.pow(point2[1] - point1[1], 2)));
 }
 function getDirection(point1, point2) {
-    var k, b;
+    var k, b, dir;
 
     if (point1[0] == point2[0]) {
         k = 'vert';
+        dir = (point2[1] >= point1[1]) ? 1 : -1;
     } else {
-        k = (point2[1] - point1[1]) / (point2[0] - point1[0]),
-            b = point1[1] - point1[0] * k;
+        k = (point2[1] - point1[1]) / (point2[0] - point1[0]);
+        b = point1[1] - point1[0] * k;
+        dir = (point2[0] >= point1[0]) ? 1 : -1;
     }
     return {
         'k': k,
         'b': b,
-        'dir': (point2[0] > point1[0]) ? 1 : -1
+        'dir': dir
     }
 }
 
