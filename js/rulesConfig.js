@@ -66,7 +66,7 @@ var config = {
                 }
             }
         },
-        damageOnMonsterCollision : {
+        bulletMonsterCollision: {
             update: function(dt, obj) {
                 var monsters = obj.layer.getObjectsByType('monster');
 
@@ -75,17 +75,7 @@ var config = {
                         monsters[i].triggerAction('damage', {
                             damage: obj.parameters.power
                         });
-                        break;
-                    }
-                }
-            }
-        },
-        destroyOnMonsterCollision : {
-            update: function(dt, obj) {
-                var monsters = obj.layer.getObjectsByType('monster');
 
-                for (var i = 0, l = monsters.length; i < l; i++) {
-                    if(utils.boxCollides(obj.pos, obj.size, monsters[i].pos, monsters[i].size)) {
                         var	explosionConfig = obj.layer.game.getConfig('explosion');
                         explosionConfig.pos = monsters[i].pos;
                         explosionConfig.id = 'exp_' + monsters[i].id;
@@ -93,6 +83,7 @@ var config = {
                         obj.layer.addObject(explosionConfig);
 
                         obj._removeInNextTick = true;
+
                         break;
                     }
                 }
