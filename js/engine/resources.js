@@ -1,12 +1,12 @@
-var resources = (function() {
+var resources = (function () {
     var resourceCache = {};
     var loading = [];
     var readyCallback;
 
-    // Load an image url or an array of image urls
+// Load an image url or an array of image urls
     function load(urlOrArr) {
-        if(urlOrArr instanceof Array) {
-            urlOrArr.forEach(function(url) {
+        if (urlOrArr instanceof Array) {
+            urlOrArr.forEach(function (url) {
                 _load(url);
             });
         }
@@ -16,15 +16,15 @@ var resources = (function() {
     }
 
     function _load(url) {
-        if(resourceCache[url]) {
+        if (resourceCache[url]) {
             return resourceCache[url];
         }
         else {
             var img = new Image();
-            img.onload = function() {
+            img.onload = function () {
                 resourceCache[url] = img;
-                
-                if(isReady()) {
+
+                if (isReady()) {
                     readyCallback()
                 }
             };
@@ -39,9 +39,8 @@ var resources = (function() {
 
     function isReady() {
         var ready = true;
-        for(var k in resourceCache) {
-            if(resourceCache.hasOwnProperty(k) &&
-               !resourceCache[k]) {
+        for (var k in resourceCache) {
+            if (resourceCache.hasOwnProperty(k) && !resourceCache[k]) {
                 ready = false;
             }
         }
@@ -52,7 +51,7 @@ var resources = (function() {
         readyCallback = func;
     }
 
-    return { 
+    return {
         load: load,
         get: get,
         onReady: onReady,
