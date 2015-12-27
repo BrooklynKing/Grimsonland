@@ -59,7 +59,7 @@ var config = {
 				power : 10,
 				speed: 350
 			},
-			rules : ['destroyAfterLeavingLayer', 'moveToDirection', 'damageOnMonsterCollision', 'destroyOnMonsterCollision']
+			rules : ['destroyAfterLeavingLayer', 'moveToDirection', 'bulletMonsterCollision']
 		},
 		mbullet : {
 			zIndex : 2,
