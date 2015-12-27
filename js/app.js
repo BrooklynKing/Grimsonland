@@ -10,11 +10,6 @@ var canvas = document.createElement("canvas"),
 canvas.width = 600;
 canvas.height = 600;
 
-document.body.appendChild(canvas);
-
-canvas = document.getElementsByTagName('canvas')[0];
-canvas.focus();
-
 var game = engine.default({
 	objects: objects,
 	logic: logic,
@@ -34,6 +29,13 @@ var game = engine.default({
 		});
 	}
 });
-game.init();
+
+window.onload = function() {
+	document.body.appendChild(canvas);
+	canvas = document.getElementsByTagName('canvas')[0];
+	canvas.focus();
+
+	game.init();
+}
 
 
