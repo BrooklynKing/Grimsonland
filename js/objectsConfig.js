@@ -1,7 +1,6 @@
 var config = {
 		player : {
 			zIndex : 2,
-			id : 'player',
 			sprite: ['img/sprites2.png', [0, 0], [32, 32], 6, [0, 1, 2]],
 			size : [30,30],
 			parameters : {
@@ -13,11 +12,12 @@ var config = {
 				direction : {}
 			},
 			type : 'player',
-			rules : ['bindPositionToLayer', 'playerDeath', 'canShoot', 'moveToDirection', 'rotateToMouse']
+			rules : ['playerLogic','moveWithKeyboard', 'bindPositionToLayer', 'playerDeath', 'canShoot', 'moveToDirection', 'rotateToMouse']
 		},
 		explosion : {
 			zIndex : 3,
-			sprite: ['img/sprites.png', [0, 117], [39, 39], 16, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], null, true]
+			sprite: ['img/sprites.png', [0, 117], [39, 39], 16, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], null, true],
+			rules: ['explosionLogic']
 		},
 		monster : {
 			zIndex : 1,
@@ -31,7 +31,7 @@ var config = {
 				power : 1
 			},
 			type : 'monster',
-			rules : ['setDirectionToPlayer', 'moveToDirection', 'monsterHealthStatus', 'damageOnPlayerCollision', 'rotateByDirection', 'canShoot'],
+			rules : ['setDirectionToPlayer', 'moveToDirection', 'monsterHealthStatus', 'damageOnPlayerCollision', 'rotateByDirection', 'canShoot']
 		},
 		monsterBoss : {
 			zIndex : 1,
@@ -48,7 +48,7 @@ var config = {
 				health : 30
 			},
 			type : 'monster',
-			rules : ['setDirectionToPlayer', 'moveToDirection', 'monsterHealthStatus','rotateByDirection', 'canShoot'],
+			rules : ['monsterBossLogic', 'setDirectionToPlayer', 'moveToDirection', 'monsterHealthStatus','rotateByDirection', 'canShoot']
 		},
 		bullet : {
 			zIndex : 2,
@@ -74,14 +74,16 @@ var config = {
 		},
 		cursor : {
 			zIndex : 999,
-			sprite : ['img/cursor.png', [0, 0], [30, 30]]
+			sprite : ['img/cursor.png', [0, 0], [30, 30]],
+			rules: ['cursorLogic']
 		},
 		blood : {
 			zIndex : 0,
 			sprite : ['img/blood.png', [0, 0], [32, 13]],
 			parameters : {
 				cooldown : 500
-			}
+			},
+			rules: ['bloodLogic']
 		}
 	};
 

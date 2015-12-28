@@ -1,6 +1,6 @@
 import resources from './resources';
 import mouseModule from './mouse';
-import inputModule from './input';
+import input from './input';
 import GameWindow from './objects';
 
 // A cross-browser requestAnimationFrame
@@ -25,15 +25,16 @@ function loadResources(list, callback) {
     });
 }
 
-
 function createGame(config) {
     var canvas = config.canvas,
-        ctx = config.ctx,
         lastTime = 0;
 
-    var game = new GameWindow(config),
-        mouse = mouseModule(canvas),
-        input = inputModule(game);
+    var mouse = mouseModule(canvas);
+
+    config.input = input;
+    config.mouse = mouse;
+
+    var game = new GameWindow(config);
 
     canvas.addEventListener('click', function(e) {
         game.triggerAction('eclick', e, mouse.getMousePosition(e));
@@ -46,7 +47,6 @@ function createGame(config) {
         var now = Date.now(),
             dt = (now - lastTime) / 1000.0;
 
-        input.triggerGameActions(dt);
         game.update(dt);
         game.render(dt);
 
