@@ -1,4 +1,5 @@
-import utils from './engine/utils';
+import utils from './../engine/utils';
+import format from 'string-template';
 
 var config = {
     playerShootOnMouseClick: {
@@ -39,29 +40,27 @@ var config = {
         update: function (dt, obj) {
             if (this.parameters.monsterSpawned < this.parameters.totalMonsters) {
                 if (this.parameters.currentMonsterCooldown == 0) {
+                    var monsterConfig = (Math.random() * 100 > (100 - this.parameters.chanceOfBoss)) ? obj.game.getConfig('monsterBoss') : obj.game.getConfig('monster'),
+                        startPosition = Math.round(Math.random() * 3);
 
-                    var monsterConfig = (Math.random() * 100 > 95) ? obj.game.getConfig('monsterBoss') : obj.game.getConfig('monster'),
-                        randomStartPosition = Math.round(Math.random() * 3);
-
-                    switch (randomStartPosition) {
+                    switch (startPosition) {
                         case 0 :
-                            monsterConfig.pos = [0 - monsterConfig.sprite[2][0], Math.round(Math.random() * 720)];
+                            monsterConfig.pos = [this.parameters.area[0][0] - monsterConfig.sprite[2][0], Math.round(Math.random() * this.parameters.area[1][1])];
                             break;
                         case 1 :
-                            monsterConfig.pos = [Math.round(Math.random() * 1280), 0 - monsterConfig.sprite[2][1]];
+                            monsterConfig.pos = [Math.round(Math.random() * this.parameters.area[1][0]), this.parameters.area[0][1] - monsterConfig.sprite[2][1]];
                             break;
                         case 2 :
-                            monsterConfig.pos = [1280 + monsterConfig.sprite[2][0], Math.round(Math.random() * 720)];
+                            monsterConfig.pos = [this.parameters.area[1][0] + monsterConfig.sprite[2][0], Math.round(Math.random() * this.parameters.area[1][1])];
                             break;
                         case 3 :
-                            monsterConfig.pos = [Math.round(Math.random() * 1280), 720 + monsterConfig.sprite[2][1]];
+                            monsterConfig.pos = [Math.round(Math.random() * this.parameters.area[1][0]), this.parameters.area[1][1] + monsterConfig.sprite[2][1]];
                             break;
                     }
-                    monsterConfig.id = 'monster' + this.parameters.monsterSpawned++;
-                    monsterConfig.layer = this.context;
 
                     this.context.addObject(monsterConfig);
 
+                    this.parameters.monsterSpawned++;
                     this.parameters.currentMonsterCooldown = this.parameters.monsterCooldown;
 
                 } else {
@@ -70,7 +69,9 @@ var config = {
             }
         },
         parameters: {
+            area: [[0, 0], [1280, 720]],
             currentMonsterCooldown: 0,
+            chanceOfBoss : 5,
             monsterCooldown: 5,
             monsterSpawned: 0,
             totalMonsters: 500
@@ -172,7 +173,10 @@ var config = {
         update: function (dt, obj) {
             if (obj.parameters.health <= 0) {
                 obj._removeInNextTick = true;
-                obj.layer.game.triggerGlobalEvent(obj.type + '_killed');
+                if (!obj.layer.game.parameters.monstersKilled) {
+                    obj.layer.game.parameters.monstersKilled = 0;
+                }
+                obj.layer.game.parameters.monstersKilled++
             }
         }
     },
@@ -302,6 +306,28 @@ var config = {
             obj.parameters.direction.up = obj.layer.game.input.isDown(87);
             obj.parameters.direction.down = obj.layer.game.input.isDown(83);
             obj.parameters.direction.right = obj.layer.game.input.isDown(68);
+        }
+    },
+    countMonsterKilled : {
+        update: function (dt, obj) {
+            obj.parameters.text = format(obj.parameters.template, {
+                kills: obj.layer.game.parameters.monstersKilled || 0
+            });
+        }
+    },
+    timer : {
+        update: function (dt, obj) {
+            obj.parameters.text = format(obj.parameters.template, {
+                time: ((obj.layer.game.parameters.gameTimer++) / 60).toFixed(2)
+            });
+        }
+    },
+    bestTime : {
+        init: function (dt, obj) {
+            var obj = this.context;
+            obj.parameters.text = format(obj.parameters.template, {
+                time: ((obj.layer.game.parameters.bestTime) / 60).toFixed(2)
+            });
         }
     }
 };

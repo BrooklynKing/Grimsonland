@@ -1,8 +1,5 @@
-import objects from './objectsConfig';
-import logic from './logicConfig';
-import rules from './rulesConfig';
-import resources from './resourceList';
-import layers from './layerConfig';
+var _configs = configs.default;
+var _engine = engine.default;
 
 var canvas = document.createElement("canvas"),
 	ctx = canvas.getContext("2d");
@@ -15,20 +12,24 @@ document.addEventListener("DOMContentLoaded", function() {
 	canvas = document.getElementsByTagName('canvas')[0];
 	canvas.focus();
 
-	var game = engine.default({
-		objects: objects,
-		logic: logic,
-		rules: rules,
-		layers: layers,
-		resources: resources,
+	var game = _engine({
+		objects: _configs.objects,
+		rules: _configs.rules,
+		layers: _configs.layers,
+		resources: _configs.resources,
 		canvas: canvas,
 		ctx: ctx,
 		init: function() {
 			var game = this;
 			var mainLayer = game.addLayer(this.getLayerConfig('mainLayer'));
+			game.parameters.bestTime = 0;
 
 			mainLayer.init();
 			game.bindGlobalEvent('player_dead', function(e) {
+				if (game.parameters.gameTimer > game.parameters.bestTime) {
+					game.parameters.bestTime = game.parameters.gameTimer;
+				}
+
 				mainLayer.clearLayer();
 				mainLayer.init();
 			});

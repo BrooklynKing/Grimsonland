@@ -1,13 +1,21 @@
 import resources from './resources';
 import utils from './utils';
+import renders from './renderers';
 import Sprite from './sprite';
 
 function GameObject(config) {
     this.pos = utils.clone(config.pos);
-    this.id = config.id || 'object' + this.pos[0] + this.pos[1];
-    this.sprite = new Sprite(config.sprite[0], config.sprite[1], config.sprite[2], config.sprite[3], config.sprite[4], config.sprite[5], config.sprite[6], config.sprite[7]);
+    this.id = config.id || ('object' + Date.now().toString());
+
+    if (config.sprite) {
+        this.sprite = new Sprite(config.sprite[0], config.sprite[1], config.sprite[2], config.sprite[3], config.sprite[4], config.sprite[5], config.sprite[6], config.sprite[7]);
+    }
+
     this.type = config.type;
-    this.size = config.size || this.sprite.size;
+
+    if (config.size || this.sprite) {
+        this.size = config.size || this.sprite.size;
+    }
 
     this.callbacks = config.callbacks || {};
     this.zIndex = config.zIndex || 0;
@@ -15,7 +23,11 @@ function GameObject(config) {
 
     this.rules = config.rules || [];
     this._update = config.update;
-    this.customRender = config.render;
+    if (config.render) {
+        if (renders[config.render]) {
+            this.customRender = renders[config.render];
+        }
+    }
     this._init = config.init;
 
     this.inited = false;
@@ -23,13 +35,15 @@ function GameObject(config) {
 GameObject.prototype.render = function (dt) {
     var ctx = this.layer.ctx;
     ctx.save();
+    ctx.translate(this.pos[0], this.pos[1]);
+
     if (this.customRender) {
-        this.customRender(dt);
+        this.customRender(this);
     } else {
-        ctx.translate(this.pos[0], this.pos[1]);
         dt && this.sprite.update(dt);
         this.sprite.render(ctx);
     }
+
     ctx.restore();
 };
 GameObject.prototype.init = function () {
@@ -314,7 +328,6 @@ function GameWindow(config) {
     this.layers = {};
     this.ctx = config.ctx;
     this.objectsDefinition = config.objects;
-    this.logicDefinition = config.logic;
     this.rulesDefinition = config.rules;
     this.layersDefinition = config.layers;
     this.input = config.input;
@@ -326,7 +339,6 @@ function GameWindow(config) {
 GameWindow.prototype.init = function () {
     this._init && this._init();
 };
-
 GameWindow.prototype.bindGlobalEvent = function (eventName, handler) {
     (!this._handlers[eventName]) && (this._handlers[eventName] = []);
     this._handlers[eventName].push(handler);
@@ -385,12 +397,7 @@ GameWindow.prototype.addLayer = function (obj) {
     return this.layers[obj.id];
 };
 GameWindow.prototype.getConfig = function (id) {
-    var obj = utils.clone(this.objectsDefinition[id]),
-        logic = this.logicDefinition[id];
-
-    for (var i in logic) {
-        logic.hasOwnProperty(i) && (obj[i] = logic[i]);
-    }
+    var obj = utils.clone(this.objectsDefinition[id]);
 
     return obj;
 };
@@ -399,4 +406,5 @@ GameWindow.prototype.getLayerConfig = function (id) {
 
     return layer;
 };
+
 export default GameWindow

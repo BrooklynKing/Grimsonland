@@ -62,6 +62,9 @@ function mouse(canvas) {
     }
 
     return {
+        reset: function() {
+            isMouseDown = false;
+        },
         isMouseDown : function() {
             return isMouseDown;
         },

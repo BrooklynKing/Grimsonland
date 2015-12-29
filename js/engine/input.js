@@ -16,11 +16,17 @@ window.addEventListener('blur', function () {
     pressedKeys = {};
 });
 
-var input = {
-    isDown: function (key) {
-        return pressedKeys[key];
-    }
-};
+function reset() {
+    pressedKeys = {};
+}
 
+function isDown(key) {
+    return pressedKeys[key];
+}
+
+var input = {
+    reset: reset,
+    isDown: isDown
+};
 
 export default input;
