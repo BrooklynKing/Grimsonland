@@ -1,6 +1,40 @@
 import utils from './engine/utils';
 
 var config = {
+    playerShootOnMouseClick: {
+        init: function() {
+            var obj = this.context;
+            this.context.layer.game.bindGlobalEvent('eclick', function() {
+                if (obj.parameters.fireCooldown == 0) {
+                    var	bulletConfig = obj.layer.game.getConfig('bullet'),
+                        mousePosition = obj.layer.game.mouse.getMousePosition(),
+                        destination = (mousePosition)?[mousePosition.x, mousePosition.y] : [obj.pos[0], obj.pos[1] - 1],
+                        direction1 = utils.getDirection(obj.pos, destination),
+                        direction2 = utils.getDirection(obj.pos, utils.getMovedPointByDegree(obj.pos, destination, 20)),
+                        direction3 = utils.getDirection(obj.pos, utils.getMovedPointByDegree(obj.pos, destination, -20));
+
+                    bulletConfig.pos = utils.clone(obj.pos);
+                    bulletConfig.id = 'bullet' + obj.parameters.bulletsFired++;
+
+                    bulletConfig.parameters.direction = direction1;
+                    obj.layer.addObject(bulletConfig);
+
+                    bulletConfig.id = 'bullet' + (obj.parameters.bulletsFired++);
+                    bulletConfig.pos = utils.clone(obj.pos);
+                    bulletConfig.parameters.direction = direction2;
+
+                    obj.layer.addObject(bulletConfig);
+
+                    bulletConfig.id = 'bullet' + (obj.parameters.bulletsFired++);
+                    bulletConfig.pos = utils.clone(obj.pos);
+                    bulletConfig.parameters.direction = direction3;
+
+                    obj.layer.addObject(bulletConfig);
+                    obj.parameters.fireCooldown = obj.parameters.cooldown;
+                }
+            });
+        }
+    },
     spawn_monster: {
         update: function (dt, obj) {
             if (this.parameters.monsterSpawned < this.parameters.totalMonsters) {
@@ -54,9 +88,7 @@ var config = {
             var player = obj.layer.getObjectsByType('player')[0];
 
             if (utils.boxCollides(obj.pos, obj.size, player.pos, player.size)) {
-                player.triggerAction('damage', {
-                    damage: obj.parameters.power
-                });
+                player.parameters.health -= obj.parameters.power;
             }
         }
     },
@@ -81,9 +113,7 @@ var config = {
 
             for (var i = 0, l = monsters.length; i < l; i++) {
                 if (utils.boxCollides(obj.pos, obj.size, monsters[i].pos, monsters[i].size)) {
-                    monsters[i].triggerAction('damage', {
-                        damage: obj.parameters.power
-                    });
+                    monsters[i].parameters.health -= obj.parameters.power;
 
                     var explosionConfig = obj.layer.game.getConfig('explosion');
                     explosionConfig.pos = monsters[i].pos;
@@ -153,7 +183,9 @@ var config = {
     },
     rotateToMouse: {
         update: function (dt, obj) {
-            var destination = (obj.layer.game.parameters.mouseposition) ? [obj.layer.game.parameters.mouseposition.x, obj.layer.game.parameters.mouseposition.y] : [obj.pos[0], obj.pos[1] + 1],
+            var mousePosition = obj.layer.game.mouse.getMousePosition();
+
+            var destination = (mousePosition) ? [mousePosition.x, mousePosition.y] : [obj.pos[0], obj.pos[1] + 1],
                 directionToMouse = utils.getDirection(obj.pos, destination);
 
             obj.sprite.rotateToDirection(directionToMouse);
@@ -209,7 +241,8 @@ var config = {
     },
     cursorLogic: {
         update : function(dt, obj) {
-            obj.setPosition((obj.layer.game.parameters.mouseposition)?[obj.layer.game.parameters.mouseposition.x, obj.layer.game.parameters.mouseposition.y] : [obj.pos[0], obj.pos[1]]);
+            var mousePosition = obj.layer.game.mouse.getMousePosition();
+            obj.setPosition((mousePosition)?[mousePosition.x, mousePosition.y] : [obj.pos[0], obj.pos[1]]);
         }
     },
     bloodLogic: {
@@ -229,6 +262,37 @@ var config = {
                 bloodConfig.id = 'blood_' + obj.id;
                 obj.layer.addObject(bloodConfig);
                 obj.layer.removeObject(obj.id);
+            }
+        }
+    },
+    shootOnMouseDown: {
+        update: function (dt, obj) {
+            if (obj.layer.game.mouse.isMouseDown() && obj.parameters.fireCooldown == 0) {
+                var	bulletConfig = obj.layer.game.getConfig('bullet'),
+                    mousePosition = obj.layer.game.mouse.getMousePosition(),
+                    destination = (mousePosition)?[mousePosition.x, mousePosition.y] : [obj.pos[0], obj.pos[1] - 1],
+                    direction1 = utils.getDirection(obj.pos, destination),
+                    direction2 = utils.getDirection(obj.pos, utils.getMovedPointByDegree(obj.pos, destination, 20)),
+                    direction3 = utils.getDirection(obj.pos, utils.getMovedPointByDegree(obj.pos, destination, -20));
+
+                bulletConfig.pos = utils.clone(obj.pos);
+                bulletConfig.id = 'bullet' + obj.parameters.bulletsFired++;
+
+                bulletConfig.parameters.direction = direction1;
+                obj.layer.addObject(bulletConfig);
+
+                bulletConfig.id = 'bullet' + (obj.parameters.bulletsFired++);
+                bulletConfig.pos = utils.clone(obj.pos);
+                bulletConfig.parameters.direction = direction2;
+
+                obj.layer.addObject(bulletConfig);
+
+                bulletConfig.id = 'bullet' + (obj.parameters.bulletsFired++);
+                bulletConfig.pos = utils.clone(obj.pos);
+                bulletConfig.parameters.direction = direction3;
+
+                obj.layer.addObject(bulletConfig);
+                obj.parameters.fireCooldown = obj.parameters.cooldown;
             }
         }
     },

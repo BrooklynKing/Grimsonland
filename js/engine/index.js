@@ -36,12 +36,12 @@ function createGame(config) {
 
     var game = new GameWindow(config);
 
-    canvas.addEventListener('click', function(e) {
-        game.triggerAction('eclick', e, mouse.getMousePosition(e));
+    /*anvas.addEventListener('click', function(e) {
+        game.triggerGlobalEvent('eclick', e, mouse.getMousePosition(e));
     });
     canvas.addEventListener('mousemove', function(e) {
         game.parameters.mouseposition = mouse.getMousePosition(e);
-    });
+    });*/
 
     function gameTimer() {
         var now = Date.now(),

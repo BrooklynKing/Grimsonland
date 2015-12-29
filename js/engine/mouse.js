@@ -9,9 +9,29 @@ function mouse(canvas) {
         // They will mess up mouse coordinates and this fixes that
         html = document.body.parentNode,
         htmlTop = html.offsetTop,
-        htmlLeft = html.offsetLeft;
+        htmlLeft = html.offsetLeft,
+        position = {
+            x: 0,
+            y:0
+        },
+        isMouseDown = false;
 
-    function getMousePosition(e) {
+    canvas.addEventListener('mousemove', function(e) {
+        var pos = getProperPosition(e);
+
+        position.x = pos.x;
+        position.y = pos.y;
+    });
+
+    canvas.addEventListener('mouseup', function(e) {
+        isMouseDown = false;
+    });
+
+    canvas.addEventListener('mousedown', function(e) {
+        isMouseDown = true;
+    });
+
+    function getProperPosition(e) {
         var element = canvas,
             offsetX = 0,
             offsetY = 0,
@@ -42,7 +62,12 @@ function mouse(canvas) {
     }
 
     return {
-        'getMousePosition': getMousePosition
+        isMouseDown : function() {
+            return isMouseDown;
+        },
+        getMousePosition: function() {
+            return position;
+        }
     }
 }
 

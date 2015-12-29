@@ -6,13 +6,13 @@ var config = {
 			parameters : {
 				speed : 150,
 				health : 1,
-				cooldown: 10,
-				fireCooldown : 10,
+				cooldown: 15,
+				fireCooldown : 15,
 				bulletsFired: 0,
 				direction : {}
 			},
 			type : 'player',
-			rules : ['playerLogic','moveWithKeyboard', 'bindPositionToLayer', 'playerDeath', 'canShoot', 'moveToDirection', 'rotateToMouse']
+			rules : ['playerLogic','shootOnMouseDown', 'moveWithKeyboard', 'bindPositionToLayer', 'playerDeath', 'canShoot', 'moveToDirection', 'rotateToMouse']
 		},
 		explosion : {
 			zIndex : 3,
@@ -57,7 +57,7 @@ var config = {
 			type : 'spellElement',
 			parameters : {
 				power : 10,
-				speed: 350
+				speed: 400
 			},
 			rules : ['destroyAfterLeavingLayer', 'moveToDirection', 'bulletMonsterCollision']
 		},

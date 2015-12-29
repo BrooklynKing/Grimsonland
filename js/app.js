@@ -7,7 +7,7 @@ import layers from './layerConfig';
 var canvas = document.createElement("canvas"),
 	ctx = canvas.getContext("2d");
 
-canvas.width = 600;
+canvas.width = 800;
 canvas.height = 600;
 
 document.addEventListener("DOMContentLoaded", function() {

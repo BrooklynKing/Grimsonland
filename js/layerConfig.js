@@ -1,15 +1,15 @@
 var config = {
 	mainLayer : {
 		id: 'mainLayer',
-		size : [600,600],
-		background: 'img/grass3.png',
+		size : [800,600],
+		background: 'img/grass2.png',
 		init: function() {
 			var	playerConfig = this.game.getConfig('player');
-			playerConfig.pos = [300,300];
+			playerConfig.pos = [400,300];
 			playerConfig.id = 'player';
 
 			var	cursorConfig = this.game.getConfig('cursor');
-			cursorConfig.pos = [300,300];
+			cursorConfig.pos = [400,350];
 			cursorConfig.id = 'cursor';
 
 			this.addObjects([cursorConfig, playerConfig]);

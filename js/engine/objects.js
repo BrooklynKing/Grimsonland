@@ -99,6 +99,7 @@ GameObject.prototype.addRule = function (config) {
     } else {
         var rule = new GameRule(config);
         rule.setContext(this);
+        rule.init();
         this.rules.push(rule);
     }
 
@@ -119,7 +120,15 @@ function GameRule(config) {
     this._update = config.update;
     this.parameters = (config.parameters && utils.clone(config.parameters)) || {};
     this._parameters = utils.clone(this.parameters);
+    this._init = config.init;
+    this.inited = false;
 }
+GameRule.prototype.init = function () {
+    if (!this.inited) {
+        this._init && this._init();
+        this.inited = true;
+    }
+};
 GameRule.prototype.update = function (dt, obj) {
     this._update && this._update(dt, obj);
 };
@@ -217,6 +226,7 @@ GameLayer.prototype.addRule = function (config) {
     } else {
         var rule = new GameRule(config);
         rule.setContext(this);
+        rule.init();
         this.rules.push(rule);
     }
     return this.rules[config.id];
@@ -308,6 +318,7 @@ function GameWindow(config) {
     this.rulesDefinition = config.rules;
     this.layersDefinition = config.layers;
     this.input = config.input;
+    this.mouse = config.mouse;
     this._handlers = {};
     this.parameters = {};
     this._init = config.init;
