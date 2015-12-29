@@ -20,7 +20,7 @@ function GameObject(config) {
     this.callbacks = config.callbacks || {};
     this.zIndex = config.zIndex || 0;
     this.parameters = (config.parameters && utils.clone(config.parameters)) || {};
-
+    this._parameters = config.parameters;
     this.rules = config.rules || [];
     this._update = config.update;
     if (config.render) {
@@ -206,6 +206,7 @@ GameLayer.prototype.render = function (dt) {
             }
         }
     }
+
     ctx.beginPath();
     ctx.strokeStyle = 'black';
     ctx.shadowBlur = 15;

@@ -72,9 +72,31 @@ var config = {
             area: [[0, 0], [1280, 720]],
             currentMonsterCooldown: 0,
             chanceOfBoss : 5,
-            monsterCooldown: 5,
+            monsterCooldown: 4,
             monsterSpawned: 0,
             totalMonsters: 500
+        }
+    },
+    spawn_heart: {
+        update: function (dt, obj) {
+            if (this.parameters.currentCooldown == 0) {
+                var config = obj.game.getConfig('heart');
+
+                config.pos = [Math.round(Math.random() * this.parameters.area[1][0]) + this.parameters.area[0][0], Math.round(Math.random() * this.parameters.area[1][1]) + this.parameters.area[0][1]];
+
+                this.context.addObject(config);
+
+                this.parameters.currentCooldown = this.parameters.cooldown;
+
+            } else {
+                this.parameters.currentCooldown--;
+            }
+
+        },
+        parameters: {
+            area: [[50, 50], [300, 500]],
+            currentCooldown: 500,
+            cooldown: 500
         }
     },
     playerDeath: {
@@ -105,6 +127,41 @@ var config = {
                 obj.layer.addObject(explosionConfig);
 
                 obj._removeInNextTick = true;
+            }
+        }
+    },
+    triggerOnPlayerCollision: {
+        update: function (dt, obj) {
+            var player = obj.layer.getObjectsByType('player')[0];
+
+            if (utils.boxCollides(obj.pos, obj.size, player.pos, player.size)) {
+                player.parameters.health += obj.parameters.health;
+
+                obj._removeInNextTick = true;
+            }
+        }
+    },
+    meleeAttack : {
+        update: function (dt, obj) {
+            var player = obj.layer.getObjectsByType('player')[0];
+
+            if (obj.parameters.meleeCooldown == 0) {
+                if (utils.boxCollides(obj.pos, obj.size, player.pos, player.size)) {
+                    player.parameters.health -= obj.parameters.power;
+
+                    obj.parameters.meleeCooldown = obj.parameters.cooldown;
+                }
+            }
+        }
+    },
+    stopOnCollisionWithPlayer: {
+        update: function (dt, obj) {
+            var player = obj.layer.getObjectsByType('player')[0];
+
+            if (utils.boxCollides(obj.pos, obj.size, player.pos, player.size)) {
+                obj.parameters.speed = 0
+            } else {
+                obj.parameters.speed = obj._parameters.speed;
             }
         }
     },
@@ -198,6 +255,11 @@ var config = {
     canShoot: {
         update: function (dt, obj) {
             obj.parameters.fireCooldown && obj.parameters.fireCooldown--;
+        }
+    },
+    canMelee: {
+        update: function (dt, obj) {
+            obj.parameters.meleeCooldown && obj.parameters.meleeCooldown--;
         }
     },
     playerLogic: {
@@ -322,12 +384,24 @@ var config = {
             });
         }
     },
+    health : {
+        update: function (dt, obj) {
+            obj.parameters.text = format(obj.parameters.template, {
+                health: obj.layer.getObjectsByType('player')[0].parameters.health
+            });
+        }
+    },
     bestTime : {
         init: function (dt, obj) {
             var obj = this.context;
             obj.parameters.text = format(obj.parameters.template, {
                 time: ((obj.layer.game.parameters.bestTime) / 60).toFixed(2)
             });
+        }
+    },
+    dynamicZIndex: {
+        update: function(dt, obj) {
+            obj.zIndex = (obj.pos[1] > 0) ? Math.round(obj.pos[1]) : 0;
         }
     }
 };

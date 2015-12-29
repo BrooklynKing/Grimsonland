@@ -3,6 +3,7 @@ var list = [
     'img/grass2.png',
     'img/blood.png',
     'img/desert.png',
+    'img/heart.png',
     'img/iceball.png',
     'img/bsprite.png',
     'img/cursor.png',

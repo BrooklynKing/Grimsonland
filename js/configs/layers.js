@@ -8,14 +8,15 @@ var config = {
 				cursor = this.game.getConfig('cursor'),
 				counter = this.game.getConfig('counter'),
 				timer = this.game.getConfig('timer'),
+				health = this.game.getConfig('health'),
 				bestTime = this.game.getConfig('bestTime');
 
 			this.game.parameters.monstersKilled = 0;
 			this.game.parameters.gameTimer = 0;
 
-			this.addObjects([player, cursor, counter, timer, bestTime]);
+			this.addObjects([player, cursor, counter, timer, bestTime, health]);
 		},
-		rules: ['spawn_monster']
+		rules: ['spawn_monster', 'spawn_heart']
 	}
 };
 

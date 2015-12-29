@@ -13,7 +13,7 @@ function textRender(obj) {
 
     ctx.font = fontConfig;
     ctx.fillStyle = obj.parameters.color || "#FFF";
-    ctx.fillText(obj.parameters.text || obj.parameters.template, obj.pos[0], obj.pos[1]);
+    ctx.fillText(obj.parameters.text, obj.pos[0], obj.pos[1]);
 }
 
 
