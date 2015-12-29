@@ -94,9 +94,9 @@ var config = {
 
         },
         parameters: {
-            area: [[50, 50], [300, 500]],
-            currentCooldown: 500,
-            cooldown: 500
+            area: [[50, 50], [700, 500]],
+            currentCooldown: 300,
+            cooldown: 300
         }
     },
     playerDeath: {
