@@ -16,12 +16,13 @@ function GameObject(config) {
     if (config.size || this.sprite) {
         this.size = config.size || this.sprite.size;
     }
-
+    this.collisions = config.collisions;
     this.callbacks = config.callbacks || {};
     this.zIndex = config.zIndex || 0;
     this.parameters = (config.parameters && utils.clone(config.parameters)) || {};
     this._parameters = config.parameters;
     this.rules = config.rules || [];
+    this.conditions = config.conditions || [];
     this._update = config.update;
     if (config.render) {
         if (renders[config.render]) {
@@ -38,7 +39,7 @@ GameObject.prototype.render = function (dt) {
     ctx.translate(this.pos[0], this.pos[1]);
 
     if (this.customRender) {
-        this.customRender(this);
+        this.customRender(this, dt);
     } else {
         dt && this.sprite.update(dt);
         this.sprite.render(ctx);
@@ -48,13 +49,26 @@ GameObject.prototype.render = function (dt) {
 };
 GameObject.prototype.init = function () {
     if (!this.inited) {
+        var rules = this.rules,
+            conditions = this.conditions;
+
+        this.rules = [];
+        this.conditions = [];
+
         this._init && this._init();
 
-        var rules = this.rules;
-        this.rules = [];
+        if (this.collisions) {
+            this.collisions = new GameRule(this.layer.game.rulesDefinition['collisions']);
+            this.collisions.setContext(this);
+            this.collisions.init();
+        }
 
-        for (var i = 0, l = rules.length; i < l; i++) {
+        for (let i = 0, l = rules.length; i < l; i++) {
             this.addRule(this.layer.game.rulesDefinition[rules[i]]);
+        }
+
+        for (let i = 0, l = conditions.length; i < l; i++) {
+            this.addCondition(this.layer.game.rulesDefinition[conditions[i]]);
         }
 
         this.inited = true;
@@ -68,7 +82,15 @@ GameObject.prototype.update = function (dt) {
     for (var i = 0; i < this.rules.length; i++) {
         this.rules[i].update(dt, this);
     }
+};
+GameObject.prototype.updateConditions = function(dt) {
+    for (var i = 0; i < this.conditions.length; i++) {
+        this.conditions[i].update(dt, this);
+    }
     if (this._removeInNextTick) {
+        if (this.parameters.collisions) {
+            this.layer.game.collisions.removeObject(this);
+        }
         this.layer.removeObject(this.id);
         this._removeInNextTick = false;
     }
@@ -81,8 +103,7 @@ GameObject.prototype.triggerAction = function (action, event, mouse) {
     var object = this;
 
     function checkHitBox(mouse) {
-        var flag = false,
-            hitbox = object.hitbox || object.sprite;
+        var flag;
 
         (object.pos[0] < mouse.x) && (object.pos[0] + object.sprite.size[0] > mouse.x) && (object.pos[1] < mouse.y) && (object.pos[1] + object.sprite.size[1] > mouse.y) && (flag = true);
         return flag;
@@ -118,17 +139,23 @@ GameObject.prototype.addRule = function (config) {
     }
 
     return this.rules[config.id];
-}
-GameObject.prototype.addRules = function (configs) {
-    if (Array.isArray(configs)) {
-        for (var i = 0, j = configs.length; i < j; i++) {
-            this.addRule(configs[i]);
-        }
+};
+GameObject.prototype.addCondition = function (config) {
+    if (this.conditions.hasOwnProperty(config.id)) {
+        console.error('Rule with such id already exist in this layer');
+        return false;
     } else {
-        console.error('addRules expect array in parameters');
+        var condition = new GameRule(config);
+        condition.setContext(this);
+        condition.init();
+        this.conditions.push(condition);
     }
-}
 
+    return this.rules[config.id];
+};
+GameObject.prototype.updateCollisions = function(dt) {
+    this.collisions && this.collisions.update(dt, this);
+};
 function GameRule(config) {
     this.id = config.id;
     this._update = config.update;
@@ -160,10 +187,8 @@ function GameLayer(config) {
     this.sortedObjects = {
         'default': []
     };
-//ctx = config.ctx,
     this.objects = {};
     this._rules = config.rules || [];
-    this.map = [];
     this._init = config.init;
     this.inited = false;
 }
@@ -193,13 +218,13 @@ GameLayer.prototype.render = function (dt) {
     ctx.fillStyle = this.background;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    for (var i in this.objects) {
+    for (let i in this.objects) {
         if (this.objects.hasOwnProperty(i)) {
             (arr[this.objects[i].zIndex]) || (arr[this.objects[i].zIndex] = []);
             arr[this.objects[i].zIndex].push(this.objects[i]);
         }
     }
-    for (var i = 0, l = arr.length; i < l; i++) {
+    for (let i = 0, l = arr.length; i < l; i++) {
         if (arr[i]) {
             for (var j = 0, k = arr[i].length; j < k; j++) {
                 arr[i][j].render(dt);
@@ -219,21 +244,31 @@ GameLayer.prototype.render = function (dt) {
     ctx.restore();
 };
 GameLayer.prototype.update = function (dt) {
-    for (var i in this.rules) {
+    for (let i in this.rules) {
         this.rules.hasOwnProperty(i) && this.rules[i].update(dt, this);
     }
-    for (var i in this.objects) {
-        var object = this.objects[i];
 
-        object.update(dt);
+    for (let i in this.objects) {
+        this.objects[i].update(dt);
     }
+
+    for (let i in this.objects) {
+        this.objects[i].updateCollisions(dt);
+    }
+
+    this.game.collisions.update();
+
+    for (let i in this.objects) {
+        this.objects[i].updateConditions(dt);
+    }
+
 };
 GameLayer.prototype.removeRule = function (id) {
     if (this.rules.hasOwnProperty(id)) {
         this.rules[id].layer = null;
         delete this.rules[id];
     }
-}
+};
 GameLayer.prototype.addRule = function (config) {
     if (this.rules.hasOwnProperty(config.id)) {
         console.error('Rule with such id already exist in this layer');
@@ -245,15 +280,6 @@ GameLayer.prototype.addRule = function (config) {
         this.rules.push(rule);
     }
     return this.rules[config.id];
-};
-GameLayer.prototype.addRules = function (rule) {
-    if (Array.isArray(rule)) {
-        for (var i = 0, j = rule.length; i < j; i++) {
-            this.addRule(rule[i]);
-        }
-    } else {
-        console.error('addRules expect array in parameters');
-    }
 };
 GameLayer.prototype.removeObject = function (id) {
     if (this.objects.hasOwnProperty(id)) {
@@ -310,13 +336,13 @@ GameLayer.prototype.triggerAction = function (action, event, mouse) {
     }
 };
 GameLayer.prototype.clearLayer = function () {
-    for (var i in this.objects) {
+    for (let i in this.objects) {
         this.objects.hasOwnProperty(i) && delete this.objects[i];
     }
     this.sortedObjects = {
-        'default': [],
+        'default': []
     };
-    for (var i in this.rules) {
+    for (let i in this.rules) {
         this.rules.hasOwnProperty(i) && delete this.rules[i];
     }
     this.inited = false;
@@ -328,6 +354,8 @@ GameLayer.prototype.getCoordinates = function () {
 function GameWindow(config) {
     this.layers = {};
     this.ctx = config.ctx;
+    this.canvas = config.canvas;
+    this.collisions = config.collisions;
     this.objectsDefinition = config.objects;
     this.rulesDefinition = config.rules;
     this.layersDefinition = config.layers;
@@ -398,14 +426,10 @@ GameWindow.prototype.addLayer = function (obj) {
     return this.layers[obj.id];
 };
 GameWindow.prototype.getConfig = function (id) {
-    var obj = utils.clone(this.objectsDefinition[id]);
-
-    return obj;
+    return utils.clone(this.objectsDefinition[id]);
 };
 GameWindow.prototype.getLayerConfig = function (id) {
-    var layer = this.layersDefinition[id];
-
-    return layer;
+    return this.layersDefinition[id];
 };
 
 export default GameWindow

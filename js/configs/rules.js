@@ -2,12 +2,24 @@ import utils from './../engine/utils';
 import format from 'string-template';
 
 var config = {
+    collisions: {
+        init: function() {
+            var obj = this.context;
+            obj.parameters.collisions = [];
+            obj.parameters.collisions.cells = new Array(4);
+            obj.layer.game.collisions.checkPlace(obj);
+        },
+        update: function(dt, obj) {
+            obj.parameters.collisions.splice(0);
+            obj.layer.game.collisions.checkPlace(obj);
+        }
+    },
     random_trees: {
         init: function() {
             var obj = this.context;
 
-            function getRandomPointInArea(area) {
-                return [Math.round(Math.random() * area[1][0]) + area[0][0], Math.round(Math.random() * area[1][1]) + area[0][1]];
+            function getRandomPointInArea() {
+                return [Math.round(Math.random() * obj.game.canvas.width), Math.round(Math.random() * obj.game.canvas.height)];
             }
 
             for (var i = 0; i < this.parameters.trees; i++) {
@@ -19,7 +31,6 @@ var config = {
             }
 
             for (var i = 0; i < this.parameters.stones; i++) {
-
                 var config = obj.game.getConfig('stones');
 
                 config.pos = getRandomPointInArea(this.parameters.area);
@@ -30,46 +41,46 @@ var config = {
 
         },
         parameters: {
-            area: [[50, 50], [700, 500]],
             trees: 30,
             stones: 20
         }
     },
     spawn_monster: {
         update: function (dt, obj) {
-            if (this.parameters.currentMonsterCooldown == 0) {
-                var monsterConfig = (Math.random() * 100 > (100 - this.parameters.chanceOfBoss)) ? obj.game.getConfig('monsterBoss') : obj.game.getConfig('monster'),
-                    startPosition = Math.round(Math.random() * 3);
+            if (this.parameters.monsterSpawned < 10000) {
+                if (this.parameters.currentMonsterCooldown == 0) {
+                    var monsterConfig = (Math.random() * 100 > (100 - this.parameters.chanceOfBoss)) ? obj.game.getConfig('monsterBoss') : obj.game.getConfig('monster'),
+                        startPosition = Math.round(Math.random() * 3);
 
-                switch (startPosition) {
-                    case 0 :
-                        monsterConfig.pos = [this.parameters.area[0][0] - monsterConfig.sprite[2][0], Math.round(Math.random() * this.parameters.area[1][1])];
-                        break;
-                    case 1 :
-                        monsterConfig.pos = [Math.round(Math.random() * this.parameters.area[1][0]), this.parameters.area[0][1] - monsterConfig.sprite[2][1]];
-                        break;
-                    case 2 :
-                        monsterConfig.pos = [this.parameters.area[1][0] + monsterConfig.sprite[2][0], Math.round(Math.random() * this.parameters.area[1][1])];
-                        break;
-                    case 3 :
-                        monsterConfig.pos = [Math.round(Math.random() * this.parameters.area[1][0]), this.parameters.area[1][1] + monsterConfig.sprite[2][1]];
-                        break;
+                    switch (startPosition) {
+                        case 0 :
+                            monsterConfig.pos = [this.parameters.area[0][0] - monsterConfig.sprite[2][0], Math.round(Math.random() * this.parameters.area[1][1])];
+                            break;
+                        case 1 :
+                            monsterConfig.pos = [Math.round(Math.random() * this.parameters.area[1][0]), this.parameters.area[0][1] - monsterConfig.sprite[2][1]];
+                            break;
+                        case 2 :
+                            monsterConfig.pos = [this.parameters.area[1][0] + monsterConfig.sprite[2][0], Math.round(Math.random() * this.parameters.area[1][1])];
+                            break;
+                        case 3 :
+                            monsterConfig.pos = [Math.round(Math.random() * this.parameters.area[1][0]), this.parameters.area[1][1] + monsterConfig.sprite[2][1]];
+                            break;
+                    }
+                    this.context.addObject(monsterConfig);
+
+                    this.parameters.monsterSpawned++;
+                    this.parameters.currentMonsterCooldown = this.parameters.monsterCooldown;
+
+                } else {
+                    this.parameters.currentMonsterCooldown--;
                 }
-
-                this.context.addObject(monsterConfig);
-
-                this.parameters.monsterSpawned++;
-                this.parameters.currentMonsterCooldown = this.parameters.monsterCooldown;
-
-            } else {
-                this.parameters.currentMonsterCooldown--;
             }
         },
         parameters: {
             area: [[0, 0], [800, 600]],
             currentMonsterCooldown: 0,
             chanceOfBoss : 3,
-            monsterCooldown: 7,
+            monsterCooldown: 4,
             monsterSpawned: 0
         }
     },
@@ -90,7 +101,7 @@ var config = {
 
         },
         parameters: {
-            area: [[50, 50], [700, 500]],
+            area: [[50, 50], [750, 550]],
             currentCooldown: 1000,
             cooldown: 1000
         }
@@ -104,73 +115,84 @@ var config = {
     },
     damageOnPlayerCollision: {
         update: function (dt, obj) {
-            var player = obj.layer.getObjectsByType('player')[0];
-
-            if (utils.boxCollides(obj.pos, obj.size, player.pos, player.size)) {
-                player.parameters.health -= obj.parameters.power;
+            var objects = obj.parameters.collisions;
+            for (var i = 0; i < objects.length; i++) {
+                if (objects[i].type == 'player') {
+                    objects[i].parameters.health -= obj.parameters.power;
+                }
             }
         }
     },
     destroyOnPlayerCollision: {
         update: function (dt, obj) {
-            var player = obj.layer.getObjectsByType('player')[0];
+            var objects = obj.parameters.collisions;
 
-            if (utils.boxCollides(obj.pos, obj.size, player.pos, player.size)) {
-                var explosionConfig = obj.layer.game.getConfig('explosion');
-                explosionConfig.pos = player.pos;
+            for (var i = 0; i < objects.length; i++) {
+                if (objects[i].type == 'player') {
+                    var explosionConfig = obj.layer.game.getConfig('explosion');
+                    explosionConfig.pos = obj.pos;
 
-                obj.layer.addObject(explosionConfig);
+                    obj.layer.addObject(explosionConfig);
 
-                obj._removeInNextTick = true;
+                    obj._removeInNextTick = true;
+                }
             }
         }
     },
     triggerOnPlayerCollision: {
         update: function (dt, obj) {
-            var player = obj.layer.getObjectsByType('player')[0];
+            var objects = obj.parameters.collisions;
 
-            if (utils.boxCollides(obj.pos, obj.size, player.pos, player.size)) {
-                player.parameters.health += obj.parameters.health;
+            for (var i = 0; i < objects.length; i++) {
+                if (objects[i].type == 'player') {
+                    if (objects[i].parameters.health < objects[i]._parameters.health) {
+                        if (objects[i].parameters.health + obj.parameters.health <= objects[i]._parameters.health) {
+                            objects[i].parameters.health += obj.parameters.health;
+                        } else {
+                            objects[i].parameters.health = objects[i]._parameters.health
+                        }
+                    }
 
-                obj._removeInNextTick = true;
+                    obj._removeInNextTick = true;
+                }
             }
         }
     },
     meleeAttack : {
         update: function (dt, obj) {
-            var player = obj.layer.getObjectsByType('player')[0];
-
             if (obj.parameters.meleeCooldown == 0) {
-                if (utils.boxCollides(obj.pos, obj.size, player.pos, player.size)) {
-                    player.parameters.health -= obj.parameters.power;
+                var objects = obj.parameters.collisions;
+                for (var i = 0; i < objects.length; i++) {
+                    if (objects[i].type == 'player') {
+                        objects[i].parameters.health -= obj.parameters.power;
 
-                    obj.parameters.meleeCooldown = obj.parameters.cooldown;
+                        obj.parameters.meleeCooldown = obj.parameters.cooldown;
+                    }
                 }
             }
         }
     },
     stopOnCollisionWithPlayer: {
         update: function (dt, obj) {
-            var player = obj.layer.getObjectsByType('player')[0];
-
-            if (utils.boxCollides(obj.pos, obj.size, player.pos, player.size)) {
-                obj.parameters.speed = 0
-            } else {
-                obj.parameters.speed = obj._parameters.speed;
+            var objects = obj.parameters.collisions;
+            obj.parameters.speed = obj._parameters.speed;
+            for (var i = 0, l = objects.length; i < l; i++) {
+                if (objects[i].type == 'player') {
+                    obj.parameters.speed = 0
+                }
             }
         }
     },
     bulletMonsterCollision: {
         update: function (dt, obj) {
-            var monsters = obj.layer.getObjectsByType('monster');
-
-            for (var i = 0, l = monsters.length; i < l; i++) {
-                if (utils.boxCollides(obj.pos, obj.size, monsters[i].pos, monsters[i].size)) {
-                    monsters[i].parameters.health -= obj.parameters.power;
+            var objects = obj.parameters.collisions;
+            for (var i = 0, l = objects.length; i < l; i++) {
+                if (objects[i].type == 'monster') {
+                    objects[i].parameters.health -= obj.parameters.power;
 
                     var explosionConfig = obj.layer.game.getConfig('explosion');
-                    explosionConfig.pos = monsters[i].pos;
-                    explosionConfig.id = 'exp_' + monsters[i].id;
+                    explosionConfig.pos = objects[i].pos;
+                    explosionConfig.id = 'exp_' + objects[i].id;
 
                     obj.layer.addObject(explosionConfig);
 
@@ -225,9 +247,9 @@ var config = {
         update: function (dt, obj) {
             if (obj.parameters.health <= 0) {
                 obj._removeInNextTick = true;
-                var skelet = obj.layer.game.getConfig('skelet');
-                skelet.pos = obj.pos;
-                obj.layer.addObject(skelet);
+                var blood = obj.layer.game.getConfig('blood');
+                blood.pos = obj.pos;
+                obj.layer.addObject(blood);
 
                 if (!obj.layer.game.parameters.monstersKilled) {
                     obj.layer.game.parameters.monstersKilled = 0;
@@ -305,7 +327,7 @@ var config = {
             }
         }
     },
-    cursorLogic: {
+    bindPositionToMouse: {
         update : function(dt, obj) {
             var mousePosition = obj.layer.game.mouse.getMousePosition();
             obj.setPosition((mousePosition)?[mousePosition.x, mousePosition.y] : [obj.pos[0], obj.pos[1]]);
@@ -320,13 +342,9 @@ var config = {
             }
         }
     },
-    explosionLogic: {
+    destroyAfterSpriteDone: {
         update : function (dt, obj) {
             if(obj.sprite.done) {
-               /* var	bloodConfig = obj.layer.game.getConfig('blood');
-                bloodConfig.pos = obj.pos;
-                bloodConfig.id = 'blood_' + obj.id;
-                obj.layer.addObject(bloodConfig);*/
                 obj._removeInNextTick = true;
             }
         }

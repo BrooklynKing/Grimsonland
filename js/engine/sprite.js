@@ -32,21 +32,19 @@ Sprite.prototype.updateConfig = function (config) {
 };
 Sprite.prototype.rotateToDirection = function (direction) {
     var pos = this.defaultPosition,
-        spritePosition = null;
+        config = {};
 
     if (direction.dir == 1) {
-        (direction.k >= 1) && (spritePosition = [pos[0], pos[1]]);
-        ((direction.k < 1) && (direction.k >= -1)) && (spritePosition = [pos[0], pos[1] + 2 * this.size[1]]);
-        (direction.k < -1) && (spritePosition = [pos[0], pos[1] + 3 * this.size[1]]);
+        (direction.k >= 1) && (config.pos = [pos[0], pos[1]]);
+        ((direction.k < 1) && (direction.k >= -1)) && (config.pos = [pos[0], pos[1] + 2 * this.size[1]]);
+        (direction.k < -1) && (config.pos =[pos[0], pos[1] + 3 * this.size[1]]);
     } else if (direction.dir == -1) {
-        (direction.k >= 1) && (spritePosition = [pos[0], pos[1] + 3 * this.size[1]]);
-        ((direction.k < 1) && (direction.k >= -1)) && (spritePosition = [pos[0], pos[1] + this.size[1]]);
-        (direction.k < -1) && (spritePosition = [pos[0], pos[1]]);
+        (direction.k >= 1) && (config.pos =[pos[0], pos[1] + 3 * this.size[1]]);
+        ((direction.k < 1) && (direction.k >= -1)) && (config.pos =[pos[0], pos[1] + this.size[1]]);
+        (direction.k < -1) && (config.pos = [pos[0], pos[1]]);
     }
 
-    this.updateConfig({
-        'pos': spritePosition
-    });
+    this.updateConfig(config);
 };
 Sprite.prototype.render = function (ctx) {
     var frame;

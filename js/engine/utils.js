@@ -40,7 +40,7 @@ function getMovedPointByDegree(point1, point2, degree) {
     var direction = {
         dir: dir,
         k: Math.tan(newDegree * Math.PI / 180)
-    }
+    };
 
     return getDestination(point1, direction, Math.sqrt(Math.pow(point2[0] - point1[0], 2) + Math.pow(point2[1] - point1[1], 2)));
 }
@@ -68,8 +68,8 @@ function getDestination(point, line, speed) {
         x = point[0];
         y = point[1] + line.dir * speed;
     } else {
-        x = point[0] + line.dir * speed / (Math.sqrt(Math.pow(line.k, 2) + 1));
-        y = point[1] + line.dir * speed * line.k / (Math.sqrt(Math.pow(line.k, 2) + 1));
+        x = (point[0] + line.dir * speed / (Math.sqrt(Math.pow(line.k, 2) + 1)));
+        y = (point[1] + line.dir * speed * line.k / (Math.sqrt(Math.pow(line.k, 2) + 1)));
     }
     return [x, y];
 }
@@ -80,27 +80,22 @@ function nextPosition(point1, point2/*, speed, dt*/) {
         error = 0,
         deltaerr = (deltax > deltay) ? deltay : deltax,
         y = point1[1],
-//			s = speed * dt,
         x = point1[0];
 
-//		for (var i = 0; i < s; i++) {
     if (deltax > deltay) {
         (point1[0] > point2[0]) ? x-- : x++;
-        error = error + deltaerr
+        error = error + deltaerr;
         if (2 * error >= deltax) {
             y = (point1[1] > point2[1]) ? y - 1 : y + 1;
-            error = error - deltax
         }
     } else {
         (point1[1] > point2[1]) ? y-- : y++;
-        error = error + deltaerr
+        error = error + deltaerr;
         if (2 * error >= deltay) {
             x = (point1[0] > point2[0]) ? x - 1 : x + 1;
-            error = error - deltay
         }
 
     }
-//}
     return [x, y];
 }
 function clone(obj) {

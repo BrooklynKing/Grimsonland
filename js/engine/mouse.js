@@ -23,11 +23,11 @@ function mouse(canvas) {
         position.y = pos.y;
     });
 
-    canvas.addEventListener('mouseup', function(e) {
+    canvas.addEventListener('mouseup', function() {
         isMouseDown = false;
     });
 
-    canvas.addEventListener('mousedown', function(e) {
+    canvas.addEventListener('mousedown', function() {
         isMouseDown = true;
     });
 

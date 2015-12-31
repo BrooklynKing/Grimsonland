@@ -29,13 +29,13 @@ document.addEventListener("DOMContentLoaded", function() {
 				if (game.parameters.gameTimer > game.parameters.bestTime) {
 					game.parameters.bestTime = game.parameters.gameTimer;
 				}
-
+				game.collisions.clear();
 				mainLayer.clearLayer();
 				mainLayer.init();
 			});
 		}
 	});
-
+	window.game = game;
 	game.init();
 });
 

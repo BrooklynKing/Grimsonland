@@ -5,15 +5,18 @@ var config = {
 		sprite: ['img/mainhero.png', [0, 0], [32, 32], 6, [0, 1, 2]],
 		pos : [400,300],
 		size : [25, 32],
+		render : 'unit',
+		collisions: true,
 		parameters : {
 			speed : 150,
-			health : 1,
+			health : 10,
 			cooldown: 15,
 			fireCooldown : 15,
 			bulletsFired: 0,
 			direction : {}
 		},
 		type : 'player',
+		//conditions : [],
 		rules : ['playerLogic','shootOnMouseDown', 'moveWithKeyboard', 'bindPositionToLayer', 'playerDeath', 'canShoot', 'moveToDirection', 'rotateToMouse', 'dynamicZIndex']
 	},
 	explosion : {
@@ -21,13 +24,15 @@ var config = {
 		sprite: ['img/sprites.png', [0, 117], [39, 39], 16, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], null, true],
         //sprite: ['img/explosion.png', [0, 0], [33, 33], 5, [0, 1, 2], null, true],
 
-		rules: ['explosionLogic']
+		rules: ['destroyAfterSpriteDone']
 	},
 	monster : {
 		zIndex : 1,
 		id : 'monster',
 		sprite: ['img/demons.png', [0, 128], [32, 32], 6, [0, 1, 2]],
-		size : [25,25],
+		size : [20,28],
+		collisions: true,
+		render : 'unit',
 		parameters : {
 			speed : 50,
 			degreeSpeed: 0.03,
@@ -37,15 +42,18 @@ var config = {
 			health : 6,
 			power : 1
 		},
+		conditions : ['monsterHealthStatus', 'stopOnCollisionWithPlayer'],
 		type : 'monster',
-		rules : ['stopOnCollisionWithPlayer', 'setDirectionToPlayer', 'moveToDirection', 'monsterHealthStatus', 'canMelee', 'rotateByDirection', 'meleeAttack', 'dynamicZIndex']
+		rules : ['setDirectionToPlayer', 'moveToDirection', 'canMelee', 'rotateByDirection', 'meleeAttack', 'dynamicZIndex']
 	},
 	monsterBoss : {
         //[288, 200]
 		zIndex : 1,
 		id : 'monster',
+		collisions: true,
 		sprite: ['img/monsters2.png', [0, 0], [32, 50], 6, [0, 1, 2]],
 		size : [25, 40],
+		render : 'unit',
 		parameters : {
 			speed : 30,
 			degreeSpeed: 0.03,
@@ -56,25 +64,29 @@ var config = {
 			power : 5,
 			health : 30
 		},
+		conditions : ['monsterHealthStatus' , 'stopOnCollisionWithPlayer'],
 		type : 'monster',
-		rules : ['stopOnCollisionWithPlayer', 'monsterBossLogic', 'setDirectionToPlayer', 'moveToDirection', 'monsterHealthStatus','rotateByDirection', 'canShoot', 'dynamicZIndex']
+		rules : ['monsterBossLogic', 'setDirectionToPlayer', 'moveToDirection', 'rotateByDirection', 'canShoot', 'dynamicZIndex']
 	},
 	bullet : {
 		zIndex : 3,
 		id : 'bullet',
+		collisions: true,
 		//sprite: ['img/bsprite.png',[ 0, 0], [27, 27], 16, [0, 1]],
         sprite: ['img/fireballsprite.png',[ 0, 0], [33, 33], 16, [0, 1, 2, 3]],
-		size : [20, 20],
+		size : [25, 25],
 		type : 'spellElement',
 		parameters : {
 			power : 10,
 			speed: 400
 		},
-		rules : ['destroyAfterLeavingLayer', 'moveToDirection', 'bulletMonsterCollision', 'dynamicZIndex']
+		conditions: ['bulletMonsterCollision'],
+		rules : ['destroyAfterLeavingLayer', 'moveToDirection', 'dynamicZIndex']
 	},
 	mbullet : {
 		zIndex : 3,
 		id : 'bullet',
+		collisions: true,
 		sprite: ['img/effects.png',[288, 128], [32, 32], 10, [0, 1, 2]],
 		type : 'monsterSpellElement',
 		size : [32, 32],
@@ -89,12 +101,12 @@ var config = {
 		id : 'cursor',
 		pos: [400,350],
 		sprite : ['img/cursor.png', [0, 0], [30, 30]],
-		rules: ['cursorLogic']
+		rules: ['bindPositionToMouse']
 	},
 	blood : {
 		zIndex : 2,
 		id : 'blood',
-		sprite : ['img/blood.png', [0, 0], [32, 13]],
+		sprite : ['img/sblood.png', [0, 0], [32, 13]],
 		parameters : {
 			cooldown : 500
 		},
@@ -115,6 +127,16 @@ var config = {
         size : [70,70],
         rules: ['dynamicZIndex']
     },
+    wall : {
+        id : 'wall',
+        sprite : ['img/wall.png', [0, 0], [63, 97]],
+        size : [70,70]
+    },
+    gate : {
+        id : 'gate',
+        sprite : ['img/gates.png', [0, 0], [60, 64]],
+        size : [60,64]
+    },
     stones : {
         id : 'stones',
         sprite : ['img/stones.png', [0, 0], [36, 36]],
@@ -124,11 +146,12 @@ var config = {
 	heart : {
 		zIndex : 2,
 		id : 'heart',
+		collisions: true,
 		sprite : ['img/heart.png', [0, 0], [32, 32], 5, [0, 1]],
+		conditions: ['triggerOnPlayerCollision'],
 		parameters : {
 			health : 1
-		},
-		rules: ['triggerOnPlayerCollision']
+		}
 	},
 	counter: {
 		id : 'counter',
@@ -168,19 +191,6 @@ var config = {
 			template : "BEST TIME: {time}"
 		},
 		rules: ['bestTime']
-	},
-	health : {
-		id : 'health',
-		pos: [5, 23],
-		zIndex : 900,
-		render : "text",
-		parameters : {
-			weight : "bold",
-			color : "#EFEFEF",
-			size : 14,
-			template : "HEALTH: {health}"
-		},
-		rules: ['health']
 	}
 };
 

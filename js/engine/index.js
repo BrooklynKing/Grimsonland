@@ -2,6 +2,7 @@ import resources from './resources';
 import mouseModule from './mouse';
 import input from './input';
 import GameWindow from './objects';
+import collisions from './collisions';
 
 // A cross-browser requestAnimationFrame
 // See https://hacks.mozilla.org/2011/08/animating-with-javascript-from-setinterval-to-requestanimationframe/
@@ -33,15 +34,13 @@ function createGame(config) {
 
     config.input = input;
     config.mouse = mouse;
+    config.collisions = collisions({
+        n: 6,
+        width: canvas.width,
+        height: canvas.height
+    });
 
     var game = new GameWindow(config);
-
-    /*anvas.addEventListener('click', function(e) {
-        game.triggerGlobalEvent('eclick', e, mouse.getMousePosition(e));
-    });
-    canvas.addEventListener('mousemove', function(e) {
-        game.parameters.mouseposition = mouse.getMousePosition(e);
-    });*/
 
     function gameTimer() {
         var now = Date.now(),
@@ -60,6 +59,7 @@ function createGame(config) {
             requestAnimFrame(gameTimer);
         });
     }
+
     return {
         model: game,
         init: initGame
