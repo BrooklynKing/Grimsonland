@@ -38,43 +38,40 @@ var config = {
     },
     spawn_monster: {
         update: function (dt, obj) {
-            if (this.parameters.monsterSpawned < this.parameters.totalMonsters) {
-                if (this.parameters.currentMonsterCooldown == 0) {
-                    var monsterConfig = (Math.random() * 100 > (100 - this.parameters.chanceOfBoss)) ? obj.game.getConfig('monsterBoss') : obj.game.getConfig('monster'),
-                        startPosition = Math.round(Math.random() * 3);
+            if (this.parameters.currentMonsterCooldown == 0) {
+                var monsterConfig = (Math.random() * 100 > (100 - this.parameters.chanceOfBoss)) ? obj.game.getConfig('monsterBoss') : obj.game.getConfig('monster'),
+                    startPosition = Math.round(Math.random() * 3);
 
-                    switch (startPosition) {
-                        case 0 :
-                            monsterConfig.pos = [this.parameters.area[0][0] - monsterConfig.sprite[2][0], Math.round(Math.random() * this.parameters.area[1][1])];
-                            break;
-                        case 1 :
-                            monsterConfig.pos = [Math.round(Math.random() * this.parameters.area[1][0]), this.parameters.area[0][1] - monsterConfig.sprite[2][1]];
-                            break;
-                        case 2 :
-                            monsterConfig.pos = [this.parameters.area[1][0] + monsterConfig.sprite[2][0], Math.round(Math.random() * this.parameters.area[1][1])];
-                            break;
-                        case 3 :
-                            monsterConfig.pos = [Math.round(Math.random() * this.parameters.area[1][0]), this.parameters.area[1][1] + monsterConfig.sprite[2][1]];
-                            break;
-                    }
-
-                    this.context.addObject(monsterConfig);
-
-                    this.parameters.monsterSpawned++;
-                    this.parameters.currentMonsterCooldown = this.parameters.monsterCooldown;
-
-                } else {
-                    this.parameters.currentMonsterCooldown--;
+                switch (startPosition) {
+                    case 0 :
+                        monsterConfig.pos = [this.parameters.area[0][0] - monsterConfig.sprite[2][0], Math.round(Math.random() * this.parameters.area[1][1])];
+                        break;
+                    case 1 :
+                        monsterConfig.pos = [Math.round(Math.random() * this.parameters.area[1][0]), this.parameters.area[0][1] - monsterConfig.sprite[2][1]];
+                        break;
+                    case 2 :
+                        monsterConfig.pos = [this.parameters.area[1][0] + monsterConfig.sprite[2][0], Math.round(Math.random() * this.parameters.area[1][1])];
+                        break;
+                    case 3 :
+                        monsterConfig.pos = [Math.round(Math.random() * this.parameters.area[1][0]), this.parameters.area[1][1] + monsterConfig.sprite[2][1]];
+                        break;
                 }
+
+                this.context.addObject(monsterConfig);
+
+                this.parameters.monsterSpawned++;
+                this.parameters.currentMonsterCooldown = this.parameters.monsterCooldown;
+
+            } else {
+                this.parameters.currentMonsterCooldown--;
             }
         },
         parameters: {
             area: [[0, 0], [1280, 720]],
             currentMonsterCooldown: 0,
             chanceOfBoss : 5,
-            monsterCooldown: 4,
-            monsterSpawned: 0,
-            totalMonsters: 500
+            monsterCooldown: 5,
+            monsterSpawned: 0
         }
     },
     spawn_heart: {
@@ -95,7 +92,7 @@ var config = {
         },
         parameters: {
             area: [[50, 50], [700, 500]],
-            currentCooldown: 300,
+            currentCooldown: 350,
             cooldown: 300
         }
     },
