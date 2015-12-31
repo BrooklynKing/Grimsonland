@@ -6,6 +6,7 @@ var list = [
     'img/mainhero.png',
     'img/monsters2.png',
     'img/wall.png',
+    'img/powerup.png',
     'img/gates.png',
     'img/mainhero2.png',
     'img/grass2.png',

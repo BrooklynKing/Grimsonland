@@ -15,7 +15,7 @@ var config = {
 
 			this.addObjects([player, cursor, counter, timer, bestTime]);
 		},
-		rules: ['spawn_monster', 'spawn_heart', 'random_trees']
+		rules: ['spawn_monster', 'spawn_heart', 'random_trees','spawn_powerup']
 	}
 };
 

@@ -80,7 +80,7 @@ var config = {
             area: [[0, 0], [800, 600]],
             currentMonsterCooldown: 0,
             chanceOfBoss : 3,
-            monsterCooldown: 4,
+            monsterCooldown: 6,
             monsterSpawned: 0
         }
     },
@@ -102,8 +102,30 @@ var config = {
         },
         parameters: {
             area: [[50, 50], [750, 550]],
-            currentCooldown: 1000,
-            cooldown: 1000
+            currentCooldown: 500,
+            cooldown: 500
+        }
+    },
+    spawn_powerup: {
+        update: function (dt, obj) {
+            if (this.parameters.currentCooldown == 0) {
+                var config = obj.game.getConfig('powerup');
+
+                config.pos = [Math.round(Math.random() * this.parameters.area[1][0]) + this.parameters.area[0][0], Math.round(Math.random() * this.parameters.area[1][1]) + this.parameters.area[0][1]];
+
+                this.context.addObject(config);
+
+                this.parameters.currentCooldown = this.parameters.cooldown;
+
+            } else {
+                this.parameters.currentCooldown--;
+            }
+
+        },
+        parameters: {
+            area: [[50, 50], [750, 550]],
+            currentCooldown: 500,
+            cooldown: 500
         }
     },
     playerDeath: {
@@ -119,6 +141,7 @@ var config = {
             for (var i = 0; i < objects.length; i++) {
                 if (objects[i].type == 'player') {
                     objects[i].parameters.health -= obj.parameters.power;
+                    break;
                 }
             }
         }
@@ -135,6 +158,7 @@ var config = {
                     obj.layer.addObject(explosionConfig);
 
                     obj._removeInNextTick = true;
+                    break;
                 }
             }
         }
@@ -154,6 +178,7 @@ var config = {
                     }
 
                     obj._removeInNextTick = true;
+                    break;
                 }
             }
         }
@@ -167,6 +192,7 @@ var config = {
                         objects[i].parameters.health -= obj.parameters.power;
 
                         obj.parameters.meleeCooldown = obj.parameters.cooldown;
+                        break;
                     }
                 }
             }
@@ -179,6 +205,7 @@ var config = {
             for (var i = 0, l = objects.length; i < l; i++) {
                 if (objects[i].type == 'player') {
                     obj.parameters.speed = 0
+                    break;
                 }
             }
         }
@@ -354,8 +381,31 @@ var config = {
             if (obj.layer.game.mouse.isMouseDown() && obj.parameters.fireCooldown == 0) {
                 var	bulletConfig = obj.layer.game.getConfig('bullet'),
                     mousePosition = obj.layer.game.mouse.getMousePosition(),
-                    destination = (mousePosition)?[mousePosition.x, mousePosition.y] : [obj.pos[0], obj.pos[1] - 1],
-                    direction1 = utils.getDirection(obj.pos, destination),
+                    destination = (mousePosition)?[mousePosition.x, mousePosition.y] : [obj.pos[0], obj.pos[1] - 1];
+
+                function createBullet(direction, destination) {
+                    bulletConfig.pos = utils.clone(obj.pos);
+                    bulletConfig.id = 'bullet' + obj.parameters.bulletsFired++;
+                    bulletConfig.parameters.direction = direction;
+
+                    var bull = obj.layer.addObject(bulletConfig);
+                    bull.sprite.setDegree(utils.getDegree(obj.pos, destination)[0]);
+                }
+
+                var direction = utils.getDirection(obj.pos, utils.getMovedPointByDegree(obj.pos, destination, 0));
+
+                createBullet(direction, destination);
+
+                for (var i = 1; i <= obj.parameters.spellPower - 1; i++) {
+                    var direction1 = utils.getDirection(obj.pos, utils.getMovedPointByDegree(obj.pos, destination, 20 * i)),
+                        direction2 = utils.getDirection(obj.pos, utils.getMovedPointByDegree(obj.pos, destination, -20 * i));
+
+                    createBullet(direction1, utils.getMovedPointByDegree(obj.pos, destination, 20 * i));
+                    createBullet(direction2, utils.getMovedPointByDegree(obj.pos, destination, -20 * i));
+                }
+
+
+               /* var direction1 = utils.getDirection(obj.pos, destination),
                     direction2 = utils.getDirection(obj.pos, utils.getMovedPointByDegree(obj.pos, destination, 20)),
                     direction3 = utils.getDirection(obj.pos, utils.getMovedPointByDegree(obj.pos, destination, -20));
 
@@ -378,7 +428,7 @@ var config = {
                 bulletConfig.parameters.direction = direction3;
 
                 var bull = obj.layer.addObject(bulletConfig);
-                bull.sprite.setDegree(utils.getDegree(obj.pos, utils.getMovedPointByDegree(obj.pos, destination, -20))[0]);
+                bull.sprite.setDegree(utils.getDegree(obj.pos, utils.getMovedPointByDegree(obj.pos, destination, -20))[0]);*/
                 obj.parameters.fireCooldown = obj.parameters.cooldown;
             }
         }
@@ -427,6 +477,20 @@ var config = {
             obj.sprite && (newZIndex += obj.sprite.size[1] / 2);
 
             obj.zIndex = (obj.pos[1] > 0) ? Math.round(newZIndex) : 0;
+        }
+    },
+    triggerOnPlayerCollisionPowerUp : {
+        update: function (dt, obj) {
+            var objects = obj.parameters.collisions;
+
+            for (var i = 0; i < objects.length; i++) {
+                if (objects[i].type == 'player') {
+                    objects[i].parameters.spellPower += obj.parameters.spellPower;
+                    objects[i].parameters.cooldown += 5 ^ objects[i].parameters.spellPower;
+                    obj._removeInNextTick = true;
+                    break;
+                }
+            }
         }
     }
 };

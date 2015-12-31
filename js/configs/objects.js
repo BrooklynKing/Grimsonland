@@ -10,8 +10,9 @@ var config = {
 		parameters : {
 			speed : 150,
 			health : 10,
-			cooldown: 15,
-			fireCooldown : 15,
+            spellPower: 1,
+			cooldown: 10,
+			fireCooldown : 10,
 			bulletsFired: 0,
 			direction : {}
 		},
@@ -153,6 +154,16 @@ var config = {
 			health : 1
 		}
 	},
+    powerup : {
+        zIndex : 2,
+        id : 'powerup',
+        collisions: true,
+        sprite : ['img/powerup.png', [0, 0], [34, 34]],
+        conditions: ['triggerOnPlayerCollisionPowerUp'],
+        parameters : {
+            spellPower : 1
+        }
+    },
 	counter: {
 		id : 'counter',
 		zIndex : 910,
