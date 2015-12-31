@@ -2,7 +2,7 @@ var config = {
 	mainLayer : {
 		id: 'mainLayer',
 		size : [800,600],
-		background: 'img/grass2.png',
+		background: 'img/terrain.png',
 		init: function() {
 			var	player = this.game.getConfig('player'),
 				cursor = this.game.getConfig('cursor'),
@@ -16,7 +16,7 @@ var config = {
 
 			this.addObjects([player, cursor, counter, timer, bestTime, health]);
 		},
-		rules: ['spawn_monster', 'spawn_heart']
+		rules: ['spawn_monster', 'spawn_heart', 'random_trees']
 	}
 };
 

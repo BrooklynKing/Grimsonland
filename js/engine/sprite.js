@@ -1,11 +1,12 @@
 import resources from './resources';
+import utils from './utils';
 
 function Sprite(url, pos, size, speed, frames, dir, once, degree) {
     this.pos = pos;
     this.defaultPosition = [pos[0], pos[1]];
     this.size = size;
     this.speed = typeof speed === 'number' ? speed : 0;
-    this.frames = frames;
+    this.frames = utils.clone(frames);
     this._index = 0;
     this.url = url;
     this.dir = dir || 'horizontal';
@@ -74,14 +75,15 @@ Sprite.prototype.render = function (ctx) {
     else {
         x += frame * this.size[0];
     }
+
     ctx.rotate(this.degree);
     ctx.drawImage(resources.get(this.url),
         x, y,
         this.size[0], this.size[1],
-        -this.size[0] / 2, -this.size[1] / 2,
+        Math.round(-this.size[0] / 2), Math.round(-this.size[1] / 2),
         this.size[0], this.size[1]);
 };
-Sprite.prototype.setdegree = function (degree) {
+Sprite.prototype.setDegree = function (degree) {
     this.degree = degree;
 };
 

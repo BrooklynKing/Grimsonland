@@ -2,38 +2,37 @@ import utils from './../engine/utils';
 import format from 'string-template';
 
 var config = {
-    playerShootOnMouseClick: {
+    random_trees: {
         init: function() {
             var obj = this.context;
-            this.context.layer.game.bindGlobalEvent('eclick', function() {
-                if (obj.parameters.fireCooldown == 0) {
-                    var	bulletConfig = obj.layer.game.getConfig('bullet'),
-                        mousePosition = obj.layer.game.mouse.getMousePosition(),
-                        destination = (mousePosition)?[mousePosition.x, mousePosition.y] : [obj.pos[0], obj.pos[1] - 1],
-                        direction1 = utils.getDirection(obj.pos, destination),
-                        direction2 = utils.getDirection(obj.pos, utils.getMovedPointByDegree(obj.pos, destination, 20)),
-                        direction3 = utils.getDirection(obj.pos, utils.getMovedPointByDegree(obj.pos, destination, -20));
 
-                    bulletConfig.pos = utils.clone(obj.pos);
-                    bulletConfig.id = 'bullet' + obj.parameters.bulletsFired++;
+            function getRandomPointInArea(area) {
+                return [Math.round(Math.random() * area[1][0]) + area[0][0], Math.round(Math.random() * area[1][1]) + area[0][1]];
+            }
 
-                    bulletConfig.parameters.direction = direction1;
-                    obj.layer.addObject(bulletConfig);
+            for (var i = 0; i < this.parameters.trees; i++) {
+                var config = obj.game.getConfig('tree');
 
-                    bulletConfig.id = 'bullet' + (obj.parameters.bulletsFired++);
-                    bulletConfig.pos = utils.clone(obj.pos);
-                    bulletConfig.parameters.direction = direction2;
+                config.pos = getRandomPointInArea(this.parameters.area);
 
-                    obj.layer.addObject(bulletConfig);
+                this.context.addObject(config);
+            }
 
-                    bulletConfig.id = 'bullet' + (obj.parameters.bulletsFired++);
-                    bulletConfig.pos = utils.clone(obj.pos);
-                    bulletConfig.parameters.direction = direction3;
+            for (var i = 0; i < this.parameters.stones; i++) {
 
-                    obj.layer.addObject(bulletConfig);
-                    obj.parameters.fireCooldown = obj.parameters.cooldown;
-                }
-            });
+                var config = obj.game.getConfig('stones');
+
+                config.pos = getRandomPointInArea(this.parameters.area);
+
+                var stone = this.context.addObject(config);
+                stone.sprite.setDegree(utils.getDegree(obj.pos, getRandomPointInArea(this.parameters.area))[0]);
+            }
+
+        },
+        parameters: {
+            area: [[50, 50], [700, 500]],
+            trees: 30,
+            stones: 20
         }
     },
     spawn_monster: {
@@ -67,10 +66,10 @@ var config = {
             }
         },
         parameters: {
-            area: [[0, 0], [1280, 720]],
+            area: [[0, 0], [800, 600]],
             currentMonsterCooldown: 0,
-            chanceOfBoss : 5,
-            monsterCooldown: 5,
+            chanceOfBoss : 3,
+            monsterCooldown: 7,
             monsterSpawned: 0
         }
     },
@@ -92,8 +91,8 @@ var config = {
         },
         parameters: {
             area: [[50, 50], [700, 500]],
-            currentCooldown: 350,
-            cooldown: 300
+            currentCooldown: 1000,
+            cooldown: 1000
         }
     },
     playerDeath: {
@@ -119,7 +118,6 @@ var config = {
             if (utils.boxCollides(obj.pos, obj.size, player.pos, player.size)) {
                 var explosionConfig = obj.layer.game.getConfig('explosion');
                 explosionConfig.pos = player.pos;
-                explosionConfig.id = 'exp_' + player.id;
 
                 obj.layer.addObject(explosionConfig);
 
@@ -227,6 +225,10 @@ var config = {
         update: function (dt, obj) {
             if (obj.parameters.health <= 0) {
                 obj._removeInNextTick = true;
+                var skelet = obj.layer.game.getConfig('skelet');
+                skelet.pos = obj.pos;
+                obj.layer.addObject(skelet);
+
                 if (!obj.layer.game.parameters.monstersKilled) {
                     obj.layer.game.parameters.monstersKilled = 0;
                 }
@@ -295,7 +297,8 @@ var config = {
                 bulletConfig.id = 'mbullet_' + obj.id + '_' + obj.parameters.bulletsFired;
 
                 bulletConfig.parameters.direction = direction;
-                obj.layer.addObject(bulletConfig);
+                var bull = obj.layer.addObject(bulletConfig);
+                bull.sprite.setDegree(utils.getDegree(obj.pos, player.pos)[0]);
 
                 obj.parameters.bulletsFired++;
                 obj.parameters.fireCooldown = obj.parameters.cooldown;
@@ -308,10 +311,10 @@ var config = {
             obj.setPosition((mousePosition)?[mousePosition.x, mousePosition.y] : [obj.pos[0], obj.pos[1]]);
         }
     },
-    bloodLogic: {
+    removeOnCooldown: {
         update : function(dt, obj) {
             if (obj.parameters.cooldown == 0) {
-                obj.layer.removeObject(obj.id);
+                obj._removeInNextTick = true;
             } else {
                 obj.parameters.cooldown--;
             }
@@ -320,11 +323,11 @@ var config = {
     explosionLogic: {
         update : function (dt, obj) {
             if(obj.sprite.done) {
-                var	bloodConfig = obj.layer.game.getConfig('blood');
+               /* var	bloodConfig = obj.layer.game.getConfig('blood');
                 bloodConfig.pos = obj.pos;
                 bloodConfig.id = 'blood_' + obj.id;
-                obj.layer.addObject(bloodConfig);
-                obj.layer.removeObject(obj.id);
+                obj.layer.addObject(bloodConfig);*/
+                obj._removeInNextTick = true;
             }
         }
     },
@@ -342,19 +345,22 @@ var config = {
                 bulletConfig.id = 'bullet' + obj.parameters.bulletsFired++;
 
                 bulletConfig.parameters.direction = direction1;
-                obj.layer.addObject(bulletConfig);
+                var bull = obj.layer.addObject(bulletConfig);
+                bull.sprite.setDegree(utils.getDegree(obj.pos, destination)[0]);
 
                 bulletConfig.id = 'bullet' + (obj.parameters.bulletsFired++);
                 bulletConfig.pos = utils.clone(obj.pos);
                 bulletConfig.parameters.direction = direction2;
 
-                obj.layer.addObject(bulletConfig);
+                var bull = obj.layer.addObject(bulletConfig);
+                bull.sprite.setDegree(utils.getDegree(obj.pos, utils.getMovedPointByDegree(obj.pos, destination, 20))[0]);
 
                 bulletConfig.id = 'bullet' + (obj.parameters.bulletsFired++);
                 bulletConfig.pos = utils.clone(obj.pos);
                 bulletConfig.parameters.direction = direction3;
 
-                obj.layer.addObject(bulletConfig);
+                var bull = obj.layer.addObject(bulletConfig);
+                bull.sprite.setDegree(utils.getDegree(obj.pos, utils.getMovedPointByDegree(obj.pos, destination, -20))[0]);
                 obj.parameters.fireCooldown = obj.parameters.cooldown;
             }
         }
@@ -398,7 +404,11 @@ var config = {
     },
     dynamicZIndex: {
         update: function(dt, obj) {
-            obj.zIndex = (obj.pos[1] > 0) ? Math.round(obj.pos[1]) : 0;
+            var newZIndex = 0;
+            obj.pos && (newZIndex += obj.pos[1]);
+            obj.sprite && (newZIndex += obj.sprite.size[1] / 2);
+
+            obj.zIndex = (obj.pos[1] > 0) ? Math.round(newZIndex) : 0;
         }
     }
 };

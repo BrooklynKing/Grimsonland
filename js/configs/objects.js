@@ -2,12 +2,12 @@ var config = {
 	player : {
 		zIndex : 2,
 		id : 'player',
-		sprite: ['img/sprites2.png', [0, 0], [32, 32], 6, [0, 1, 2]],
+		sprite: ['img/mainhero.png', [0, 0], [32, 32], 6, [0, 1, 2]],
 		pos : [400,300],
-		size : [15, 20],
+		size : [25, 32],
 		parameters : {
 			speed : 150,
-			health : 2,
+			health : 1,
 			cooldown: 15,
 			fireCooldown : 15,
 			bulletsFired: 0,
@@ -19,13 +19,15 @@ var config = {
 	explosion : {
 		zIndex : 10000,
 		sprite: ['img/sprites.png', [0, 117], [39, 39], 16, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], null, true],
+        //sprite: ['img/explosion.png', [0, 0], [33, 33], 5, [0, 1, 2], null, true],
+
 		rules: ['explosionLogic']
 	},
 	monster : {
 		zIndex : 1,
 		id : 'monster',
-		sprite: ['img/sprites2.png', [0, 128], [32, 32], 6, [0, 1, 2]],
-		size : [30,30],
+		sprite: ['img/demons.png', [0, 128], [32, 32], 6, [0, 1, 2]],
+		size : [25,25],
 		parameters : {
 			speed : 50,
 			degreeSpeed: 0.03,
@@ -39,17 +41,18 @@ var config = {
 		rules : ['stopOnCollisionWithPlayer', 'setDirectionToPlayer', 'moveToDirection', 'monsterHealthStatus', 'canMelee', 'rotateByDirection', 'meleeAttack', 'dynamicZIndex']
 	},
 	monsterBoss : {
+        //[288, 200]
 		zIndex : 1,
 		id : 'monster',
-		sprite: ['img/sprites2.png', [192, 128], [32, 32], 6, [0, 1, 2]],
-		size : [30,30],
+		sprite: ['img/monsters2.png', [0, 0], [32, 50], 6, [0, 1, 2]],
+		size : [25, 40],
 		parameters : {
 			speed : 30,
 			degreeSpeed: 0.03,
 			degreeRotation : 1,
 			bulletsFired : 0,
-			cooldown : 70 ,
-			fireCooldown : 70,
+			cooldown : 150 ,
+			fireCooldown : 150,
 			power : 5,
 			health : 30
 		},
@@ -57,28 +60,29 @@ var config = {
 		rules : ['stopOnCollisionWithPlayer', 'monsterBossLogic', 'setDirectionToPlayer', 'moveToDirection', 'monsterHealthStatus','rotateByDirection', 'canShoot', 'dynamicZIndex']
 	},
 	bullet : {
-		zIndex : 2,
+		zIndex : 3,
 		id : 'bullet',
-		sprite: ['img/bsprite.png',[ 0, 0], [27, 27], 16, [0, 1]],
+		//sprite: ['img/bsprite.png',[ 0, 0], [27, 27], 16, [0, 1]],
+        sprite: ['img/fireballsprite.png',[ 0, 0], [33, 33], 16, [0, 1, 2, 3]],
 		size : [20, 20],
 		type : 'spellElement',
 		parameters : {
 			power : 10,
 			speed: 400
 		},
-		rules : ['destroyAfterLeavingLayer', 'moveToDirection', 'bulletMonsterCollision']
+		rules : ['destroyAfterLeavingLayer', 'moveToDirection', 'bulletMonsterCollision', 'dynamicZIndex']
 	},
 	mbullet : {
-		zIndex : 2,
+		zIndex : 3,
 		id : 'bullet',
-		sprite: ['img/iceball.png',[0, 0], [15, 16], 16, [0, 1, 2]],
+		sprite: ['img/effects.png',[288, 128], [32, 32], 10, [0, 1, 2]],
 		type : 'monsterSpellElement',
-		size : [12, 12],
+		size : [32, 32],
 		parameters : {
 			power : 1,
-			speed: 150
+			speed: 100
 		},
-		rules : ['destroyAfterLeavingLayer', 'moveToDirection', 'damageOnPlayerCollision', 'destroyOnPlayerCollision']
+		rules : ['destroyAfterLeavingLayer', 'moveToDirection', 'damageOnPlayerCollision', 'destroyOnPlayerCollision', 'dynamicZIndex']
 	},
 	cursor : {
 		zIndex : 999,
@@ -88,18 +92,39 @@ var config = {
 		rules: ['cursorLogic']
 	},
 	blood : {
-		zIndex : 0,
+		zIndex : 2,
 		id : 'blood',
 		sprite : ['img/blood.png', [0, 0], [32, 13]],
 		parameters : {
 			cooldown : 500
 		},
-		rules: ['bloodLogic']
+		rules: ['removeOnCooldown']
 	},
+    skelet : {
+        zIndex : 0,
+        id : 'skelet',
+        sprite : ['img/skeleton.png', [0, 0], [34, 34]],
+        parameters : {
+            cooldown : 300
+        },
+        rules: ['removeOnCooldown']
+    },
+	tree : {
+        id : 'tree',
+        sprite : ['img/tree.png', [0, 0], [76, 76]],
+        size : [70,70],
+        rules: ['dynamicZIndex']
+    },
+    stones : {
+        id : 'stones',
+        sprite : ['img/stones.png', [0, 0], [36, 36]],
+        size : [30,30],
+        zIndex : 0
+    },
 	heart : {
-		zIndex : 1,
+		zIndex : 2,
 		id : 'heart',
-		sprite : ['img/heart.png', [0, 0], [30, 30], 15, [0, 0, 0, 1, 2, 3]],
+		sprite : ['img/heart.png', [0, 0], [32, 32], 5, [0, 1]],
 		parameters : {
 			health : 1
 		},
