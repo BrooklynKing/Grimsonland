@@ -24,7 +24,7 @@ function generate(config) {
         var oldCells = object.parameters.collisions.cells;
 
         for (var i = 0; i < oldCells.length; i++) {
-            oldCells[i] && cellGrid[oldCells[i]].splice(cellGrid[oldCells[i]].indexOf(object), 1);
+            oldCells[i] && cellGrid[oldCells[i]] && cellGrid[oldCells[i]].splice(cellGrid[oldCells[i]].indexOf(object), 1);
         }
     }
 
@@ -38,19 +38,13 @@ function generate(config) {
             cells = [getCell(point1), getCell(point2), getCell(point3), getCell(point4)],
             oldCells = object.parameters.collisions.cells;
 
-        if (point1[0] < 0 || point1[1] < 0 || point2[0] < 0 || point2[1] < 0 || point3[0] < 0 || point3[1] < 0 || point4[0] <0 || point4[1] < 0) {
-            return;
-        }
-        if (point1[0] > width || point1[1] > height || point2[0] > width || point2[1] > height || point3[0] > width || point3[1] > height || point4[0] > width || point4[1] > height) {
-            return;
-        }
         for (var i = 0; i < oldCells.length; i++) {
             if (oldCells[i] != cells[i]) {
-                oldCells[i] && cellGrid[oldCells[i]].splice(cellGrid[oldCells[i]].indexOf(object), 1);
-                (cellGrid[cells[i]].indexOf(object) == -1) && cellGrid[cells[i]].push(object);
+                cellGrid[oldCells[i]] && oldCells[i] && cellGrid[oldCells[i]].splice(cellGrid[oldCells[i]].indexOf(object), 1);
+                cellGrid[cells[i]] && (cellGrid[cells[i]].indexOf(object) == -1) && cellGrid[cells[i]].push(object);
                 oldCells[i] = cells[i];
             } else {
-                (cellGrid[cells[i]].indexOf(object) == -1) && cellGrid[cells[i]].push(object);
+                cellGrid[cells[i]] && (cellGrid[cells[i]].indexOf(object) == -1) && cellGrid[cells[i]].push(object);
             }
         }
     }

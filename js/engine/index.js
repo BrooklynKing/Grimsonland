@@ -3,6 +3,7 @@ import mouseModule from './mouse';
 import input from './input';
 import GameWindow from './objects';
 import collisions from './collisions';
+import {Howl} from 'howler';
 
 // A cross-browser requestAnimationFrame
 // See https://hacks.mozilla.org/2011/08/animating-with-javascript-from-setinterval-to-requestanimationframe/
@@ -42,6 +43,13 @@ function createGame(config) {
 
     var game = new GameWindow(config);
 
+    var sound = new Howl({
+        urls: ['music/main.mp3', 'music/main.ogg'],
+        loop: true,
+        volume: 0.5
+    }).play();
+
+    console.log(sound);
     function gameTimer() {
         var now = Date.now(),
             dt = (now - lastTime) / 1000.0;
