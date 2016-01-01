@@ -85,7 +85,9 @@ var config = {
 
                         player.setPosition(destination);
 
-                        obj.parameters.cooldown = obj._parameters.cooldown - (40 * (player.parameters.spellPower - 1));
+                        var cooldown = obj._parameters.cooldown - (30 * (player.parameters.spellPower - 1));
+
+                        obj.parameters.cooldown = (cooldown > 50) ? cooldown : 50;
 
                         obj.parameters.fireCooldown = obj.parameters.cooldown;
                     }
