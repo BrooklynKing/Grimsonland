@@ -256,7 +256,7 @@ GameLayer.prototype.update = function (dt) {
         this.objects[i].updateCollisions(dt);
     }
 
-    this.game.collisions.update();
+    this.game.collisions.check();
 
     for (let i in this.objects) {
         this.objects[i].updateConditions(dt);

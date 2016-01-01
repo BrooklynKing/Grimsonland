@@ -25,6 +25,7 @@ function isDown(key) {
 }
 
 var input = {
+    pressedKeys: pressedKeys,
     reset: reset,
     isDown: isDown
 };

@@ -36,20 +36,19 @@ function createGame(config) {
     config.input = input;
     config.mouse = mouse;
     config.collisions = collisions({
-        n: 6,
-        width: canvas.width,
-        height: canvas.height
+        n: 7,
+        width: canvas.width + 100,
+        height: canvas.height + 100
     });
 
     var game = new GameWindow(config);
 
-    var sound = new Howl({
+    /*var sound = new Howl({
         urls: ['music/main.mp3', 'music/main.ogg'],
         loop: true,
         volume: 0.5
-    }).play();
+    }).play();*/
 
-    console.log(sound);
     function gameTimer() {
         var now = Date.now(),
             dt = (now - lastTime) / 1000.0;

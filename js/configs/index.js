@@ -1,5 +1,5 @@
-import objects from './objects';
-import rules from './rules';
+import objects from './objects/index';
+import rules from './rules/index';
 import resources from './resources';
 import layers from './layers';
 
@@ -9,4 +9,3 @@ export default {
     resources: resources,
     layers: layers
 };
-
