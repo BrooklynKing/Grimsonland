@@ -8,7 +8,8 @@ canvas.width = 800;
 canvas.height = 600;
 
 document.addEventListener("DOMContentLoaded", function() {
-	document.body.appendChild(canvas);
+
+	document.getElementById('main').appendChild(canvas);
 	canvas = document.getElementsByTagName('canvas')[0];
 	canvas.focus();
 
