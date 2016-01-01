@@ -3,7 +3,7 @@ var config = {
         zIndex : 2,
         id : 'player',
         sprite: ['img/mainhero.png', [0, 0], [32, 32], 6, [0, 1, 2]],
-        pos : [450,400],
+        pos : [400,300],
         size : [25, 32],
         render : 'unit',
         collisions: true,
@@ -64,10 +64,11 @@ var config = {
         rules : ['monsterBossLogic', 'setDirectionToPlayer', 'moveToDirection', 'rotateByDirection', 'canShoot', 'dynamicZIndex', 'resetSpeed', 'resetEffects']
     },
     heart : {
-        zIndex : 2,
+        zIndex : 3,
         id : 'heart',
+        render: 'object',
         collisions: true,
-        sprite : ['img/heart.png', [0, 0], [32, 32], 5, [0, 1]],
+        sprite : ['img/heart.png', [0, 0], [32, 32], 5, [0,1]],
         conditions: ['triggerOnPlayerCollision'],
         parameters : {
             health : 1
@@ -76,8 +77,10 @@ var config = {
     powerup : {
         zIndex : 2,
         id : 'powerup',
+        size: [25, 25],
+        //render: 'object',
         collisions: true,
-        sprite : ['img/powerup.png', [0, 0], [34, 34]],
+        sprite : ['img/powerup2.png', [0, 0], [72, 65]],
         conditions: ['triggerOnPlayerCollisionPowerUp'],
         parameters : {
             power : 1

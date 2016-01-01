@@ -5,6 +5,7 @@ var config = {
         collisions: true,
         sprite: ['img/effects.png',[288, 128], [32, 32], 10, [0, 1, 2]],
         type : 'monsterSpellElement',
+        render: 'object',
         size : [32, 32],
         parameters : {
             power : 1,
@@ -21,7 +22,6 @@ var config = {
         },
         rules: ['removeOnCooldown']
     },
-
     skelet : {
         zIndex : 0,
         id : 'skelet',
@@ -32,9 +32,9 @@ var config = {
         rules: ['removeOnCooldown']
     },
     explosion : {
-        zIndex : 10000,
+        render: 'object',
         sprite: ['img/sprites.png', [0, 117], [39, 39], 16, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], null, true],
-        rules: ['destroyAfterSpriteDone']
+        rules: ['destroyAfterSpriteDone', 'dynamicZIndex']
     }
 };
 

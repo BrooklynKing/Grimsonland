@@ -27,6 +27,8 @@ function GameObject(config) {
     if (config.render) {
         if (renders[config.render]) {
             this.customRender = renders[config.render];
+        } else {
+            this.customRender = config.render;
         }
     }
     this._init = config.init;
@@ -39,10 +41,15 @@ GameObject.prototype.render = function (dt) {
     ctx.translate(this.pos[0], this.pos[1]);
 
     if (this.customRender) {
-        this.customRender(this, dt);
+        if (Array.isArray(this.customRender)) {
+            for (var i = 0; i < this.customRender.length; i++) {
+                this.customRender[i](this, dt);
+            }
+        } else {
+            this.customRender(this, dt);
+        }
     } else {
-        dt && this.sprite.update(dt);
-        this.sprite.render(ctx);
+        renders.sprite(this, dt);
     }
 
     ctx.restore();
@@ -180,6 +187,7 @@ GameRule.prototype.setContext = function (context) {
 function GameLayer(config) {
     this.id = config.id;
     this.ctx = config.ctx;
+    this.initList = config.initList;
     this.game = config.game;
     this.background = this.ctx.createPattern(resources.get(config.background), 'repeat');
     this.pos = config.pos || [0, 0];
@@ -194,12 +202,16 @@ function GameLayer(config) {
 }
 GameLayer.prototype.init = function () {
     if (!this.inited) {
+        for (let i = 0; i < this.initList.length; i++) {
+            this.addObject(this.game.getConfig(this.initList[i]));
+        }
+
         this._init && this._init();
 
         var rules = this._rules;
         this.rules = [];
 
-        for (var i = 0, l = rules.length; i < l; i++) {
+        for (let i = 0, l = rules.length; i < l; i++) {
             this.addRule(this.game.rulesDefinition[rules[i]]);
         }
 

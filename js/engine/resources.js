@@ -1,5 +1,5 @@
-var resourceCache = {};
-var readyCallback;
+var resourceCache = {},
+    readyCallback;
 
 // Load an image url or an array of image urls
 function load(urlOrArr) {

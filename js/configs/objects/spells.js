@@ -48,6 +48,7 @@ var config = {
     teleportGate: {
         zIndex : 0,
         id : 'teleportGate',
+        render: 'object',
         sprite: ['img/spell.png', [0, 0], [32, 32], 7, [0,1]],
         pos : [466, 580],
         size : [32, 32],
@@ -62,6 +63,7 @@ var config = {
         zIndex : 3,
         id : 'bullet',
         collisions: true,
+        render: 'object',
         sprite: ['img/fireballsprite.png',[ 0, 0], [33, 33], 16, [0, 1, 2, 3]],
         size : [25, 25],
         type : 'spellElement',
@@ -75,6 +77,7 @@ var config = {
     frostShard : {
         zIndex : 3,
         id : 'spellPart',
+        render: 'object',
         collisions: true,
         sprite: ['img/effects.png',[96, 0], [32, 32], 10, [0, 1, 2]],
         type : 'spellElement',

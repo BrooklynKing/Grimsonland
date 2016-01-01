@@ -5,42 +5,40 @@ var config = {
         update: function (dt, obj) {
             var player = obj.layer.getObjectsByType('player')[0];
             if (player.parameters.currentSpell == 'fireball') {
-                if (obj.layer.game.mouse.isMouseDown() && obj.parameters.fireCooldown == 0) {
-                    var rule = obj,
-                        bulletConfig = obj.layer.game.getConfig('bullet'),
-                        mousePosition = obj.layer.game.mouse.getMousePosition(),
-                        destination = (mousePosition) ? [mousePosition.x, mousePosition.y] : [player.pos[0], player.pos[1] - 1],
-                        direction = utils.getDirection(player.pos, utils.getMovedPointByDegree(player.pos, destination, 0));
+                if (obj.layer.game.mouse.isMouseDown() || obj.layer.game.input.isDown(32)) {
+                    if (obj.parameters.fireCooldown == 0) {
+                        var rule = obj,
+                            bulletConfig = obj.layer.game.getConfig('bullet'),
+                            mousePosition = obj.layer.game.mouse.getMousePosition(),
+                            destination = (mousePosition) ? [mousePosition.x, mousePosition.y] : [player.pos[0], player.pos[1] - 1],
+                            startDegree = 10 * (player.parameters.spellPower);
 
-                    function createBullet(direction, destination) {
-                        bulletConfig.pos = utils.clone(player.pos);
-                        bulletConfig.id = 'bullet' + rule.parameters.bulletsFired++;
-                        bulletConfig.parameters.direction = direction;
+                        for (var i = 0; i < player.parameters.spellPower; i++) {
+                            let direction = utils.getDirection(player.pos, utils.getMovedPointByDegree(player.pos, destination, startDegree));
 
-                        var bull = obj.layer.addObject(bulletConfig);
-                        bull.sprite.setDegree(utils.getDegree(player.pos, destination)[0]);
-                    }
+                            createBullet(direction, utils.getMovedPointByDegree(player.pos, destination, startDegree));
+                            startDegree -= 20;
+                        }
+                        if (obj._parameters.cooldown + 5 * (player.parameters.spellPower - 1) > 30) {
+                            obj.parameters.cooldown = 30;
+                        } else {
+                            obj.parameters.cooldown = obj._parameters.cooldown + 5 * (player.parameters.spellPower - 1);
+                        }
 
-                    createBullet(direction, destination);
-
-                    for (var i = 1; i <= player.parameters.spellPower - 1; i++) {
-                        var direction1 = utils.getDirection(player.pos, utils.getMovedPointByDegree(player.pos, destination, 20 * i)),
-                            direction2 = utils.getDirection(player.pos, utils.getMovedPointByDegree(player.pos, destination, -20 * i));
-
-                        createBullet(direction1, utils.getMovedPointByDegree(player.pos, destination, 20 * i));
-                        createBullet(direction2, utils.getMovedPointByDegree(player.pos, destination, -20 * i));
-                    }
-                    if (player.parameters.spellPower > 1) {
-                        obj.parameters.fireCooldown = (obj.parameters.cooldown + 5 ^ (player.parameters.spellPower));
-                    } else {
                         obj.parameters.fireCooldown = obj.parameters.cooldown;
+
+                        function createBullet(direction, destination) {
+                            bulletConfig.pos = utils.clone(player.pos);
+                            bulletConfig.id = 'bullet' + rule.parameters.bulletsFired++;
+                            bulletConfig.parameters.direction = direction;
+
+                            var bull = obj.layer.addObject(bulletConfig);
+                            bull.sprite.setDegree(utils.getDegree(player.pos, destination)[0]);
+                        }
                     }
-                } else {
-                    obj.parameters.fireCooldown && obj.parameters.fireCooldown--;
                 }
-            } else {
-                obj.parameters.fireCooldown && obj.parameters.fireCooldown--;
             }
+            obj.parameters.fireCooldown && obj.parameters.fireCooldown--;
         }
 
     },
@@ -67,32 +65,33 @@ var config = {
             var player = obj.layer.getObjectsByType('player')[0];
 
             if (player.parameters.currentSpell == 'teleport') {
-                if (obj.layer.game.mouse.isMouseDown() && obj.parameters.fireCooldown == 0) {
-                    var teleportGate = obj.layer.game.getConfig('teleportGate'),
-                        mousePosition = obj.layer.game.mouse.getMousePosition(),
-                        direction = utils.getDirection(player.pos, utils.getMovedPointByDegree(player.pos, (mousePosition) ? [mousePosition.x, mousePosition.y] : [player.pos[0], player.pos[1] - 1], 0)),
-                        destination = utils.getDestination(player.pos, direction, obj.parameters.power);
+                if (obj.layer.game.mouse.isMouseDown() || obj.layer.game.input.isDown(32)) {
+                    if (obj.parameters.fireCooldown == 0) {
+                        var teleportGate = obj.layer.game.getConfig('teleportGate'),
+                            mousePosition = obj.layer.game.mouse.getMousePosition(),
+                            direction = utils.getDirection(player.pos, utils.getMovedPointByDegree(player.pos, (mousePosition) ? [mousePosition.x, mousePosition.y] : [player.pos[0], player.pos[1] - 1], 0)),
+                            destination = utils.getDestination(player.pos, direction, obj.parameters.power);
 
 
-                    teleportGate.pos = utils.clone(player.pos);
-                    teleportGate.id = 'shard' + obj.parameters.teleportGates++;
+                        teleportGate.pos = utils.clone(player.pos);
+                        teleportGate.id = 'shard' + obj.parameters.teleportGates++;
 
-                    obj.layer.addObject(teleportGate);
+                        obj.layer.addObject(teleportGate);
 
-                    teleportGate.pos = utils.clone(destination);
-                    teleportGate.id = 'shard' + obj.parameters.teleportGates++;
+                        teleportGate.pos = utils.clone(destination);
+                        teleportGate.id = 'shard' + obj.parameters.teleportGates++;
 
-                    obj.layer.addObject(teleportGate);
+                        obj.layer.addObject(teleportGate);
 
-                    player.setPosition(destination);
+                        player.setPosition(destination);
 
-                    obj.parameters.fireCooldown = obj.parameters.cooldown;
-                } else {
-                    obj.parameters.fireCooldown && obj.parameters.fireCooldown--;
+                        obj.parameters.cooldown = obj._parameters.cooldown - (40 * (player.parameters.spellPower - 1));
+
+                        obj.parameters.fireCooldown = obj.parameters.cooldown;
+                    }
                 }
-            } else {
-                obj.parameters.fireCooldown && obj.parameters.fireCooldown--;
             }
+            obj.parameters.fireCooldown && obj.parameters.fireCooldown--;
         }
     },
     frostShard : {
@@ -100,31 +99,30 @@ var config = {
             var player = obj.layer.getObjectsByType('player')[0];
 
             if (player.parameters.currentSpell == 'frostShard') {
-                if (obj.layer.game.mouse.isMouseDown() && obj.parameters.fireCooldown == 0) {
-                    var frostShard = obj.layer.game.getConfig('frostShard'),
-                        mousePosition = obj.layer.game.mouse.getMousePosition(),
-                        destination = (mousePosition) ? [mousePosition.x, mousePosition.y] : [player.pos[0], player.pos[1] - 1];
+                if (obj.layer.game.mouse.isMouseDown() || obj.layer.game.input.isDown(32)) {
+                    if (obj.parameters.fireCooldown == 0) {
+                        var frostShard = obj.layer.game.getConfig('frostShard'),
+                            mousePosition = obj.layer.game.mouse.getMousePosition(),
+                            destination = (mousePosition) ? [mousePosition.x, mousePosition.y] : [player.pos[0], player.pos[1] - 1];
 
-                    frostShard.pos = utils.clone(destination);
-                    frostShard.id = 'shard' + obj.parameters.shardsFired++;
+                        frostShard.pos = utils.clone(destination);
+                        frostShard.id = 'shard' + obj.parameters.shardsFired++;
 
-                    var spellPowerBoost = 0;
+                        var spellPowerBoost = 0;
 
-                    for (var i = 1; i < player.parameters.spellPower; i++) {
-                        spellPowerBoost += 50;
+                        for (var i = 1; i < player.parameters.spellPower; i++) {
+                            spellPowerBoost += 50;
+                        }
+
+                        frostShard.parameters.cooldown += spellPowerBoost;
+
+                        obj.layer.addObject(frostShard);
+
+                        obj.parameters.fireCooldown = obj.parameters.cooldown;
                     }
-
-                    frostShard.parameters.cooldown += spellPowerBoost;
-
-                    obj.layer.addObject(frostShard);
-
-                    obj.parameters.fireCooldown = obj.parameters.cooldown;
-                } else {
-                    obj.parameters.fireCooldown && obj.parameters.fireCooldown--;
                 }
-            } else {
-                obj.parameters.fireCooldown && obj.parameters.fireCooldown--;
             }
+            obj.parameters.fireCooldown && obj.parameters.fireCooldown--;
         }
     },
     bulletMonsterCollision: {

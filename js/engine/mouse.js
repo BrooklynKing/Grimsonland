@@ -23,14 +23,16 @@ function mouse(canvas) {
         position.y = pos.y;
     });
 
-    canvas.addEventListener('mouseup', function() {
+    window.addEventListener('mouseup', function() {
         isMouseDown = false;
     });
 
     canvas.addEventListener('mousedown', function() {
         isMouseDown = true;
     });
-
+    window.addEventListener('blur', function () {
+        isMouseDown = false;
+    });
     function getProperPosition(e) {
         var element = canvas,
             offsetX = 0,

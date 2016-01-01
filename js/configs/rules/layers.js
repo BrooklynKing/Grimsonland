@@ -10,7 +10,7 @@ var config = {
             }
 
             for (var i = 0; i < this.parameters.trees; i++) {
-                var config = obj.game.getConfig('tree');
+                let config = obj.game.getConfig('tree');
 
                 config.pos = getRandomPointInArea(this.parameters.area);
 
@@ -18,7 +18,7 @@ var config = {
             }
 
             for (var i = 0; i < this.parameters.stones; i++) {
-                var config = obj.game.getConfig('stones');
+                let config = obj.game.getConfig('stones');
 
                 config.pos = getRandomPointInArea(this.parameters.area);
 
@@ -29,7 +29,7 @@ var config = {
         },
         parameters: {
             trees: 30,
-            stones: 20
+            stones: 0
         }
     },
     spawn_monster: {
@@ -110,9 +110,25 @@ var config = {
 
         },
         parameters: {
-            area: [[50, 50], [850, 750]],
+            area: [[50, 50], [750, 550]],
             currentCooldown: 500,
             cooldown: 500
+        }
+    },
+    spawn_terrain: {
+        init: function() {
+            var obj = this.context,
+                gateConfig = obj.game.getConfig('gate'),
+                wallConfig = obj.game.getConfig('wall');
+
+            for (var i = 0; i < 7; i++) {
+                var wallConfig = obj.game.getConfig('wall');
+                wallConfig.pos = [wallConfig.size[0] * i + wallConfig.size[0] / 2, wallConfig.size[1]/2];
+                var wall = this.context.addObject(wallConfig);
+                //stone.sprite.setDegree(utils.getDegree(obj.pos, getRandomPointInArea(this.parameters.area))[0]);
+            }
+            gateConfig.pos = [wallConfig.pos[0] + wallConfig.size[0]/ 2 + gateConfig.size[0]/2, (gateConfig.size[1] - 3)/2 ];
+            var gate = this.context.addObject(gateConfig);
         }
     }
 };

@@ -9,6 +9,9 @@ function boxCollides(pos, size, pos2, size2) {
         pos2[0] + size2[0] / 2, pos2[1] + size2[1] / 2,
         pos2[0] - size2[0] / 2, pos2[1] - size2[1] / 2);
 }
+function getRadians(degree) {
+    return degree * Math.PI / 180;
+}
 function getDegree(point1, point2, prevDegree, speed) {
     var degree = Math.acos(((point2[0] - point1[0])) / Math.sqrt(Math.pow(point2[0] - point1[0], 2) + Math.pow(point2[1] - point1[1], 2)));
     (point1[1] > point2[1]) && (degree = -degree);
@@ -73,7 +76,16 @@ function getDestination(point, line, speed) {
     }
     return [x, y];
 }
+function ellipse(context, cx, cy, rx, ry, rot, aStart, aEnd){
+    context.save();
+    context.translate(cx, cy);
+    context.rotate(rot);
+    context.translate(-rx, -ry);
 
+    context.scale(rx, ry);
+    context.arc(1, 1, 1, aStart, aEnd, false);
+    context.restore();
+}
 function nextPosition(point1, point2/*, speed, dt*/) {
     var deltax = Math.abs(point2[0] - point1[0]),
         deltay = Math.abs(point2[1] - point1[1]),
@@ -110,6 +122,8 @@ function clone(obj) {
 }
 
 export default {
+    ellipse: ellipse,
+    getRadians: getRadians,
     'collides': collides,
     'boxCollides': boxCollides,
     'getDegree': getDegree,

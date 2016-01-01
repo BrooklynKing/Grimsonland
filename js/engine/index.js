@@ -47,7 +47,7 @@ function createGame(config) {
         urls: ['music/main.mp3', 'music/main.ogg'],
         loop: true,
         volume: 0.5
-    }).play();
+    })//.play();
 
     function gameTimer() {
         var now = Date.now(),
