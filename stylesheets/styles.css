@@ -224,7 +224,7 @@ header ul a strong {
 }
 
 section {
-  width:500px;
+  width:900px;
   float:right;
   padding-bottom:50px;
 }
@@ -344,4 +344,9 @@ canvas {
   float: left;
   font-family: sans-serif;
   color: #757575;
+}
+#description {
+  left: 10px;
+  width: 200px;
+  margin-top: 105px;
 }
