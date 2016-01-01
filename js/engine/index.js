@@ -43,11 +43,11 @@ function createGame(config) {
 
     var game = new GameWindow(config);
 
-    /*var sound = new Howl({
+    var sound = new Howl({
         urls: ['music/main.mp3', 'music/main.ogg'],
         loop: true,
         volume: 0.5
-    }).play();*/
+    }).play();
 
     function gameTimer() {
         var now = Date.now(),
