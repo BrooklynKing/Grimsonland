@@ -76,8 +76,8 @@ var config = {
             area: [[0, 0], [1024 , 768]],
             currentMonsterCooldown: 7,
             chanceOfBoss : 3,
-            chanceOfBoomer : 100,
-            monsterCooldown: 7000,
+            chanceOfBoomer : 27,
+            monsterCooldown: 7,
             monsterSpawned: 0
         }
     },
