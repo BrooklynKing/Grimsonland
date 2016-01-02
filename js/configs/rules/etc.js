@@ -35,6 +35,30 @@ var config = {
             obj.parameters.direction = utils.getDirection(obj.pos, player.pos);
         }
     },
+    setDirectionToPlayerAdvance: {
+        update: function (dt, obj) {
+            var player = obj.layer.getObjectsByType('player')[0],
+                playerDirection = player.parameters.direction,
+                oldDirection = utils.clone(obj.parameters.direction);
+
+            if (!oldDirection) {
+                oldDirection = utils.getDirection(obj.pos, player.pos);
+            }
+
+            if (playerDirection.dir == null) {
+                obj.parameters.direction = utils.getDirection(obj.pos, player.pos);
+            } else {
+                var newDirection = utils.getDirection(utils.getDestination(obj.pos, oldDirection, obj.parameters.speed / 2), utils.getDestination(player.pos, playerDirection, player.parameters.speed / 2));
+                var degreeBetween = utils.getDegreeBetweenDirections(newDirection, utils.getDirection(obj.pos, player.pos));
+
+                if (degreeBetween < 5 && degreeBetween > -5) {
+                    utils.getDirection(obj.pos, player.pos)
+                } else {
+                    obj.parameters.direction = utils.clone(newDirection);
+                }
+            }
+        }
+    },
     dynamicZIndex: {
         update: function(dt, obj) {
             var newZIndex = 0;
@@ -93,6 +117,13 @@ var config = {
             obj.sprite.rotateToDirection(obj.parameters.direction);
         }
     },
+    rotateByPlayer: {
+        update: function (dt, obj) {
+            var player = obj.layer.getObjectsByType('player')[0];
+
+            obj.sprite.rotateToDirection(utils.getDirection(obj.pos, player.pos));
+        }
+    }
 };
 
 export default config;

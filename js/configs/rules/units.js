@@ -171,8 +171,8 @@ var config = {
     },
     moveToDirection: {
         update: function (dt, obj) {
-            if (obj.parameters.direction.dir) {
-                obj.setPosition(utils.getDestination(obj.pos, obj.parameters.direction, obj.parameters.speed * dt));
+            if (obj.parameters.direction && obj.parameters.direction.dir) {
+                obj.setPosition(utils.getDestination(obj.pos, obj.parameters.direction, Math.round(obj.parameters.speed * dt)));
             }
         }
     },
@@ -252,6 +252,7 @@ var config = {
                 var direction = utils.getDirection(obj.pos, pos);
                 obj.parameters.direction.k = direction.k;
                 obj.parameters.direction.dir = direction.dir;
+                obj.parameters.direction.b = direction.b;
             }
         }
     },

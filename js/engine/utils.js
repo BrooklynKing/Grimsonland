@@ -11,7 +11,17 @@ function boxCollides(pos, size, pos2, size2) {
 }
 function getRadians(degree) {
     return degree * Math.PI / 180;
+};
+function getDegreeBetweenDirections(dir1, dir2){
+    if (dir2.k == 'vert') {
+        return getDegrees(Math.atan(1 / dir1.k*dir1.dir));
+    } else {
+        return getDegrees(Math.atan((dir2.k * dir2.dir - dir1.k * dir1.dir) / (1 - dir1.k * dir1.dir * dir2.k * dir2.dir)));
+    }
 }
+function getDegrees(radians) {
+    return 180 * radians / Math.PI;
+};
 function getDegree(point1, point2, prevDegree, speed) {
     var degree = Math.acos(((point2[0] - point1[0])) / Math.sqrt(Math.pow(point2[0] - point1[0], 2) + Math.pow(point2[1] - point1[1], 2)));
     (point1[1] > point2[1]) && (degree = -degree);
@@ -52,6 +62,7 @@ function getDirection(point1, point2) {
 
     if (point1[0] == point2[0]) {
         k = 'vert';
+        b = point2[0];
         dir = (point2[1] >= point1[1]) ? 1 : -1;
     } else {
         k = (point2[1] - point1[1]) / (point2[0] - point1[0]);
@@ -71,10 +82,18 @@ function getDestination(point, line, speed) {
         x = point[0];
         y = point[1] + line.dir * speed;
     } else {
-        x = (point[0] + line.dir * speed / (Math.sqrt(Math.pow(line.k, 2) + 1)));
-        y = (point[1] + line.dir * speed * line.k / (Math.sqrt(Math.pow(line.k, 2) + 1)));
+        x = point[0] + line.dir * speed / (Math.sqrt(Math.pow(line.k, 2) + 1));
+        y = point[1] + line.dir * speed * line.k / (Math.sqrt(Math.pow(line.k, 2) + 1));
     }
     return [x, y];
+}
+
+function getSpeed(start, destination, line) {
+    if (line.k == 'vert') {
+        return ( destination[1] - start[1] ) / line.dir;
+    } else {
+        return ( destination[1] - start[1] ) * (Math.sqrt(Math.pow(line.k, 2) + 1)) / line.dir;
+    }
 }
 function ellipse(context, cx, cy, rx, ry, rot, aStart, aEnd){
     context.save();
@@ -110,6 +129,19 @@ function nextPosition(point1, point2/*, speed, dt*/) {
     }
     return [x, y];
 }
+function getPointOfInterception(direction1, direction2) {
+    var x, y;
+
+    if (direction2.k == 'vert') {
+        x = direction2.b;
+        y = direction1.k * direction1.dir * x + direction1.b;
+    } else {
+        x = (direction2.b - direction1.b) / (direction1.dir * direction1.k - direction2.dir * direction2.k);
+        y = direction1.k * direction1.dir * x + direction1.b;
+    }
+
+    return [x, y];
+}
 function clone(obj) {
     if (obj == null || typeof(obj) != 'object')
         return obj;
@@ -128,8 +160,12 @@ export default {
     'boxCollides': boxCollides,
     'getDegree': getDegree,
     'nextPosition': nextPosition,
+    getSpeed: getSpeed,
     'getDestination': getDestination,
     'getDirection': getDirection,
-    'getMovedPointByDegree': getMovedPointByDegree,
-    'clone': clone
+    getDegrees: getDegrees,
+    getPointOfInterception,getPointOfInterception,
+    getDegreeBetweenDirections: getDegreeBetweenDirections,
+    clone: clone,
+    'getMovedPointByDegree': getMovedPointByDegree
 }

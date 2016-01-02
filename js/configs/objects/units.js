@@ -47,9 +47,9 @@ var config = {
             health : 10,
             power : 10
         },
-        conditions : ['monsterHealthStatus', 'monsterExplosionCondition'],
+        conditions : ['monsterHealthStatus','setDirectionToPlayerAdvance',  'monsterExplosionCondition'],
         type : 'monster',
-        rules : ['setDirectionToPlayer', 'moveToDirection', 'rotateByDirection', 'dynamicZIndex', 'resetSpeed', 'resetEffects']
+        rules : ['moveToDirection', 'rotateByPlayer', 'dynamicZIndex', 'resetSpeed', 'resetEffects']
     },
     monsterBoss : {
         zIndex : 1,
