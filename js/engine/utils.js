@@ -92,7 +92,7 @@ function getSpeed(start, destination, line) {
     if (line.k == 'vert') {
         return ( destination[1] - start[1] ) / line.dir;
     } else {
-        return ( destination[1] - start[1] ) * (Math.sqrt(Math.pow(line.k, 2) + 1)) / line.dir;
+        return ( destination[1] - start[1] ) * (Math.sqrt(Math.pow(line.k, 2) + 1)) /(line.dir * line.k);
     }
 }
 function ellipse(context, cx, cy, rx, ry, rot, aStart, aEnd){

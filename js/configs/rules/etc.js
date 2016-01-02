@@ -48,11 +48,11 @@ var config = {
             if (playerDirection.dir == null) {
                 obj.parameters.direction = utils.getDirection(obj.pos, player.pos);
             } else {
-                var newDirection = utils.getDirection(utils.getDestination(obj.pos, oldDirection, obj.parameters.speed / 2), utils.getDestination(player.pos, playerDirection, player.parameters.speed / 2));
-                var degreeBetween = utils.getDegreeBetweenDirections(newDirection, utils.getDirection(obj.pos, player.pos));
+                var newDirection = utils.getDirection(utils.getDestination(obj.pos, oldDirection, obj.parameters.speed), utils.getDestination(player.pos, playerDirection, player.parameters.speed));
+                //var degreeBetween = utils.getDegreeBetweenDirections(newDirection, utils.getDirection(obj.pos, player.pos));
 
-                if (degreeBetween < 5 && degreeBetween > -5) {
-                    utils.getDirection(obj.pos, player.pos)
+                if (Math.abs( utils.getSpeed(obj.pos, player.pos, utils.getDirection(obj.pos, player.pos))) < obj.parameters.speed) {
+                    obj.parameters.direction =  utils.getDirection(obj.pos, player.pos);
                 } else {
                     obj.parameters.direction = utils.clone(newDirection);
                 }
