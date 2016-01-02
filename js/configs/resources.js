@@ -4,7 +4,6 @@ var list = [
     'img/fireballsprite.png',
     'img/mainhero.png',
     'img/mainhero2.png',
-    'img/mainhero3.png',
     'img/monsters2.png',
     'img/spellicons.png',
     'img/spell.png',
@@ -21,6 +20,7 @@ var list = [
     'img/heart.png',
     'img/heart2.png',
     'img/terrain.png',
+    'img/bloods.png',
     'img/cursor.png'
 ];
 

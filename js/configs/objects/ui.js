@@ -1,28 +1,25 @@
 var config = {
     cursor : {
         zIndex : 999,
-        id : 'cursor',
         pos: [400,350],
         sprite : ['img/cursor.png', [0, 0], [30, 30]],
         rules: ['bindPositionToMouse']
     },
     counter: {
-        id : 'counter',
         zIndex : 910,
         pos: [5, 13],
         render : "text",
         parameters : {
             weight : "bold",
             color : "#EFEFEF",
-            template : "DEMONS KILLED: {kills}",
+            template : "SCORE: {kills}",
             size : 14
         },
         rules: ['countMonsterKilled']
     },
     timer: {
-        id : 'timer',
         zIndex : 910,
-        pos: [5, 285],
+        pos: [5, 23],
         render : "text",
         parameters : {
             weight : "bold",
@@ -33,8 +30,7 @@ var config = {
         rules: ['timer']
     },
     bestTime: {
-        id : 'bestTime',
-        pos: [5, 295],
+        pos: [5, 370],
         zIndex : 900,
         render : "text",
         parameters : {
@@ -44,6 +40,18 @@ var config = {
             template : "BEST TIME: {time}"
         },
         rules: ['bestTime']
+    },
+    bestScore: {
+        pos: [5, 380],
+        zIndex : 900,
+        render : "text",
+        parameters : {
+            weight : "bold",
+            color : "#EFEFEF",
+            size : 14,
+            template : "BEST SCORE: {score}"
+        },
+        rules: ['bestScore']
     }
 };
 

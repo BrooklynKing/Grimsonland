@@ -64,7 +64,83 @@ var config = {
                     if (objects[i].type == 'player') {
                         objects[i].parameters.health -= obj.parameters.power;
 
+                        var blood = obj.layer.game.getConfig('bloodSpray');
+                        blood.pos = utils.clone(objects[i].pos);
+                        blood.pos[0] += 2;
+                        blood.pos[1] += - 10;
+                        obj.layer.addObject(blood);
+
                         obj.parameters.meleeCooldown = obj.parameters.cooldown;
+                        break;
+                    }
+                }
+            }
+        }
+    },
+    monsterExplosion: {
+        update: function (dt, obj) {
+            if (!obj.parameters.exploded) {
+                var objects = obj.parameters.collisions;
+                for (var i = 0, l = objects.length; i < l; i++) {
+                    if (objects[i].parameters.health) {
+                        objects[i].parameters.health -= obj.parameters.power;
+                        break;
+                    }
+                }
+
+                obj.parameters.exploded = true;
+            }
+        }
+    },
+
+    monsterExplosionCondition : {
+        update: function (dt, obj) {
+            function generateExplosions() {
+                var pos = obj.pos,
+                    explosionConfig,
+                    expl;
+
+                obj._removeInNextTick = true;
+
+                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
+                explosionConfig.pos = [pos[0] - obj.size[0], pos[1] - obj.size[1]];
+                expl = obj.layer.addObject(explosionConfig);
+                expl.parameters.power = obj.parameters.power;
+
+                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
+                explosionConfig.pos = [pos[0] + obj.size[0], pos[1] - obj.size[1]];
+                expl = obj.layer.addObject(explosionConfig);
+                expl.parameters.power = obj.parameters.power;
+
+                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
+                explosionConfig.pos = [pos[0] - obj.size[0], pos[1] + obj.size[1]];
+                expl = obj.layer.addObject(explosionConfig);
+                expl.parameters.power = obj.parameters.power;
+
+                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
+                explosionConfig.pos = [pos[0] + obj.size[0], pos[1] + obj.size[1]];
+                expl = obj.layer.addObject(explosionConfig);
+                expl.parameters.power = obj.parameters.power;
+
+                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
+                explosionConfig.pos = [pos[0] - 3 / 2 * obj.size[0], pos[1]];
+                expl = obj.layer.addObject(explosionConfig);
+                expl.parameters.power = obj.parameters.power;
+
+                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
+                explosionConfig.pos = [pos[0] + 3 / 2 * obj.size[0], pos[1]];
+                expl = obj.layer.addObject(explosionConfig);
+                expl.parameters.power = obj.parameters.power;
+            }
+
+            if (obj.parameters.health <= 0) {
+                generateExplosions();
+            } else {
+                var objects = obj.parameters.collisions;
+                for (var i = 0; i < objects.length; i++) {
+                    if (objects[i].type == 'player') {
+                        generateExplosions();
+
                         break;
                     }
                 }
@@ -104,6 +180,12 @@ var config = {
         update: function (dt, obj) {
             if (obj.parameters.health <= 0) {
                 obj._removeInNextTick = true;
+
+                var explosionConfig = obj.layer.game.getConfig('explosion');
+                explosionConfig.pos = obj.pos;
+
+                obj.layer.addObject(explosionConfig);
+
                 var blood = obj.layer.game.getConfig('blood');
                 blood.pos = obj.pos;
                 obj.layer.addObject(blood);
@@ -115,12 +197,12 @@ var config = {
             }
         }
     },
-    canShoot: {
+    resetRangeCooldown: {
         update: function (dt, obj) {
             obj.parameters.fireCooldown && obj.parameters.fireCooldown--;
         }
     },
-    canMelee: {
+    resetMeleeCooldown: {
         update: function (dt, obj) {
             obj.parameters.meleeCooldown && obj.parameters.meleeCooldown--;
         }
@@ -133,25 +215,24 @@ var config = {
                     direction = utils.getDirection(obj.pos, player.pos);
 
                 bulletConfig.pos = utils.clone(obj.pos);
-                bulletConfig.id = 'mbullet_' + obj.id + '_' + obj.parameters.bulletsFired;
 
                 bulletConfig.parameters.direction = direction;
                 var bull = obj.layer.addObject(bulletConfig);
+
                 bull.sprite.setDegree(utils.getDegree(obj.pos, player.pos)[0]);
 
-                obj.parameters.bulletsFired++;
                 obj.parameters.fireCooldown = obj.parameters.cooldown;
             }
         }
     },
     moveWithKeyboard: {
         update: function (dt, obj) {
+            var pos = utils.clone(obj.pos);
+
             obj.parameters.direction.left = obj.layer.game.input.isDown(65);
             obj.parameters.direction.up = obj.layer.game.input.isDown(87);
             obj.parameters.direction.down = obj.layer.game.input.isDown(83);
             obj.parameters.direction.right = obj.layer.game.input.isDown(68);
-
-            var pos = utils.clone(obj.pos);
 
             if (obj.parameters.direction.right) {
                 pos[0] = obj.pos[0] + 1;

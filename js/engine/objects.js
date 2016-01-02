@@ -5,7 +5,7 @@ import Sprite from './sprite';
 
 function GameObject(config) {
     this.pos = utils.clone(config.pos);
-    this.id = config.id || ('object' + Date.now().toString());
+    this.id = config.id;
 
     if (config.sprite) {
         this.sprite = new Sprite(config.sprite[0], config.sprite[1], config.sprite[2], config.sprite[3], config.sprite[4], config.sprite[5], config.sprite[6], config.sprite[7]);
@@ -35,6 +35,7 @@ function GameObject(config) {
 
     this.inited = false;
 }
+GameObject.prototype.objectCount = 0;
 GameObject.prototype.render = function (dt) {
     var ctx = this.layer.ctx;
     ctx.save();
@@ -185,6 +186,7 @@ GameRule.prototype.setContext = function (context) {
 };
 
 function GameLayer(config) {
+    this.objectCount = 0;
     this.id = config.id;
     this.ctx = config.ctx;
     this.initList = config.initList;
@@ -305,25 +307,24 @@ GameLayer.prototype.removeObject = function (id) {
     }
 };
 GameLayer.prototype.addObject = function (config) {
-    if (this.objects.hasOwnProperty(config.id)) {
+    /*if (this.objects.hasOwnProperty(config.id)) {
         console.error('Object with such id already exist in this layer: ', config.id);
         return false;
-    }
-    config.id = config.id + Math.round(Date.now() + Math.random() * 1000001);
+    }*/
 
     var _obj = new GameObject(config);
     _obj.setLayer(this);
     _obj.init();
+
     if (config.type && config.type != 'default') {
         (!this.sortedObjects[config.type]) && (this.sortedObjects[config.type] = []);
-        this.sortedObjects[config.type].push(config.id);
+        this.sortedObjects[config.type].push(_obj.id);
     } else {
-        this.sortedObjects['default'].push(config.id);
+        this.sortedObjects['default'].push(_obj.id);
     }
-    this.objects[config.id] = _obj;
+    this.objects[_obj.id] = _obj;
 
-
-    return this.objects[config.id];
+    return this.objects[_obj.id];
 };
 GameLayer.prototype.addObjects = function (obj) {
     if (Array.isArray(obj)) {
@@ -438,10 +439,15 @@ GameWindow.prototype.addLayer = function (obj) {
     return this.layers[obj.id];
 };
 GameWindow.prototype.getConfig = function (id) {
-    return utils.clone(this.objectsDefinition[id]);
+    var config = utils.clone(this.objectsDefinition[id]);
+
+    (!config.id) && (config.id = id);
+
+    config.id += (this.objectCount++) + Math.round((new Date()).getTime() + Math.random() * 1000001);
+    return config;
 };
 GameWindow.prototype.getLayerConfig = function (id) {
     return this.layersDefinition[id];
 };
-
+GameWindow.prototype.objectCount= 0;
 export default GameWindow

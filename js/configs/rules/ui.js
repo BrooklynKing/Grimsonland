@@ -24,10 +24,18 @@ var config = {
         }
     },
     bestTime : {
-        init: function (dt, obj) {
+        init: function () {
             var obj = this.context;
             obj.parameters.text = format(obj.parameters.template, {
                 time: ((obj.layer.game.parameters.bestTime) / 60).toFixed(2)
+            });
+        }
+    },
+    bestScore : {
+        init: function () {
+            var obj = this.context;
+            obj.parameters.text = format(obj.parameters.template, {
+                score: obj.layer.game.parameters.bestScore
             });
         }
     }

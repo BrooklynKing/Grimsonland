@@ -5,7 +5,7 @@ var config = {
         init: function() {
             var obj = this.context;
 
-            function getRandomPointInArea() {
+            function getRandomPointInArea(size) {
                 return [Math.round(Math.random() * obj.game.canvas.width), Math.round(Math.random() * obj.game.canvas.height)];
             }
 
@@ -23,21 +23,30 @@ var config = {
                 config.pos = getRandomPointInArea(this.parameters.area);
 
                 var stone = this.context.addObject(config);
-                stone.sprite.setDegree(utils.getDegree(obj.pos, getRandomPointInArea(this.parameters.area))[0]);
+                //stone.sprite.setDegree(utils.getDegree(obj.pos, getRandomPointInArea(this.parameters.area))[0]);
             }
 
         },
         parameters: {
             trees: 30,
-            stones: 0
+            stones: 30
         }
     },
     spawn_monster: {
         update: function (dt, obj) {
             if (this.parameters.monsterSpawned < 10000) {
                 if (this.parameters.currentMonsterCooldown == 0) {
-                    var monsterConfig = (Math.random() * 100 > (100 - this.parameters.chanceOfBoss)) ? obj.game.getConfig('monsterBoss') : obj.game.getConfig('monster'),
-                        startPosition = Math.round(Math.random() * 3);
+                    var random = Math.random() * 100,
+                        startPosition = Math.round(Math.random() * 3),
+                        monsterConfig;
+
+                    if (random <= this.parameters.chanceOfBoss) {
+                        monsterConfig = obj.game.getConfig('monsterBoss');
+                    } else if (random <= this.parameters.chanceOfBoss + this.parameters.chanceOfBoomer) {
+                        monsterConfig = obj.game.getConfig('monsterBoomer');
+                    } else {
+                        monsterConfig = obj.game.getConfig('monster');
+                    }
 
                     switch (startPosition) {
                         case 0 :
@@ -64,10 +73,11 @@ var config = {
             }
         },
         parameters: {
-            area: [[0, 0], [800, 600]],
-            currentMonsterCooldown: 8,
+            area: [[0, 0], [1024 , 768]],
+            currentMonsterCooldown: 7,
             chanceOfBoss : 3,
-            monsterCooldown: 8,
+            chanceOfBoomer : 10,
+            monsterCooldown: 7,
             monsterSpawned: 0
         }
     },
@@ -88,7 +98,7 @@ var config = {
 
         },
         parameters: {
-            area: [[50, 50], [750, 550]],
+            area: [[50, 50], [975, 715]],
             currentCooldown: 400,
             cooldown: 400
         }
@@ -110,7 +120,7 @@ var config = {
 
         },
         parameters: {
-            area: [[50, 50], [750, 550]],
+            area: [[100, 100], [900, 715]],
             currentCooldown: 500,
             cooldown: 500
         }

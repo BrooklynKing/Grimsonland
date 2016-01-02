@@ -7,11 +7,9 @@ var config = {
             if (player.parameters.currentSpell == 'fireball') {
                 if (obj.layer.game.mouse.isMouseDown() || obj.layer.game.input.isDown(32)) {
                     if (obj.parameters.fireCooldown == 0) {
-                        var rule = obj,
-                            bulletConfig = obj.layer.game.getConfig('bullet'),
-                            mousePosition = obj.layer.game.mouse.getMousePosition(),
+                        var mousePosition = obj.layer.game.mouse.getMousePosition(),
                             destination = (mousePosition) ? [mousePosition.x, mousePosition.y] : [player.pos[0], player.pos[1] - 1],
-                            startDegree = 10 * (player.parameters.spellPower);
+                            startDegree = 10 * (player.parameters.spellPower - 1);
 
                         for (var i = 0; i < player.parameters.spellPower; i++) {
                             let direction = utils.getDirection(player.pos, utils.getMovedPointByDegree(player.pos, destination, startDegree));
@@ -28,9 +26,10 @@ var config = {
                         obj.parameters.fireCooldown = obj.parameters.cooldown;
 
                         function createBullet(direction, destination) {
+                            var bulletConfig = obj.layer.game.getConfig('bullet');
                             bulletConfig.pos = utils.clone(player.pos);
-                            bulletConfig.id = 'bullet' + rule.parameters.bulletsFired++;
                             bulletConfig.parameters.direction = direction;
+                            bulletConfig.parameters.power += 5 * (player.parameters.spellPower - 1);
 
                             var bull = obj.layer.addObject(bulletConfig);
                             bull.sprite.setDegree(utils.getDegree(player.pos, destination)[0]);
@@ -67,19 +66,17 @@ var config = {
             if (player.parameters.currentSpell == 'teleport') {
                 if (obj.layer.game.mouse.isMouseDown() || obj.layer.game.input.isDown(32)) {
                     if (obj.parameters.fireCooldown == 0) {
-                        var teleportGate = obj.layer.game.getConfig('teleportGate'),
-                            mousePosition = obj.layer.game.mouse.getMousePosition(),
+                        var  mousePosition = obj.layer.game.mouse.getMousePosition(),
                             direction = utils.getDirection(player.pos, utils.getMovedPointByDegree(player.pos, (mousePosition) ? [mousePosition.x, mousePosition.y] : [player.pos[0], player.pos[1] - 1], 0)),
                             destination = utils.getDestination(player.pos, direction, obj.parameters.power);
 
-
+                        var teleportGate = obj.layer.game.getConfig('teleportGate');
                         teleportGate.pos = utils.clone(player.pos);
-                        teleportGate.id = 'shard' + obj.parameters.teleportGates++;
 
                         obj.layer.addObject(teleportGate);
 
+                        var teleportGate = obj.layer.game.getConfig('teleportGate');
                         teleportGate.pos = utils.clone(destination);
-                        teleportGate.id = 'shard' + obj.parameters.teleportGates++;
 
                         obj.layer.addObject(teleportGate);
 
@@ -108,7 +105,6 @@ var config = {
                             destination = (mousePosition) ? [mousePosition.x, mousePosition.y] : [player.pos[0], player.pos[1] - 1];
 
                         frostShard.pos = utils.clone(destination);
-                        frostShard.id = 'shard' + obj.parameters.shardsFired++;
 
                         var spellPowerBoost = 0;
 
@@ -134,11 +130,11 @@ var config = {
                 if (objects[i].type == 'monster') {
                     objects[i].parameters.health -= obj.parameters.power;
 
-                    var explosionConfig = obj.layer.game.getConfig('explosion');
-                    explosionConfig.pos = objects[i].pos;
-                    explosionConfig.id = 'exp_' + objects[i].id;
-
-                    obj.layer.addObject(explosionConfig);
+                    var blood = obj.layer.game.getConfig('bloodSpray');
+                    blood.pos = utils.clone(objects[i].pos);
+                    blood.pos[0] += 2;
+                    blood.pos[1] += - 10;
+                    obj.layer.addObject(blood);
 
                     obj._removeInNextTick = true;
 
