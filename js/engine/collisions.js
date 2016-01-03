@@ -21,7 +21,7 @@ function generate(config) {
     }
 
     function removeObject(object){
-        var oldCells = object.parameters.collisions.cells;
+        var oldCells = object.getParameter('collisions').cells;
 
         for (var i = 0; i < oldCells.length; i++) {
             cellGrid[oldCells[i]] && cellGrid[oldCells[i]].splice(cellGrid[oldCells[i]].indexOf(object), 1);
@@ -31,13 +31,13 @@ function generate(config) {
     function updateObject(object) {
         var pos = object.pos,
             size = object.size,
-            point1 = [(pos[0] + size[0] / 2) >> n, (pos[1] + size[1] / 2) >> n],
-            point2 = [(pos[0] - size[0] / 2) >> n, (pos[1] - size[1] / 2) >> n],
-            point3 = [(pos[0] + size[0] / 2) >> n, (pos[1] - size[1] / 2) >> n],
-            point4 = [(pos[0] - size[0] / 2) >> n, (pos[1] + size[1] / 2) >> n],
-            point5 = [pos[0] >> n, pos[1] >> n],
+            point1 = [(pos.x + size[0] / 2) >> n, (pos.y + size[1] / 2) >> n],
+            point2 = [(pos.x - size[0] / 2) >> n, (pos.y - size[1] / 2) >> n],
+            point3 = [(pos.x + size[0] / 2) >> n, (pos.y - size[1] / 2) >> n],
+            point4 = [(pos.x - size[0] / 2) >> n, (pos.y + size[1] / 2) >> n],
+            point5 = [pos.x >> n, pos.y >> n],
             cells = [getCell(point1), getCell(point2), getCell(point3), getCell(point4), getCell(point5)],
-            oldCells = object.parameters.collisions.cells;
+            oldCells = object.getParameter('collisions').cells;
 
         for (var i = 0; i < oldCells.length; i++) {
             if (oldCells[i] != cells[i]) {
@@ -60,8 +60,8 @@ function generate(config) {
                     for (var k = 0; k < length; k++) {
                         for (var l = k + 1; l < length; l++) {
                             if (utils.boxCollides(objects[k].pos, objects[k].size, objects[l].pos, objects[l].size)) {
-                                (objects[k].parameters.collisions.indexOf(objects[l]) == -1 ) && objects[k].parameters.collisions.push(objects[l]);
-                                (objects[l].parameters.collisions.indexOf(objects[k]) == -1 ) && objects[l].parameters.collisions.push(objects[k]);
+                                (objects[k].getParameter('collisions').indexOf(objects[l]) == -1 ) && objects[k].getParameter('collisions').push(objects[l]);
+                                (objects[l].getParameter('collisions').indexOf(objects[k]) == -1 ) && objects[l].getParameter('collisions').push(objects[k]);
                             }
                         }
                     }

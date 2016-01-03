@@ -1,12 +1,13 @@
 var config = {
     cursor : {
-        zIndex : 999,
+        zIndex : 2000,
+        render: 'cursor',
         pos: [400,350],
         sprite : ['img/cursor.png', [0, 0], [30, 30]],
         rules: ['bindPositionToMouse']
     },
     counter: {
-        zIndex : 910,
+        zIndex : 2000,
         pos: [5, 13],
         render : "text",
         parameters : {
@@ -18,7 +19,7 @@ var config = {
         rules: ['countMonsterKilled']
     },
     timer: {
-        zIndex : 910,
+        zIndex : 2000,
         pos: [5, 23],
         render : "text",
         parameters : {
@@ -31,7 +32,7 @@ var config = {
     },
     bestTime: {
         pos: [5, 370],
-        zIndex : 900,
+        zIndex : 2000,
         render : "text",
         parameters : {
             weight : "bold",
@@ -43,7 +44,7 @@ var config = {
     },
     bestScore: {
         pos: [5, 380],
-        zIndex : 900,
+        zIndex : 2000,
         render : "text",
         parameters : {
             weight : "bold",

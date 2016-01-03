@@ -2,8 +2,12 @@ import resources from './resources';
 import utils from './utils';
 
 function Sprite(url, pos, size, speed, frames, dir, once, degree) {
-    this.pos = pos;
-    this.defaultPosition = [pos[0], pos[1]];
+    if (pos instanceof utils.Point) {
+        this.pos = pos.clone();
+    } else {
+        this.pos = new utils.Point(pos);
+    }
+    this.defaultPosition = this.pos.clone();
     this.size = size;
     this.speed = typeof speed === 'number' ? speed : 0;
     this.frames = utils.clone(frames);
@@ -35,15 +39,20 @@ Sprite.prototype.rotateToDirection = function (direction) {
         config = {};
 
     if (direction.dir == 1) {
-        (direction.k >= 1) && (config.pos = [pos[0], pos[1]]);
-        ((direction.k < 1) && (direction.k >= -1)) && (config.pos = [pos[0], pos[1] + 2 * this.size[1]]);
-        (direction.k < -1) && (config.pos =[pos[0], pos[1] + 3 * this.size[1]]);
+        ((direction.k < 1) && (direction.k >= -1)) && (config.pos = [pos.x, pos.y]);
+        (direction.k >= 1) && (config.pos = [pos.x, pos.y + 2 * this.size[1]]);
+        (direction.k < -1) && (config.pos =[pos.x, pos.y + this.size[1]]);
+        ( direction.k == 'vertical')  && (config.pos =[pos.x, pos.y + 3 * this.size[1]]);
+        ( direction.k == 'horizontal')  && (config.pos =[pos.x, pos.y]);
     } else if (direction.dir == -1) {
-        (direction.k >= 1) && (config.pos =[pos[0], pos[1] + 3 * this.size[1]]);
-        ((direction.k < 1) && (direction.k >= -1)) && (config.pos =[pos[0], pos[1] + this.size[1]]);
-        (direction.k < -1) && (config.pos = [pos[0], pos[1]]);
+        (direction.k >= 1) && (config.pos =[pos.x, pos.y + this.size[1]]);
+        ((direction.k < 1) && (direction.k >= -1)) && (config.pos =[pos.x, pos.y + 3 * this.size[1]]);
+        (direction.k < -1) && (config.pos = [pos.x, pos.y + 2 * this.size[1]]);
+        ( direction.k == 'vertical')  && (config.pos =[pos.x, pos.y]);
+        ( direction.k == 'horizontal')  && (config.pos =[pos.x, pos.y + 3 * this.size[1]]);
     }
 
+    config.pos = new utils.Point(config.pos);
     this.updateConfig(config);
 };
 Sprite.prototype.render = function (ctx) {
@@ -64,8 +73,8 @@ Sprite.prototype.render = function (ctx) {
     }
 
 
-    var x = this.pos[0];
-    var y = this.pos[1];
+    var x = this.pos.x;
+    var y = this.pos.y;
 
     if (this.dir == 'vertical') {
         y += frame * this.size[1];

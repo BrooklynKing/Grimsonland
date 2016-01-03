@@ -2,7 +2,7 @@ var config = {
     player : {
         zIndex : 2,
         sprite: ['img/mainhero.png', [0, 0], [32, 32], 6, [0, 1, 2]],
-        pos : [512, 384],
+        pos : [612, 484],
         size : [25, 32],
         render : 'unit',
         collisions: true,
@@ -27,7 +27,6 @@ var config = {
             speed : 35,
             cooldown : 70 ,
             effects : [],
-            meleeCooldown: 70,
             health : 20,
             power : 5
         },
@@ -47,9 +46,9 @@ var config = {
             health : 10,
             power : 10
         },
-        conditions : ['monsterHealthStatus','setDirectionToPlayerAdvance',  'monsterExplosionCondition'],
+        conditions : ['monsterHealthStatus', 'setDirectionToPlayerAdvance', 'monsterExplosionCondition'],
         type : 'monster',
-        rules : ['moveToDirection', 'rotateByPlayer', 'dynamicZIndex', 'resetSpeed', 'resetEffects']
+        rules : [ 'moveToDirection', 'rotateByPlayer', 'dynamicZIndex', 'resetSpeed', 'resetEffects']
     },
     monsterBoss : {
         zIndex : 1,
@@ -58,16 +57,33 @@ var config = {
         size : [25, 40],
         render : 'unit',
         parameters : {
-            speed : 30,
+            speed : 40,
             cooldown : 200 ,
-            fireCooldown : 200,
             power : 10,
             health : 30,
             effects : []
         },
         conditions : ['monsterHealthStatus' , 'stopOnCollisionWithPlayer'],
         type : 'monster',
-        rules : ['monsterBossLogic', 'setDirectionToPlayer', 'moveToDirection', 'rotateByDirection', 'dynamicZIndex', 'resetSpeed', 'resetEffects', 'resetRangeCooldown']
+        rules : ['setDirectionToPlayer', 'monsterBossLogic', 'moveToDirection', 'rotateByDirection', 'dynamicZIndex', 'resetSpeed', 'resetEffects', 'resetRangeCooldown']
+    },
+    monsterBoss2 : {
+        zIndex : 1,
+        collisions: true,
+        sprite: ['img/monsters2.png', [192, 200], [32, 50], 6, [0, 1, 2]],
+        size : [25, 40],
+        render : 'unit',
+        parameters : {
+            speed : 15,
+            cooldown : 200 ,
+            fireRange : 300,
+            power : 10,
+            health : 50,
+            effects : []
+        },
+        conditions : ['monsterHealthStatus' , 'stopOnCollisionWithPlayer'],
+        type : 'monster',
+        rules : ['setDirectionToPlayer', 'monsterBoss2Logic', 'rotateByDirection', 'dynamicZIndex', 'resetSpeed', 'resetEffects', 'resetRangeCooldown']
     },
     heart : {
         zIndex : 3,
@@ -76,7 +92,7 @@ var config = {
         sprite : ['img/heart.png', [0, 0], [32, 32], 5, [0,1]],
         conditions: ['triggerOnPlayerCollision'],
         parameters : {
-            health : 10
+            health : 5
         }
     },
     powerup : {

@@ -1,3 +1,5 @@
+import utils from './utils';
+
 function mouse(canvas) {
         // HITTEST: To convert the mouse position to be canvas relative.
         // BEGIN http://stackoverflow.com/questions/1114465/getting-mouse-location-in-canvas
@@ -10,10 +12,7 @@ function mouse(canvas) {
         html = document.body.parentNode,
         htmlTop = html.offsetTop,
         htmlLeft = html.offsetLeft,
-        position = {
-            x: 0,
-            y:0
-        },
+        position = new utils.Point(0, 0),
         isMouseDown = false;
 
     canvas.addEventListener('mousemove', function(e) {

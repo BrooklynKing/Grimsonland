@@ -20,6 +20,7 @@
     "babel-preset-es2015": "^6.1.18",
     "node-libs-browser": "^0.5.3",
     "webpack": "^1.12.2",
+    "victor" : "*",
     "webpack-dev-server": "^1.12.1"
   }
 }

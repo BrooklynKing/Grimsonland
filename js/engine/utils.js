@@ -1,13 +1,81 @@
+var Victor = require('victor');
+
 function collides(x, y, r, b, x2, y2, r2, b2) {
     return !(r >= x2 || x < r2 ||
     b >= y2 || y < b2);
 }
 
+function Point(x, y) {
+    if (Array.isArray(x)) {
+        this.x = x[0];
+        this.y = x[1];
+    } else {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+Point.prototype.clone = function() {
+    return new Point(this.x, this.y);
+};
+
+function Line(point, vector){
+
+    /*if (point.x == vector.x) {
+        this.k = 'vert';
+        this.b = vector.x;
+        this.dir = (vector.y >= point.y) ? 1 : -1;
+    } else {
+        this.k = (vector.y - point.y) / (vector.x - point.x);
+        this.b = point.y - point.x * this.k;
+        this.dir = (vector.x >= point.x) ? 1 : -1;
+    }*/
+    var _vector = vector;
+
+    if (vector instanceof Point) {
+        _vector = getVectorByTwoPoints(point, vector);
+    }
+    if (_vector.x != 0 && _vector.y != 0) {
+        this.k = (_vector.x / _vector.y);
+        this.b = (point.x - _vector.x * point.y / _vector.y);
+        this.dir = (_vector.y >= 0) ? 1 : -1;
+    } else if (_vector.x == 0) {
+        this.k = 'vertical';
+        this.b = _vector.x;
+        this.dir = (_vector.y >= 0) ? 1 : -1;
+    } else {
+        this.k = 'horizontal';
+        this.b = _vector.y;
+        this.dir = (_vector.x >= 0) ? 1 : -1;
+    }
+    this.vector = _vector//getVectorByTwoPoints(point, vector);
+}
+
+Line.prototype.getDestination = function(point, speed) {
+    var x, y;
+
+    if (this.k == 'vertical') {
+        x = point.x;
+        y = point.y + this.dir * speed;
+    } else if (this.k == 'horizontal') {
+        x = point.x + this.dir * speed;
+        y = point.y;
+    }else {
+        x = point.x + this.dir * speed * this.k / (Math.sqrt(Math.pow(this.k, 2) + 1));
+        y = point.y + this.dir * speed / (Math.sqrt(Math.pow(this.k, 2) + 1));
+    }
+    return new Point(x, y);
+};
+
+function getVectorByTwoPoints(point1, point2) {
+    return new Victor(point2.x - point1.x, point2.y - point1.y);
+}
+
 function boxCollides(pos, size, pos2, size2) {
-    return collides(pos[0] + size[0] / 2, pos[1] + size[1] / 2,
-        pos[0] - size[0] / 2, pos[1] - size[1] / 2,
-        pos2[0] + size2[0] / 2, pos2[1] + size2[1] / 2,
-        pos2[0] - size2[0] / 2, pos2[1] - size2[1] / 2);
+    return collides(pos.x + size[0] / 2, pos.y + size[1] / 2,
+        pos.x  - size[0] / 2, pos.y  - size[1] / 2,
+        pos2.x  + size2[0] / 2, pos2.y  + size2[1] / 2,
+        pos2.x  - size2[0] / 2, pos2.y  - size2[1] / 2);
 }
 function getRadians(degree) {
     return degree * Math.PI / 180;
@@ -23,8 +91,8 @@ function getDegrees(radians) {
     return 180 * radians / Math.PI;
 };
 function getDegree(point1, point2, prevDegree, speed) {
-    var degree = Math.acos(((point2[0] - point1[0])) / Math.sqrt(Math.pow(point2[0] - point1[0], 2) + Math.pow(point2[1] - point1[1], 2)));
-    (point1[1] > point2[1]) && (degree = -degree);
+    var degree = Math.acos(((point2.x - point1.x)) / Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2)));
+    (point1.y > point2.y) && (degree = -degree);
     if (degree == prevDegree) {
         return [degree, 0];
     } else if (((degree < 0 && prevDegree > 0) || (degree > 0 && prevDegree < 0)) && (Math.abs(prevDegree - degree) > Math.PI)) {
@@ -41,9 +109,10 @@ function getDegree(point1, point2, prevDegree, speed) {
 
 }
 function getMovedPointByDegree(point1, point2, degree) {
-    var newDegree = Math.acos(((point2[0] - point1[0])) / Math.sqrt(Math.pow(point2[0] - point1[0], 2) + Math.pow(point2[1] - point1[1], 2)));
+    var newDegree = Math.acos(((point2.x - point1.x)) / Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2)));
+
     newDegree = newDegree * 180 / Math.PI;
-    (point1[1] > point2[1]) && (newDegree = 360 - newDegree);
+    (point1.y > point2.y) && (newDegree = 360 - newDegree);
     newDegree += degree;
     (newDegree < 0) && (newDegree += 360);
     (newDegree > 360) && (newDegree -= 360);
@@ -55,7 +124,7 @@ function getMovedPointByDegree(point1, point2, degree) {
         k: Math.tan(newDegree * Math.PI / 180)
     };
 
-    return getDestination(point1, direction, Math.sqrt(Math.pow(point2[0] - point1[0], 2) + Math.pow(point2[1] - point1[1], 2)));
+    return getDestination(point1, direction, Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2)));
 }
 function getDirection(point1, point2) {
     var k, b, dir;
@@ -75,24 +144,25 @@ function getDirection(point1, point2) {
         'dir': dir
     }
 }
-
+function getDistance(point1, point2) {
+    return Math.sqrt(Math.pow(point1.x - point2.x,2) + Math.pow(point1.y - point2.y,2))
+}
 function getDestination(point, line, speed) {
     var x, y;
     if (line.k == 'vert') {
-        x = point[0];
-        y = point[1] + line.dir * speed;
+        x = point.x;
+        y = point.y + line.dir * speed;
     } else {
-        x = point[0] + line.dir * speed / (Math.sqrt(Math.pow(line.k, 2) + 1));
-        y = point[1] + line.dir * speed * line.k / (Math.sqrt(Math.pow(line.k, 2) + 1));
+        x = point.x + line.dir * speed / (Math.sqrt(Math.pow(line.k, 2) + 1));
+        y = point.y + line.dir * speed * line.k / (Math.sqrt(Math.pow(line.k, 2) + 1));
     }
-    return [x, y];
+    return new Point(x, y);
 }
-
 function getSpeed(start, destination, line) {
     if (line.k == 'vert') {
-        return ( destination[1] - start[1] ) / line.dir;
+        return ( destination.y - start.y ) / line.dir;
     } else {
-        return ( destination[1] - start[1] ) * (Math.sqrt(Math.pow(line.k, 2) + 1)) /(line.dir * line.k);
+        return ( destination.y - start.y ) * (Math.sqrt(Math.pow(line.k, 2) + 1)) /(line.dir * line.k);
     }
 }
 function ellipse(context, cx, cy, rx, ry, rot, aStart, aEnd){
@@ -127,7 +197,7 @@ function nextPosition(point1, point2/*, speed, dt*/) {
         }
 
     }
-    return [x, y];
+    return new Point(x, y);
 }
 function getPointOfInterception(direction1, direction2) {
     var x, y;
@@ -143,17 +213,13 @@ function getPointOfInterception(direction1, direction2) {
     return [x, y];
 }
 function clone(obj) {
-    if (obj == null || typeof(obj) != 'object')
-        return obj;
-
-    var temp = obj.constructor(); // changed
-
-    for (var key in obj)
-        temp[key] = clone(obj[key]);
-    return temp;
+    (!obj) && (obj = {});
+    return JSON.parse(JSON.stringify(obj));
 }
 
 export default {
+    Line : Line,
+    Point : Point,
     ellipse: ellipse,
     getRadians: getRadians,
     'collides': collides,
@@ -164,6 +230,7 @@ export default {
     'getDestination': getDestination,
     'getDirection': getDirection,
     getDegrees: getDegrees,
+    getDistance : getDistance,
     getPointOfInterception,getPointOfInterception,
     getDegreeBetweenDirections: getDegreeBetweenDirections,
     clone: clone,

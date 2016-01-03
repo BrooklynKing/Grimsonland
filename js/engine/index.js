@@ -37,8 +37,11 @@ function createGame(config) {
     config.mouse = mouse;
     config.collisions = collisions({
         n: 7,
-        width: canvas.width + 100,
-        height: canvas.height + 100
+        width: canvas.width + 200,
+        height: canvas.height + 200
+    });
+    document.addEventListener('contextmenu', function(e){
+        e.preventDefault();
     });
 
     var game = new GameWindow(config);

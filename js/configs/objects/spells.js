@@ -8,8 +8,7 @@ var config = {
         render : 'spell',
         parameters : {
             bulletsFired: 0,
-            cooldown: 10,
-            fireCooldown : 10
+            cooldown: 10
         },
         type : 'spell',
         rules : ['fireball']
@@ -23,7 +22,6 @@ var config = {
         parameters : {
             shardsFired: 0,
             cooldown: 50,
-            fireCooldown : 50
         },
         type : 'spell',
         rules : ['frostShard']
@@ -37,8 +35,7 @@ var config = {
         parameters : {
             power : 200,
             teleportGates : 0,
-            cooldown: 200,
-            fireCooldown : 200
+            cooldown: 200
         },
         type : 'spell',
         rules : ['teleport']

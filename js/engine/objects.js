@@ -4,7 +4,11 @@ import renders from './renderers';
 import Sprite from './sprite';
 
 function GameObject(config) {
-    this.pos = utils.clone(config.pos);
+    if (config.pos instanceof utils.Point) {
+        this.pos = config.pos.clone();
+    } else {
+        this.pos = new utils.Point(config.pos);
+    }
     this.id = config.id;
 
     if (config.sprite) {
@@ -19,11 +23,26 @@ function GameObject(config) {
     this.collisions = config.collisions;
     this.callbacks = config.callbacks || {};
     this.zIndex = config.zIndex || 0;
-    this.parameters = (config.parameters && utils.clone(config.parameters)) || {};
-    this._parameters = config.parameters;
+    var parameters = (config.parameters && utils.clone(config.parameters)) || {},
+        _parameters = config.parameters || {};
+
+    this.getParameter = function(id) {
+        return parameters[id];
+    };
+    this.setParameter = function(id, value) {
+        parameters[id] = value;
+        return parameters[id];
+    };
+    this.getDefaultParameter = function(id) {
+        return _parameters[id];
+    };
+
+    /*this.parameters = (config.parameters && utils.clone(config.parameters)) || {};
+    this._parameters = config.parameters;*/
     this.rules = config.rules || [];
     this.conditions = config.conditions || [];
     this._update = config.update;
+
     if (config.render) {
         if (renders[config.render]) {
             this.customRender = renders[config.render];
@@ -39,7 +58,7 @@ GameObject.prototype.objectCount = 0;
 GameObject.prototype.render = function (dt) {
     var ctx = this.layer.ctx;
     ctx.save();
-    ctx.translate(this.pos[0], this.pos[1]);
+    ctx.translate(this.pos.x, this.pos.y);
 
     if (this.customRender) {
         if (Array.isArray(this.customRender)) {
@@ -96,7 +115,7 @@ GameObject.prototype.updateConditions = function(dt) {
         this.conditions[i].update(dt, this);
     }
     if (this._removeInNextTick) {
-        if (this.parameters.collisions) {
+        if (this.collisions) {
             this.layer.game.collisions.removeObject(this);
         }
         this.layer.removeObject(this.id);
@@ -104,30 +123,8 @@ GameObject.prototype.updateConditions = function(dt) {
     }
 };
 GameObject.prototype.setPosition = function (point) {
-    this.pos[0] = point[0];
-    this.pos[1] = point[1];
-};
-GameObject.prototype.triggerAction = function (action, event, mouse) {
-    var object = this;
-
-    function checkHitBox(mouse) {
-        var flag;
-
-        (object.pos[0] < mouse.x) && (object.pos[0] + object.sprite.size[0] > mouse.x) && (object.pos[1] < mouse.y) && (object.pos[1] + object.sprite.size[1] > mouse.y) && (flag = true);
-        return flag;
-    }
-
-    switch (action) {
-        case 'click':
-            this.callbacks['click'] && checkHitBox(mouse) && this.callbacks['click'](this, event);
-            break;
-        case 'mousemove' :
-            this.callbacks['mousemove'] && checkHitBox(mouse) && this.callbacks['mousemove'](this, event);
-            this.callbacks['mouseleave'] && !checkHitBox(mouse) && this.callbacks['mouseleave'](this, event);
-            break;
-        default:
-            this.callbacks.hasOwnProperty(action) && this.callbacks[action](this, event)
-    }
+    this.pos.x = point.x;
+    this.pos.y = point.y;
 };
 GameObject.prototype.removeRule = function (id) {
     if (this.rules.hasOwnProperty(id)) {
@@ -192,8 +189,12 @@ function GameLayer(config) {
     this.initList = config.initList;
     this.game = config.game;
     this.background = this.ctx.createPattern(resources.get(config.background), 'repeat');
-    this.pos = config.pos || [0, 0];
+    this.pos = config.pos ? new utils.Point(config.pos) : new utils.Point(0, 0);
     this.size = config.size || [config.ctx.canvas.width, config.ctx.canvas.height];
+    this.translate = config.translate || {
+            x: 0,
+            y: 0
+        };
     this.sortedObjects = {
         'default': []
     };
@@ -227,11 +228,12 @@ GameLayer.prototype.render = function (dt) {
 
     ctx.save();
     ctx.beginPath();
-    ctx.rect(this.pos[0], this.pos[1], this.size[0], this.size[1]);
+    ctx.rect(this.pos.x, this.pos.y, this.size[0], this.size[1]);
     ctx.clip();
     ctx.fillStyle = this.background;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, canvas.width, canvas.height );
 
+    ctx.translate(this.translate.x, this.translate.y);
     for (let i in this.objects) {
         if (this.objects.hasOwnProperty(i)) {
             (arr[this.objects[i].zIndex]) || (arr[this.objects[i].zIndex] = []);
@@ -245,7 +247,7 @@ GameLayer.prototype.render = function (dt) {
             }
         }
     }
-
+    ctx.translate(-this.translate.x, -this.translate.y);
     ctx.beginPath();
     ctx.strokeStyle = 'black';
     ctx.shadowBlur = 15;
@@ -253,7 +255,7 @@ GameLayer.prototype.render = function (dt) {
     ctx.lineWidth = 2;
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
-    ctx.rect(this.pos[0], this.pos[1], this.size[0], this.size[1]);
+    ctx.rect(this.pos.x, this.pos.y, this.size[0], this.size[1]);
     ctx.stroke();
     ctx.restore();
 };
@@ -303,6 +305,7 @@ GameLayer.prototype.removeObject = function (id) {
         } else {
             this.sortedObjects['default'].splice(this.sortedObjects['default'].indexOf(id), 1);
         }
+        this.objects[id] = null;
         delete this.objects[id];
     }
 };
@@ -343,11 +346,7 @@ GameLayer.prototype.getObjectsByType = function (type) {
     }
     return result;
 };
-GameLayer.prototype.triggerAction = function (action, event, mouse) {
-    for (var i in this.objects) {
-        this.objects.hasOwnProperty(i) && this.objects[i].triggerAction(action, event, mouse);
-    }
-};
+
 GameLayer.prototype.clearLayer = function () {
     for (let i in this.objects) {
         this.objects.hasOwnProperty(i) && delete this.objects[i];
@@ -361,7 +360,7 @@ GameLayer.prototype.clearLayer = function () {
     this.inited = false;
 };
 GameLayer.prototype.getCoordinates = function () {
-    return [this.pos[0], this.pos[1], this.pos[0] + this.size[0], this.pos[1] + this.size[1]];
+    return [this.pos.x, this.pos.y, this.pos.x + this.size[0], this.pos.y + this.size[1]];
 };
 
 function GameWindow(config) {
@@ -394,11 +393,7 @@ GameWindow.prototype.triggerGlobalEvent = function (eventName, eventObject) {
 
     return this;
 };
-GameWindow.prototype.triggerAction = function (action, event, mouse) {
-    for (var i in this.layers) {
-        this.layers.hasOwnProperty(i) && this.layers[i].triggerAction(action, event, mouse);
-    }
-};
+
 GameWindow.prototype.getLayer = function () {
     return this.layers;
 };
