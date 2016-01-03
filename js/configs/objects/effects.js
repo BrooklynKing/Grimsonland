@@ -69,7 +69,7 @@ var config = {
     },
     explosion : {
         render: 'object',
-        sprite: ['img/sprites.png', [0, 117], [39, 39], 16, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], null, true],
+        sprite: ['img/sprites.png', [0, 117], [39, 39], 16, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], null, true],
         rules: ['destroyAfterSpriteDone', 'dynamicZIndex']
     },
     monsterExplosion : {

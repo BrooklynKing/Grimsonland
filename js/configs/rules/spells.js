@@ -54,7 +54,7 @@ var config = {
                 if (objects[i].type == 'monster') {
                     var speed = objects[i].getParameter('speed'),
                         power = obj.getParameter('power'),
-                        effects = objects[i].getParameter('effects');
+                        effects = objects[i].getParameter('effects') || [];
 
                     if (speed < power) {
                         objects[i].setParameter('speed', 0);

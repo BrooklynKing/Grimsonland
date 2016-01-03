@@ -2,7 +2,7 @@ var config = {
 	mainLayer : {
 		id: 'mainLayer',
 		size : [1224,968],
-		background: 'img/terrain.png',
+		background: 'img/terrain11.png',
 		initList : ['player', 'cursor', 'counter', 'timer', 'bestTime', 'fireballSpell', 'frostShardSpell', 'teleportSpell', 'bestScore'],
 		init: function() {
 			this.game.parameters.monstersKilled = 0;

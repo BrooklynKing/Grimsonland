@@ -20,6 +20,7 @@ var list = [
     'img/heart.png',
     'img/heart2.png',
     'img/terrain.png',
+    'img/terrain11.png',
     'img/bloods.png',
     'img/cursor.png'
 ];

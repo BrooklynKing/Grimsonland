@@ -100,7 +100,7 @@ var config = {
         size: [25, 25],
         //render: 'object',
         collisions: true,
-        sprite : ['img/powerup2.png', [0, 0], [72, 65]],
+        sprite : ['img/powerup2.png', [0, 0], [72, 65], 15, [0, 1, 2, 1]],
         conditions: ['triggerOnPlayerCollisionPowerUp'],
         parameters : {
             power : 1

@@ -133,23 +133,23 @@ var config = {
 
             if (px < 30) {
                 if (obj.translate.x < 0) {
-                    obj.translate.x += player.getParameter('speed') * dt;
+                    obj.translate.x += Math.round(player.getParameter('speed') * dt);
                 }
             }
             if (px > 70) {
                 if (obj.translate.x > - 200) {
-                    obj.translate.x -= player.getParameter('speed') * dt;
+                    obj.translate.x -= Math.round(player.getParameter('speed') * dt);
                 }
             }
 
             if (py < 25) {
                 if (obj.translate.y < 0) {
-                    obj.translate.y += player.getParameter('speed') * dt;
+                    obj.translate.y += Math.round(player.getParameter('speed') * dt);
                 }
             }
             if (py > 75) {
                 if (obj.translate.y > - 200) {
-                    obj.translate.y -= player.getParameter('speed') * dt;
+                    obj.translate.y -= Math.round(player.getParameter('speed') * dt);
                 }
             }
         }

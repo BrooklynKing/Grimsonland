@@ -58,7 +58,7 @@ GameObject.prototype.objectCount = 0;
 GameObject.prototype.render = function (dt) {
     var ctx = this.layer.ctx;
     ctx.save();
-    ctx.translate(this.pos.x, this.pos.y);
+    ctx.translate(Math.round(this.pos.x), Math.round(this.pos.y));
 
     if (this.customRender) {
         if (Array.isArray(this.customRender)) {
@@ -161,6 +161,7 @@ GameObject.prototype.addCondition = function (config) {
 GameObject.prototype.updateCollisions = function(dt) {
     this.collisions && this.collisions.update(dt, this);
 };
+
 function GameRule(config) {
     this.id = config.id;
     this._update = config.update;
@@ -230,10 +231,10 @@ GameLayer.prototype.render = function (dt) {
     ctx.beginPath();
     ctx.rect(this.pos.x, this.pos.y, this.size[0], this.size[1]);
     ctx.clip();
-    ctx.fillStyle = this.background;
-    ctx.fillRect(0, 0, canvas.width, canvas.height );
-
     ctx.translate(this.translate.x, this.translate.y);
+    ctx.fillStyle = this.background;
+    ctx.fillRect(0, 0, this.size[0] + 5, this.size[1] + 5 );
+
     for (let i in this.objects) {
         if (this.objects.hasOwnProperty(i)) {
             (arr[this.objects[i].zIndex]) || (arr[this.objects[i].zIndex] = []);
@@ -250,7 +251,6 @@ GameLayer.prototype.render = function (dt) {
     ctx.translate(-this.translate.x, -this.translate.y);
     ctx.beginPath();
     ctx.strokeStyle = 'black';
-    ctx.shadowBlur = 15;
     ctx.shadowColor = 'black';
     ctx.lineWidth = 2;
     ctx.shadowOffsetX = 0;
@@ -346,7 +346,6 @@ GameLayer.prototype.getObjectsByType = function (type) {
     }
     return result;
 };
-
 GameLayer.prototype.clearLayer = function () {
     for (let i in this.objects) {
         this.objects.hasOwnProperty(i) && delete this.objects[i];
@@ -367,6 +366,8 @@ function GameWindow(config) {
     this.layers = {};
     this.ctx = config.ctx;
     this.canvas = config.canvas;
+    this._ctx = config._ctx;
+    this._canvas = config._canvas;
     this.collisions = config.collisions;
     this.objectsDefinition = config.objects;
     this.rulesDefinition = config.rules;
@@ -393,7 +394,6 @@ GameWindow.prototype.triggerGlobalEvent = function (eventName, eventObject) {
 
     return this;
 };
-
 GameWindow.prototype.getLayer = function () {
     return this.layers;
 };
@@ -406,6 +406,7 @@ GameWindow.prototype.render = function (dt) {
     for (var i in this.layers) {
         this.layers.hasOwnProperty(i) && this.layers[i].render(dt);
     }
+    this.ctx.drawImage(this._canvas, 0, 0);
 };
 GameWindow.prototype.removeLayer = function (id) {
     this.layers.hasOwnProperty(id) && delete this.layers[id];
@@ -426,7 +427,7 @@ GameWindow.prototype.addLayer = function (obj) {
         console.error('Layer with such id already exist in this window');
         return false;
     } else {
-        obj.ctx = this.ctx;
+        obj.ctx = this._ctx;
         obj.game = this;
         this.layers[obj.id] = new GameLayer(obj);
     }

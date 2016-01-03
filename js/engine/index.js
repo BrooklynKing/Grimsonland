@@ -32,7 +32,12 @@ function createGame(config) {
         lastTime = 0;
 
     var mouse = mouseModule(canvas);
+    var _canvas = document.createElement('canvas');
+    _canvas.width = canvas.width;
+    _canvas.height = canvas.width;
 
+    config._canvas = _canvas;
+    config._ctx = _canvas.getContext("2d");
     config.input = input;
     config.mouse = mouse;
     config.collisions = collisions({
@@ -50,7 +55,7 @@ function createGame(config) {
         urls: ['music/main.mp3', 'music/main.ogg'],
         loop: true,
         volume: 0.5
-    })//.play();
+    }).play();
 
     function gameTimer() {
         var now = Date.now(),
