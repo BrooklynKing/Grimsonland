@@ -24,27 +24,9 @@ var config = {
         parameters : {
             power : 15,
             cooldown: 100,
-            speed: 200
+            speed: 150
         },
         rules : ['destroyAfterLeavingLayer', 'setDirectionToPlayer', 'moveToDirection', 'dynamicZIndex']
-    },
-    summonGate: {
-        zIndex : 0,
-        render: 'object',
-        sprite: ['img/spell.png', [0, 0], [32, 32], 7, [0,1]],
-        pos : [466, 580],
-        size : [25, 30],
-        collisions: true,
-        parameters : {
-            cooldown: 80,
-            chanceOfBoss : 5,
-            chanceOfBoss2 : 1,
-            chanceOfBoomer : 15,
-            health : 10,
-        },
-        conditions : ['monsterHealthStatus'],
-        type : 'monster',
-        rules : ['summonOnCooldown', 'dynamicZIndex']
     },
     blood : {
         zIndex : 2,

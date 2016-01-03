@@ -178,6 +178,17 @@ var config = {
             }
         }
     },
+    playerLevelUp: {
+        update: function (dt, obj) {
+            var levelExp = obj.getParameter('levelTable')[obj.getParameter('level')];
+
+            if (obj.getParameter('exp') > obj.getParameter('levelTable')[obj.getParameter('level')]) {
+                obj.setParameter('exp', obj.getParameter('exp') - levelExp);
+                obj.setParameter('level', obj.getParameter('level') + 1);
+                obj.setParameter('spellPower', obj.getParameter('spellPower') + 1);
+            }
+        }
+    },
     monsterHealthStatus: {
         update: function (dt, obj) {
             if (obj.getParameter('health') <= 0) {
@@ -195,7 +206,10 @@ var config = {
                 if (!obj.layer.game.parameters.monstersKilled) {
                     obj.layer.game.parameters.monstersKilled = 0;
                 }
-                obj.layer.game.parameters.monstersKilled++
+                obj.layer.game.parameters.monstersKilled++;
+
+                var player = obj.layer.getObjectsByType('player')[0];
+                player.setParameter('exp', player.getParameter('exp') + obj.getParameter('exp'));
             }
         }
     },
@@ -328,7 +342,8 @@ var config = {
 
             for (var i = 0; i < objects.length; i++) {
                 if (objects[i].type == 'player') {
-                    objects[i].setParameter('spellPower', objects[i].getParameter('spellPower') + obj.getParameter('power'));
+                    //objects[i].setParameter('spellPower', objects[i].getParameter('spellPower') + obj.getParameter('power'));
+                    objects[i].setParameter('exp', objects[i].getParameter('exp') + obj.getParameter('exp'));
                     obj._removeInNextTick = true;
                     break;
                 }

@@ -19,6 +19,25 @@ function healthBar(obj, dt) {
 
     ctx.globalAlpha = 1;
 }
+function expBar(obj) {
+    var x = -22,
+        y = 17,
+        width = 200,
+        height = 40,
+        ctx = obj.layer.ctx;
+
+    ctx.translate(-obj.layer.translate.x, -obj.layer.translate.y);
+    ctx.globalAlpha = 0.3;
+    ctx.fillStyle = "rgb(0, 0, 0)";
+    ctx.fillRect(x, y, width, height);
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "#DAA520";
+
+    var player = obj.layer.getObjectsByType('player')[0];
+    ctx.fillRect(x, y, Math.round(width * (player.getParameter('exp') / player.getParameter('levelTable')[player.getParameter('level')])), height);
+    ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
+    textRender(obj);
+}
 function sprite(obj, dt) {
     var ctx = obj.layer.ctx;
 
@@ -127,6 +146,7 @@ function cursor(obj, dt) {
 }
 var renders = {
     shadow: shadow,
+    expBar: expBar,
     healthBar: healthBar,
     cursor: cursor,
     sprite: sprite,

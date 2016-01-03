@@ -21,7 +21,7 @@ var config = {
         render : 'spell',
         parameters : {
             shardsFired: 0,
-            cooldown: 50,
+            cooldown: 75,
         },
         type : 'spell',
         rules : ['frostShard']
@@ -75,8 +75,8 @@ var config = {
         type : 'spellElement',
         size : [120, 120],
         parameters : {
-            power : 35,
-            cooldown: 100
+            power : 100,
+            cooldown: 150
         },
         conditions: ['slowEnemies'],
         rules : ['removeOnCooldown', 'dynamicZIndex']

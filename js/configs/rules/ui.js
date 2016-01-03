@@ -26,6 +26,18 @@ var config = {
             }));
         }
     },
+    level : {
+        update: function (dt, obj) {
+            var template = obj.getParameter('template');
+            var player = obj.layer.getObjectsByType('player')[0];
+
+            obj.setParameter('text', format(template, {
+                level: player.getParameter('level'),
+                exp: player.getParameter('exp'),
+                levelExp : player.getParameter('levelTable')[player.getParameter('level')]
+            }));
+        }
+    },
     bestTime : {
         init: function () {
             var obj = this.context;

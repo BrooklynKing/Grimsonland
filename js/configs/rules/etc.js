@@ -1,5 +1,6 @@
 import utils from './../../engine/utils';
 import format from 'string-template';
+var Victor = require('victor');
 
 var config = {
     bindPositionToLayer: {
@@ -58,6 +59,36 @@ var config = {
                     newDirection = new utils.Line(obj.pos, newDirectionVector);
 
                 obj.setParameter('direction', newDirection);
+            }
+        }
+    },
+    wandererAI : {
+        init: function (dt) {
+            var topLeft = new Victor(100, 100);
+            var bottomRight = new Victor(1100, 850);
+
+            this.context.setParameter('direction', new utils.Line(this.context.pos, new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray())));
+        },
+        update: function (dt, obj) {
+            var player = obj.layer.getObjectsByType('player')[0],
+                distance = utils.getDistance(obj.pos, player.pos);
+
+            if (distance <= obj.getParameter('scentRange')) {
+                obj.setParameter('scent', true);
+                obj.setParameter('speed', obj.getDefaultParameter('scentSpeed'));
+                obj.setParameter('wanderCooldown', 0);
+                obj.setParameter('direction', new utils.Line(obj.pos, player.pos));
+            } else {
+                obj.setParameter('speed', obj.getDefaultParameter('speed'));
+                if (!obj.getParameter('wanderCooldown')) {
+                    var topLeft = new Victor(100, 100);
+                    var bottomRight = new Victor(1100, 850);
+
+                    obj.setParameter('direction', new utils.Line(obj.pos, new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray())));
+                    obj.setParameter('wanderCooldown', Math.round(Math.random() * (obj.getDefaultParameter('wanderCooldown') - 100) + 100));
+                } else {
+                    obj.getParameter('wanderCooldown') && obj.setParameter('wanderCooldown', obj.getParameter('wanderCooldown') - 1);
+                }
             }
         }
     },

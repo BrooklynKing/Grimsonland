@@ -56,8 +56,8 @@ var config = {
         },
         parameters: {
             area: [[50, 50], [1154 , 918]],
-            maxOnMap: 100,
-            monsterCooldown: 7,
+            maxOnMap: 200,
+            monsterCooldown: 10,
             monsterSpawned: 0
         }
     },
@@ -106,7 +106,8 @@ var config = {
         },
         parameters: {
             area: [[100, 100], [1100, 850]],
-            cooldown: 500
+            currentCooldown : 1100,
+            cooldown: 1100
         }
     },
     spawn_terrain: {

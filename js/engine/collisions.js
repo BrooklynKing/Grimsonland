@@ -11,6 +11,7 @@ function generate(config) {
     for (var i = 0; i < cellGrid.length; i++) {
         cellGrid[i] = [];
     }
+
     function generateMap() {
         for (var i = 0; i < cellGrid.length; i++) {
             cellGrid[i] = [];

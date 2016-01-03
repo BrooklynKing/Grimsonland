@@ -310,10 +310,10 @@ GameLayer.prototype.removeObject = function (id) {
     }
 };
 GameLayer.prototype.addObject = function (config) {
-    /*if (this.objects.hasOwnProperty(config.id)) {
+    if (this.objects.hasOwnProperty(config.id)) {
         console.error('Object with such id already exist in this layer: ', config.id);
         return false;
-    }*/
+    }
 
     var _obj = new GameObject(config);
     _obj.setLayer(this);
@@ -368,6 +368,7 @@ function GameWindow(config) {
     this.canvas = config.canvas;
     this._ctx = config._ctx;
     this._canvas = config._canvas;
+    this.rules = config.rules || []
     this.collisions = config.collisions;
     this.objectsDefinition = config.objects;
     this.rulesDefinition = config.rules;
@@ -444,6 +445,27 @@ GameWindow.prototype.getConfig = function (id) {
 };
 GameWindow.prototype.getLayerConfig = function (id) {
     return this.layersDefinition[id];
+};
+GameWindow.prototype.addRule = function(config) {
+    if (this.rules.hasOwnProperty(config.id)) {
+        console.error('Rule with such id already exist in this layer');
+        return false;
+    } else {
+        var rule = new GameRule(config);
+        rule.setContext(this);
+        this.rules.push(rule);
+    }
+
+    return this.rules[config.id];
+};
+GameWindow.prototype.addRules = function(configs) {
+    if (Array.isArray(configs)) {
+        for (var i = 0, j = configs.length; i < j; i++) {
+            this.addRule(configs[i]);
+        }
+    } else {
+        console.error('addRules expect array in parameters');
+    }
 };
 GameWindow.prototype.objectCount = 0;
 

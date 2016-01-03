@@ -18,6 +18,18 @@ var config = {
         },
         rules: ['countMonsterKilled']
     },
+    level: {
+        zIndex : 2000,
+        pos: [35, 45],
+        render : "expBar",
+        parameters : {
+            weight : "bold",
+            color : "#EFEFEF",
+            template : "LEVEL: {level}",
+            size : 14
+        },
+        rules: ['level']
+    },
     timer: {
         zIndex : 2000,
         pos: [5, 23],
