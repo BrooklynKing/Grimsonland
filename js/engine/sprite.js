@@ -72,7 +72,6 @@ Sprite.prototype.render = function (ctx) {
         frame = 0;
     }
 
-
     var x = this.pos.x;
     var y = this.pos.y;
 

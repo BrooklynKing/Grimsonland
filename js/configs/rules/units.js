@@ -92,7 +92,6 @@ var config = {
             }
         }
     },
-
     monsterExplosionCondition : {
         update: function (dt, obj) {
             function generateExplosions() {

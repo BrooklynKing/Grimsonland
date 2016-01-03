@@ -445,5 +445,6 @@ GameWindow.prototype.getConfig = function (id) {
 GameWindow.prototype.getLayerConfig = function (id) {
     return this.layersDefinition[id];
 };
-GameWindow.prototype.objectCount= 0;
+GameWindow.prototype.objectCount = 0;
+
 export default GameWindow

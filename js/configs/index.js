@@ -5,7 +5,7 @@ import layers from './layers';
 
 export default {
     objects: objects,
-    rules: rules,
-    resources: resources,
-    layers: layers
+        rules: rules,
+        resources: resources,
+        layers: layers
 };
