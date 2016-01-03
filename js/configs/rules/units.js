@@ -181,11 +181,14 @@ var config = {
     playerLevelUp: {
         update: function (dt, obj) {
             var levelExp = obj.getParameter('levelTable')[obj.getParameter('level')];
-
-            if (obj.getParameter('exp') > obj.getParameter('levelTable')[obj.getParameter('level')]) {
-                obj.setParameter('exp', obj.getParameter('exp') - levelExp);
-                obj.setParameter('level', obj.getParameter('level') + 1);
-                obj.setParameter('spellPower', obj.getParameter('spellPower') + 1);
+            if (obj.getParameter('levelTable')[obj.getParameter('level')]) {
+                if (obj.getParameter('exp') > obj.getParameter('levelTable')[obj.getParameter('level')]) {
+                    obj.setParameter('exp', obj.getParameter('exp') - levelExp);
+                    obj.setParameter('level', obj.getParameter('level') + 1);
+                    obj.setParameter('spellPower', obj.getParameter('spellPower') + 1);
+                }
+            } else {
+                obj.setParameter('level', 'MAX');
             }
         }
     },

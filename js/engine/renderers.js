@@ -34,7 +34,11 @@ function expBar(obj) {
     ctx.fillStyle = "#DAA520";
 
     var player = obj.layer.getObjectsByType('player')[0];
-    ctx.fillRect(x, y, Math.round(width * (player.getParameter('exp') / player.getParameter('levelTable')[player.getParameter('level')])), height);
+    if ( player.getParameter('levelTable')[player.getParameter('level')] ) {
+        ctx.fillRect(x, y, Math.min(width, Math.round(width * (player.getParameter('exp') / player.getParameter('levelTable')[player.getParameter('level')]))), height);
+    } else {
+        ctx.fillRect(x, y, width, height);
+    }
     ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
     textRender(obj);
 }
