@@ -8,6 +8,7 @@ var list = [
     'img/spellicons.png',
     'img/spell.png',
     'img/wall2.png',
+    'img/darkblast.png',
     'img/powerup.png',
     'img/powerup2.png',
     'img/gates2.png',

@@ -2,7 +2,7 @@ var config = {
     mbullet : {
         zIndex : 3,
         collisions: true,
-        sprite: ['img/effects.png',[288, 128], [32, 32], 10, [0, 1, 2]],
+        sprite: ['img/darkblast.png',[0, 0], [38, 38], 12, [0, 1, 2 ,3]],
         type : 'monsterSpellElement',
         render: 'object',
         size : [32, 32],
