@@ -15,8 +15,8 @@ var config = {
     },
     stones : {
         render: 'object',
-        sprite : ['img/stones.png', [0, 0], [18, 22]],
-        size : [18,22],
+        sprite : ['img/stones.png', [0, 0], [25, 22]],
+        size : [25,22],
         rules : ['dynamicZIndex']
         //zIndex : 0
     }
