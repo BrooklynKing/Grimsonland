@@ -150,7 +150,6 @@ var config = {
     stopOnCollisionWithPlayer: {
         update: function (dt, obj) {
             var objects = obj.getParameter('collisions');
-
             for (var i = 0, l = objects.length; i < l; i++) {
                 if (objects[i].type == 'player') {
                     obj.setParameter('speed', 0);
@@ -361,6 +360,7 @@ var config = {
                 obj._removeInNextTick = true;
 
                 var random = Math.random() * 100,
+                    player = obj.layer.getObjectsByType('player')[0],
                     monsterConfig;
 
                 if (random <= obj.getParameter('chanceOfBoss2')) {
@@ -375,7 +375,11 @@ var config = {
 
                 monsterConfig.pos = obj.pos.clone();
 
-                obj.layer.addObject(monsterConfig);
+                var monster = obj.layer.addObject(monsterConfig);
+
+                if (player.getParameter('level') > 1) {
+                    monster.setParameter('health', monster.getParameter('health') * 0.75 * player.getParameter('level'));
+                }
             } else {
                 obj.setParameter('cooldown', cooldown - 1);
             }

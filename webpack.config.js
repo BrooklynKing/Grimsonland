@@ -5,6 +5,7 @@ module.exports = {
 
     entry: {
         app: "./app",
+        phaser: "./phaser/index",
         configs: "./configs/index",
         engine: "./engine/index"
     },
@@ -34,14 +35,20 @@ module.exports = {
     ],
 
     module: {
-        loaders: [{
-            test: /\.js$/,
-            loader: 'babel',
-            query: {
-                presets: ['es2015']
+        loaders: [
+            {
+                loader: 'script',
+                test: /(pixi|phaser).js/
             },
-            exclude: /node_modules/
-        }]
+            {
+                test: /\.js$/,
+                loader: 'babel',
+                query: {
+                    presets: ['es2015']
+                },
+                exclude: /node_modules/
+            }
+        ]
     }
 };
 

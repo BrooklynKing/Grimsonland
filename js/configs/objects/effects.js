@@ -30,7 +30,7 @@ var config = {
     },
     blood : {
         zIndex : 2,
-        sprite : ['img/sblood.png', [0, 0], [32, 13]],
+        sprite : ['monsterBlood', [0, 0], [32, 13]],
         parameters : {
             cooldown : 500
         },
@@ -38,7 +38,7 @@ var config = {
     },
     bloodSpray : {
         zIndex : 2,
-        sprite : ['img/bloods.png', [0, 0], [64, 64], 15, [0, 1, 2, 3, 4], null, true, 0.785],
+        sprite : ['bloodEffect', [0, 0], [64, 64], 15, [0, 1, 2, 3, 4], null, true, 0.785],
         rules: ['destroyAfterSpriteDone', 'dynamicZIndex']
     },
     skelet : {
@@ -51,7 +51,7 @@ var config = {
     },
     explosion : {
         render: 'object',
-        sprite: ['img/sprites.png', [0, 117], [39, 39], 16, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], null, true],
+        sprite: ['explosions', [0, 0], [39, 39], 16, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], null, true],
         rules: ['destroyAfterSpriteDone', 'dynamicZIndex']
     },
     monsterExplosion : {
@@ -60,7 +60,7 @@ var config = {
         type : 'spellEffect',
         conditions : ['monsterExplosion'],
         size : [39, 39],
-        sprite: ['img/sprites.png', [0, 117], [39, 39], 16, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], null, true],
+        sprite: ['explosions', [0, 0], [39, 39], 16, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], null, true],
         rules: ['destroyAfterSpriteDone', 'dynamicZIndex']
     }
 };

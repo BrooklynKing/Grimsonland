@@ -4,6 +4,7 @@ import renders from './renderers';
 import Sprite from './sprite';
 
 function GameObject(config) {
+    this.layer = config.layer;
     if (config.pos instanceof utils.Point) {
         this.pos = config.pos.clone();
     } else {
@@ -12,7 +13,7 @@ function GameObject(config) {
     this.id = config.id;
 
     if (config.sprite) {
-        this.sprite = new Sprite(config.sprite[0], config.sprite[1], config.sprite[2], config.sprite[3], config.sprite[4], config.sprite[5], config.sprite[6], config.sprite[7]);
+        this.sprite = new Sprite(this.layer.game.cache, config.sprite[0], config.sprite[1], config.sprite[2], config.sprite[3], config.sprite[4], config.sprite[5], config.sprite[6], config.sprite[7]);
     }
 
     this.type = config.type;
@@ -20,11 +21,14 @@ function GameObject(config) {
     if (config.size || this.sprite) {
         this.size = config.size || this.sprite.size;
     }
+
     this.collisions = config.collisions;
     this.callbacks = config.callbacks || {};
     this.zIndex = config.zIndex || 0;
-    var parameters = (config.parameters && utils.clone(config.parameters)) || {},
-        _parameters = config.parameters || {};
+    var _parameters = config.parameters || {},
+        parameters = (config.parameters && utils.clone(config.parameters)) || {};
+
+    this.size = config.size;
 
     this.getParameter = function(id) {
         return parameters[id];
@@ -37,8 +41,6 @@ function GameObject(config) {
         return _parameters[id];
     };
 
-    /*this.parameters = (config.parameters && utils.clone(config.parameters)) || {};
-    this._parameters = config.parameters;*/
     this.rules = config.rules || [];
     this.conditions = config.conditions || [];
     this._update = config.update;
@@ -56,10 +58,6 @@ function GameObject(config) {
 }
 GameObject.prototype.objectCount = 0;
 GameObject.prototype.render = function (dt) {
-    var ctx = this.layer.ctx;
-    ctx.save();
-    ctx.translate(Math.round(this.pos.x), Math.round(this.pos.y));
-
     if (this.customRender) {
         if (Array.isArray(this.customRender)) {
             for (var i = 0; i < this.customRender.length; i++) {
@@ -71,8 +69,6 @@ GameObject.prototype.render = function (dt) {
     } else {
         renders.sprite(this, dt);
     }
-
-    ctx.restore();
 };
 GameObject.prototype.init = function () {
     if (!this.inited) {
@@ -189,7 +185,7 @@ function GameLayer(config) {
     this.ctx = config.ctx;
     this.initList = config.initList;
     this.game = config.game;
-    this.background = this.ctx.createPattern(resources.get(config.background), 'repeat');
+    this.background = this.ctx.createPattern(this.game.cache.getImage(config.background), 'repeat');
     this.pos = config.pos ? new utils.Point(config.pos) : new utils.Point(0, 0);
     this.size = config.size || [config.ctx.canvas.width, config.ctx.canvas.height];
     this.translate = config.translate || {
@@ -203,7 +199,14 @@ function GameLayer(config) {
     this._rules = config.rules || [];
     this._init = config.init;
     this.inited = false;
+    this.active = true;
 }
+GameLayer.prototype.activate = function(){
+    this.active = true;
+};
+GameLayer.prototype.stop = function(){
+    this.active = false;
+};
 GameLayer.prototype.init = function () {
     if (!this.inited) {
         for (let i = 0; i < this.initList.length; i++) {
@@ -223,9 +226,8 @@ GameLayer.prototype.init = function () {
     }
 };
 GameLayer.prototype.render = function (dt) {
-    var arr = [],
-        ctx = this.ctx,
-        canvas = ctx.canvas;
+    var arr = {},
+        ctx = this.ctx;
 
     ctx.save();
     ctx.beginPath();
@@ -241,25 +243,23 @@ GameLayer.prototype.render = function (dt) {
             arr[this.objects[i].zIndex].push(this.objects[i]);
         }
     }
-    for (let i = 0, l = arr.length; i < l; i++) {
+    for (let i in arr) {
         if (arr[i]) {
             for (var j = 0, k = arr[i].length; j < k; j++) {
+                ctx.save();
+                ctx.translate(Math.round(arr[i][j].pos.x), Math.round(arr[i][j].pos.y));
+
                 arr[i][j].render(dt);
+
+                ctx.restore();
             }
         }
     }
     ctx.translate(-this.translate.x, -this.translate.y);
-    ctx.beginPath();
-    ctx.strokeStyle = 'black';
-    ctx.shadowColor = 'black';
-    ctx.lineWidth = 2;
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 0;
-    ctx.rect(this.pos.x, this.pos.y, this.size[0], this.size[1]);
-    ctx.stroke();
     ctx.restore();
 };
 GameLayer.prototype.update = function (dt) {
+    if (!this.inited || !this.active) return;
     for (let i in this.rules) {
         this.rules.hasOwnProperty(i) && this.rules[i].update(dt, this);
     }
@@ -314,7 +314,7 @@ GameLayer.prototype.addObject = function (config) {
         console.error('Object with such id already exist in this layer: ', config.id);
         return false;
     }
-
+    config.layer = this;
     var _obj = new GameObject(config);
     _obj.setLayer(this);
     _obj.init();
@@ -328,15 +328,6 @@ GameLayer.prototype.addObject = function (config) {
     this.objects[_obj.id] = _obj;
 
     return this.objects[_obj.id];
-};
-GameLayer.prototype.addObjects = function (obj) {
-    if (Array.isArray(obj)) {
-        for (var i = 0, j = obj.length; i < j; i++) {
-            this.addObject(obj[i]);
-        }
-    } else {
-        console.error('addObjects expect array in parameters');
-    }
 };
 GameLayer.prototype.getObjectsByType = function (type) {
     var objectsId = this.sortedObjects[type] || [],
@@ -358,17 +349,13 @@ GameLayer.prototype.clearLayer = function () {
     }
     this.inited = false;
 };
-GameLayer.prototype.getCoordinates = function () {
-    return [this.pos.x, this.pos.y, this.pos.x + this.size[0], this.pos.y + this.size[1]];
-};
 
 function GameWindow(config) {
     this.layers = {};
+    this.cache = config.cache;
     this.ctx = config.ctx;
     this.canvas = config.canvas;
-    this._ctx = config._ctx;
-    this._canvas = config._canvas;
-    this.rules = config.rules || []
+    this.rules = config.rules || [];
     this.collisions = config.collisions;
     this.objectsDefinition = config.objects;
     this.rulesDefinition = config.rules;
@@ -395,9 +382,6 @@ GameWindow.prototype.triggerGlobalEvent = function (eventName, eventObject) {
 
     return this;
 };
-GameWindow.prototype.getLayer = function () {
-    return this.layers;
-};
 GameWindow.prototype.update = function (dt) {
     for (var i in this.layers) {
         this.layers.hasOwnProperty(i) && this.layers[i].update(dt);
@@ -407,28 +391,16 @@ GameWindow.prototype.render = function (dt) {
     for (var i in this.layers) {
         this.layers.hasOwnProperty(i) && this.layers[i].render(dt);
     }
-    this.ctx.drawImage(this._canvas, 0, 0);
 };
 GameWindow.prototype.removeLayer = function (id) {
     this.layers.hasOwnProperty(id) && delete this.layers[id];
-};
-GameWindow.prototype.addLayers = function (obj) {
-    var arr = [];
-    if (Array.isArray(obj)) {
-        for (var i = 0, j = obj.length; i < j; i++) {
-            arr.push(this.addLayer(obj[i]));
-        }
-    } else {
-        console.error('addLayers expect array in parameters');
-    }
-    return arr;
 };
 GameWindow.prototype.addLayer = function (obj) {
     if (this.layers.hasOwnProperty(obj.id)) {
         console.error('Layer with such id already exist in this window');
         return false;
     } else {
-        obj.ctx = this._ctx;
+        obj.ctx = this.ctx;
         obj.game = this;
         this.layers[obj.id] = new GameLayer(obj);
     }

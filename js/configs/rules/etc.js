@@ -5,7 +5,6 @@ var Victor = require('victor');
 var config = {
     bindPositionToLayer: {
         update: function (dt, obj) {
-
             if (obj.pos.x - obj.sprite.size[0] / 2 < obj.layer.pos.x) {
                 obj.pos.x = obj.sprite.size[0] / 2;
             }
@@ -106,7 +105,7 @@ var config = {
             var obj = this.context,
                 collisions = obj.setParameter('collisions', []);
 
-            collisions.cells = new Array(4);
+            collisions.cells = new Array();
             obj.layer.game.collisions.updateObject(obj);
         },
         update: function(dt, obj) {
@@ -116,19 +115,18 @@ var config = {
     },
     rotateToMouse: {
         update: function (dt, obj) {
-            var destination  = obj.layer.game.mouse.getMousePosition().clone();
+            var destination  = new utils.Point(obj.layer.game.mouse.x, obj.layer.game.mouse.y);
 
             destination.x -= obj.layer.translate.x;
             destination.y -= obj.layer.translate.y;
 
             var directionToMouse = new utils.Line(obj.pos, destination);
-
             obj.sprite.rotateToDirection(directionToMouse);
         }
     },
     bindPositionToMouse: {
         update : function(dt, obj) {
-            var mousePosition = obj.layer.game.mouse.getMousePosition();
+            var mousePosition = new utils.Point(obj.layer.game.mouse.x, obj.layer.game.mouse.y);
             obj.setPosition(mousePosition.clone());
         }
     },

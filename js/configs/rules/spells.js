@@ -7,9 +7,9 @@ var config = {
                 fireCooldown = obj.getParameter('fireCooldown');
 
             if (player.getParameter('currentSpell') == 'fireball') {
-                if (obj.layer.game.mouse.isMouseDown() || obj.layer.game.input.isDown(32)) {
+                if (obj.layer.game.mouse.isDown || obj.layer.game.input.isDown(32)) {
                     if (!fireCooldown) {
-                        var destination  = obj.layer.game.mouse.getMousePosition().clone(),
+                        var destination  = new utils.Point(obj.layer.game.mouse.x, obj.layer.game.mouse.y),
                             spellPower = player.getParameter('spellPower'),
                             startDegree = 10 * (spellPower - 1);
 
@@ -49,7 +49,6 @@ var config = {
     slowEnemies : {
         update: function (dt, obj) {
             var objects = obj.getParameter('collisions');
-
             for (var i = 0; i < objects.length; i++) {
                 if (objects[i].type == 'monster') {
                     var speed = objects[i].getParameter('speed'),
@@ -75,9 +74,9 @@ var config = {
                 fireCooldown = obj.getParameter('fireCooldown');
 
             if (player.getParameter('currentSpell') == 'teleport') {
-                if (obj.layer.game.mouse.isMouseDown() || obj.layer.game.input.isDown(32)) {
+                if (obj.layer.game.mouse.isDown || obj.layer.game.input.isDown(32)) {
                     if (!fireCooldown) {
-                        var mouse  = obj.layer.game.mouse.getMousePosition().clone();
+                        var mouse  = new utils.Point(obj.layer.game.mouse.x, obj.layer.game.mouse.y);
 
                         mouse.x -= obj.layer.translate.x;
                         mouse.y -= obj.layer.translate.y;
@@ -114,10 +113,10 @@ var config = {
                 fireCooldown = obj.getParameter('fireCooldown');
 
             if (player.getParameter('currentSpell') == 'frostShard') {
-                if (obj.layer.game.mouse.isMouseDown() || obj.layer.game.input.isDown(32)) {
+                if (obj.layer.game.mouse.isDown || obj.layer.game.input.isDown(32)) {
                     if (!fireCooldown) {
                         var frostShard = obj.layer.game.getConfig('frostShard'),
-                            mousePosition = obj.layer.game.mouse.getMousePosition(),
+                            mousePosition = new utils.Point(obj.layer.game.mouse.x, obj.layer.game.mouse.y),
                             spellPower = player.getParameter('spellPower'),
                             destination = mousePosition.clone();
 

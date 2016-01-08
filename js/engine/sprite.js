@@ -1,7 +1,7 @@
-import resources from './resources';
 import utils from './utils';
 
-function Sprite(url, pos, size, speed, frames, dir, once, degree) {
+function Sprite(cache, url, pos, size, speed, frames, dir, once, degree) {
+    this.cache = cache;
     if (pos instanceof utils.Point) {
         this.pos = pos.clone();
     } else {
@@ -83,7 +83,7 @@ Sprite.prototype.render = function (ctx) {
     }
 
     ctx.rotate(this.degree);
-    ctx.drawImage(resources.get(this.url),
+    ctx.drawImage(this.cache.getImage(this.url),
         x, y,
         this.size[0], this.size[1],
         Math.round(-this.size[0] / 2), Math.round(-this.size[1] / 2),

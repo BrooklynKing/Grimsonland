@@ -16,10 +16,13 @@ document.addEventListener("DOMContentLoaded", function() {
 	var game = _engine({
 		objects: _configs.objects,
 		rules: _configs.rules,
-		layers: _configs.layers,
-		resources: _configs.resources,
 		canvas: canvas,
 		ctx: ctx,
+		width: 1024,
+		height: 768,
+		layers: _configs.layers,
+		resources: _configs.resources,
+		wrapperID: 'main',
 		init: function() {
 			var game = this;
 			var mainLayer = game.addLayer(this.getLayerConfig('mainLayer'));

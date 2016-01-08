@@ -34,11 +34,13 @@ function expBar(obj) {
     ctx.fillStyle = "#DAA520";
 
     var player = obj.layer.getObjectsByType('player')[0];
+
     if ( player.getParameter('levelTable')[player.getParameter('level')] ) {
         ctx.fillRect(x, y, Math.min(width, Math.round(width * (player.getParameter('exp') / player.getParameter('levelTable')[player.getParameter('level')]))), height);
     } else {
         ctx.fillRect(x, y, width, height);
     }
+
     ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
     textRender(obj);
 }
@@ -69,7 +71,7 @@ function effects(obj, dt) {
         var effect = effects[i];
         if (effect == 'frozen') {
             ctx.globalAlpha = 0.8;
-            ctx.drawImage(resources.get('img/frosteffect.png'), - obj.sprite.size[0] / 2, -8, 32, 32);
+            ctx.drawImage(obj.layer.game.cache.getImage('frostEffect'), - obj.sprite.size[0] / 2, -8, 32, 32);
             ctx.globalAlpha = 1;
         }
     }

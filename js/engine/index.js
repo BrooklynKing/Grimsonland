@@ -5,6 +5,7 @@ import GameWindow from './objects';
 import collisions from './collisions';
 import {Howl} from 'howler';
 
+
 // A cross-browser requestAnimationFrame
 // See https://hacks.mozilla.org/2011/08/animating-with-javascript-from-setinterval-to-requestanimationframe/
 var requestAnimFrame = (function(){
@@ -32,12 +33,6 @@ function createGame(config) {
         lastTime = 0;
 
     var mouse = mouseModule(canvas);
-    var _canvas = document.createElement('canvas');
-    _canvas.width = canvas.width;
-    _canvas.height = canvas.width;
-
-    config._canvas = _canvas;
-    config._ctx = _canvas.getContext("2d");
     config.input = input;
     config.mouse = mouse;
     config.collisions = collisions({

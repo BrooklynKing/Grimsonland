@@ -3,7 +3,7 @@ var config = {
         zIndex : 2000,
         render: 'cursor',
         pos: [400,350],
-        sprite : ['img/cursor.png', [0, 0], [30, 30]],
+        sprite : ['cursor', [0, 0], [30, 30]],
         rules: ['bindPositionToMouse']
     },
     counter: {
