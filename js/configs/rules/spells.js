@@ -21,7 +21,7 @@ var config = {
                             createBullet(direction, utils.getMovedPointByDegree(player.pos, destination, startDegree));
                             startDegree -= 20;
                         }
-                        if (obj.getDefaultParameter('cooldown') + 5 * (spellPower - 1) > 30) {
+                        if (obj.getDefaultParameter('cooldown') + 3 * (spellPower - 1) > 30) {
                             obj.setParameter('cooldown', 30);
                         } else {
                             obj.setParameter('cooldown', obj.getDefaultParameter('cooldown') + 5 * (spellPower - 1));
@@ -30,6 +30,7 @@ var config = {
                         obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
 
                         function createBullet(direction, destination) {
+
                             var bulletConfig = obj.layer.game.getConfig('bullet');
                             bulletConfig.pos = player.pos.clone();
 

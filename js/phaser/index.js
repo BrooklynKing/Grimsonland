@@ -50,21 +50,14 @@ class MainMenu extends Phaser.State {
         button.addChild(text);
 
         this.world.mainTheme = this.sound.play('main',1, true);
-    }
-    startGame() {
-        this.game.state.start('game');
-    }
-}
 
-class GameState extends Phaser.State {
-    create() {
         var ctx = game.canvas.getContext("2d");
         var _collisions = collisions({
             n: 6,
             width: 1024 + 200,
             height: 768 + 200
         });
-        console.log(game);
+
         this._game = new GameWindow({
             cache: game.cache,
             canvas: game.canvas,
@@ -75,29 +68,34 @@ class GameState extends Phaser.State {
             objects: _configs.objects,
             rules: _configs.rules,
             layers: _configs.layers,
-            resources: _configs.resources,
-            init: function() {
-                var game = this;
-                var mainLayer = game.addLayer(this.getLayerConfig('mainLayer'));
-                game.parameters.bestTime = localStorage.getItem('bestTime') || 0;
-                game.parameters.bestScore = localStorage.getItem('bestScore') || 0;
-                mainLayer.init();
-                game.bindGlobalEvent('player_dead', function() {
-                    if (game.parameters.gameTimer > game.parameters.bestTime) {
-                        game.parameters.bestTime = game.parameters.gameTimer;
-                        localStorage.setItem('bestTime', game.parameters.bestTime);
-                    }
-                    if (game.parameters.monstersKilled > game.parameters.bestScore) {
-                        game.parameters.bestScore = game.parameters.monstersKilled;
-                        localStorage.setItem('bestScore', game.parameters.bestScore);
-                    }
-                    game.collisions.clear();
-                    mainLayer.clearLayer();
-                    mainLayer.init();
-                });
-            }
+            resources: _configs.resources
         });
-        this._game.init();
+    }
+    startGame() {
+        this.game.state.start('game');
+    }
+}
+
+class GameState extends Phaser.State {
+    create() {
+        var game = this._game;
+        var mainLayer = game.addLayer(this.getLayerConfig('mainLayer'));
+        game.parameters.bestTime = localStorage.getItem('bestTime') || 0;
+        game.parameters.bestScore = localStorage.getItem('bestScore') || 0;
+        mainLayer.init();
+        game.bindGlobalEvent('player_dead', function() {
+            if (game.parameters.gameTimer > game.parameters.bestTime) {
+                game.parameters.bestTime = game.parameters.gameTimer;
+                localStorage.setItem('bestTime', game.parameters.bestTime);
+            }
+            if (game.parameters.monstersKilled > game.parameters.bestScore) {
+                game.parameters.bestScore = game.parameters.monstersKilled;
+                localStorage.setItem('bestScore', game.parameters.bestScore);
+            }
+            game.collisions.clear();
+            mainLayer.clearLayer();
+            mainLayer.init();
+        });
     }
     update() {
         this._game.update((game.time.now - game.time.prevTime) / 1000);

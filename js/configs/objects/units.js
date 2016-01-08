@@ -40,9 +40,9 @@ var config = {
         parameters : {
             cooldown: 80,
             exp: 5,
-            chanceOfBoss : 0,
-            chanceOfBoss2 : 0,
-            chanceOfBoomer : 0,
+            chanceOfBoss : 3,
+            chanceOfBoss2 : 8,
+            chanceOfBoomer : 23,
             health : 10
         },
         conditions : ['monsterHealthStatus'],
