@@ -28,7 +28,8 @@ var config = {
             }
         },
         type : 'player',
-        rules : ['moveWithKeyboard', 'rotateToMouse','selectSpellWithKeyboard', 'bindPositionToLayer', 'playerDeath', 'moveToDirection','dynamicZIndex', 'resetSpeed', 'resetEffects', 'playerLevelUp']
+        conditions: ['selectSpellWithKeyboard'],
+        rules : ['moveWithKeyboard', 'rotateToMouse', 'bindPositionToLayer', 'playerDeath', 'moveToDirection','dynamicZIndex', 'resetSpeed', 'resetEffects', 'playerLevelUp']
     },
     summonGate: {
         zIndex : 0,

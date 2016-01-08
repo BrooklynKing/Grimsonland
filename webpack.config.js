@@ -4,16 +4,13 @@ module.exports = {
     context: require('path').join(__dirname, '/js'),
 
     entry: {
-        app: "./app",
-        phaser: "./phaser/index",
-        configs: "./configs/index",
-        engine: "./engine/index"
+        phaser: "./phaser/index"
     },
 
     output: {
         path: __dirname + '/public',
-        filename: "[name].js",
-        library: "[name]"
+        filename: "[name].js"
+        //library: "[name]"
     },
 
     watch: true,

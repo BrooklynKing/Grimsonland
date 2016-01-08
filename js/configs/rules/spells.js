@@ -7,9 +7,9 @@ var config = {
                 fireCooldown = obj.getParameter('fireCooldown');
 
             if (player.getParameter('currentSpell') == 'fireball') {
-                if (obj.layer.game.mouse.isDown || obj.layer.game.input.isDown(32)) {
+                if (obj.layer.game.input.mousePointer.isDown || obj.layer.game.input.keyboard.isDown(32)) {
                     if (!fireCooldown) {
-                        var destination  = new utils.Point(obj.layer.game.mouse.x, obj.layer.game.mouse.y),
+                        var destination  = new utils.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y),
                             spellPower = player.getParameter('spellPower'),
                             startDegree = 10 * (spellPower - 1);
 
@@ -75,9 +75,9 @@ var config = {
                 fireCooldown = obj.getParameter('fireCooldown');
 
             if (player.getParameter('currentSpell') == 'teleport') {
-                if (obj.layer.game.mouse.isDown || obj.layer.game.input.isDown(32)) {
+                if (obj.layer.game.input.mousePointer.isDown || obj.layer.game.input.keyboard.isDown(32)) {
                     if (!fireCooldown) {
-                        var mouse  = new utils.Point(obj.layer.game.mouse.x, obj.layer.game.mouse.y);
+                        var mouse  = new utils.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y);
 
                         mouse.x -= obj.layer.translate.x;
                         mouse.y -= obj.layer.translate.y;
@@ -114,10 +114,10 @@ var config = {
                 fireCooldown = obj.getParameter('fireCooldown');
 
             if (player.getParameter('currentSpell') == 'frostShard') {
-                if (obj.layer.game.mouse.isDown || obj.layer.game.input.isDown(32)) {
+                if (obj.layer.game.input.mousePointer.isDown || obj.layer.game.input.keyboard.isDown(32)) {
                     if (!fireCooldown) {
                         var frostShard = obj.layer.game.getConfig('frostShard'),
-                            mousePosition = new utils.Point(obj.layer.game.mouse.x, obj.layer.game.mouse.y),
+                            mousePosition = new utils.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y),
                             spellPower = player.getParameter('spellPower'),
                             destination = mousePosition.clone();
 
@@ -137,6 +137,7 @@ var config = {
                         fs.setParameter('cooldown', fs.getParameter('cooldown') + spellPowerBoost);
 
                         obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
+
                     }
                 }
             }

@@ -16,7 +16,7 @@ var config = {
     mbullet2 : {
         zIndex : 3,
         collisions: true,
-        sprite: ['img/effects.png',[0, 0], [32, 32], 10, [0, 1, 2]],
+        sprite: ['effects',[0, 0], [32, 32], 10, [0, 1, 2]],
         type : 'monsterSpellElement',
         render: 'object',
         size : [32, 32],
@@ -40,14 +40,6 @@ var config = {
         zIndex : 2,
         sprite : ['bloodEffect', [0, 0], [64, 64], 15, [0, 1, 2, 3, 4], null, true, 0.785],
         rules: ['destroyAfterSpriteDone', 'dynamicZIndex']
-    },
-    skelet : {
-        zIndex : 0,
-        sprite : ['img/skeleton.png', [0, 0], [34, 34]],
-        parameters : {
-            cooldown : 300
-        },
-        rules: ['removeOnCooldown']
     },
     explosion : {
         render: 'object',

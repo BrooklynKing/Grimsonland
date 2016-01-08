@@ -12,7 +12,6 @@ var config = {
 			x: -100,
 			y: -100
 		},
-
 		rules: ['spawn_monster', 'random_trees' ,'spawn_heart','spawn_powerup', 'goWithPlayer']
 	}
 };

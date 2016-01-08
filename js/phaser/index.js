@@ -1,19 +1,21 @@
 import 'phaser-shim';
-import GameWindow from '../engine/objects';
+import {GameLayer} from '../engine/objects';
+import configs from '../configs/index';
 import collisions from '../engine/collisions';
 
 var game = new Phaser.Game(1024, 768, Phaser.HEADLESS , 'main', null, null, false);
-var _configs = configs.default;
-var _engine = engine.default;
 
+for (var i in configs) {
+    game[i] = configs[i];
+}
 class Loading extends Phaser.State {
     preload() {
         this.game.stage.backgroundColor = 0x0e0e0e;
         this.game.load.spritesheet('hero', '/img/mainhero.png', 32, 32);
         this.game.load.spritesheet('fireball', '/img/fireballsprite.png', 33, 33);
         this.game.load.spritesheet('explosions', '/img/explosions1.png', 39, 39);
+        this.game.load.spritesheet('button', '/img/buttons.png', 293, 54);
         this.game.load.image('bigMonsters', '/img/bigMonsters.png');
-
         this.game.load.image('monsterBlood', '/img/sblood.png');
         this.game.load.image('bloodEffect', '/img/bloods.png');
         this.game.load.image('cursor', '/img/cursor.png');
@@ -50,26 +52,6 @@ class MainMenu extends Phaser.State {
         button.addChild(text);
 
         this.world.mainTheme = this.sound.play('main',1, true);
-
-        var ctx = game.canvas.getContext("2d");
-        var _collisions = collisions({
-            n: 6,
-            width: 1024 + 200,
-            height: 768 + 200
-        });
-
-        this._game = new GameWindow({
-            cache: game.cache,
-            canvas: game.canvas,
-            collisions: _collisions,
-            ctx: ctx,
-            input: game.input.keyboard,
-            mouse: game.input.mousePointer,
-            objects: _configs.objects,
-            rules: _configs.rules,
-            layers: _configs.layers,
-            resources: _configs.resources
-        });
     }
     startGame() {
         this.game.state.start('game');
@@ -78,30 +60,52 @@ class MainMenu extends Phaser.State {
 
 class GameState extends Phaser.State {
     create() {
-        var game = this._game;
-        var mainLayer = game.addLayer(this.getLayerConfig('mainLayer'));
-        game.parameters.bestTime = localStorage.getItem('bestTime') || 0;
-        game.parameters.bestScore = localStorage.getItem('bestScore') || 0;
-        mainLayer.init();
-        game.bindGlobalEvent('player_dead', function() {
-            if (game.parameters.gameTimer > game.parameters.bestTime) {
-                game.parameters.bestTime = game.parameters.gameTimer;
-                localStorage.setItem('bestTime', game.parameters.bestTime);
-            }
-            if (game.parameters.monstersKilled > game.parameters.bestScore) {
-                game.parameters.bestScore = game.parameters.monstersKilled;
-                localStorage.setItem('bestScore', game.parameters.bestScore);
-            }
-            game.collisions.clear();
-            mainLayer.clearLayer();
-            mainLayer.init();
+        var layerConfig = this.game.getLayerConfig('mainLayer');
+        layerConfig.state = this;
+        this.pause = false;
+        this.collisions = collisions({
+            n: 6,
+            width: 1024 + 200,
+            height: 768 + 200
         });
+
+        this.layer = new GameLayer(layerConfig);
+        this.game.parameters = {};
+        this.game.parameters.bestTime = localStorage.getItem('bestTime') || 0;
+        this.game.parameters.bestScore = localStorage.getItem('bestScore') || 0;
+        this.layer.init();
+    }
+    showRestartMenu() {
+        var button  = this.add.button(512, 384, 'button', this.restart, this, 2, 0 , 1, 2);
+        button.addChild(this.add.text(-65, -15,'RESTART', {
+            fill: '#efefef'
+        }));
+        button.addChild(this.add.text(-70, -70,'YOU DIED!', {
+            fill: '#EF0000'
+        }));
+        button.anchor.setTo(0.5, 0.5);
+        this.pause = true;
+    }
+    restart() {
+        this.pause = false;
+        if (this.game.parameters.gameTimer > this.game.parameters.bestTime) {
+            this.game.parameters.bestTime = this.game.parameters.gameTimer;
+            localStorage.setItem('bestTime', this.parameters.bestTime);
+        }
+        if (this.game.parameters.monstersKilled > this.game.parameters.bestScore) {
+            this.game.parameters.bestScore = this.game.parameters.monstersKilled;
+            localStorage.setItem('bestScore', this.game.parameters.bestScore);
+        }
+        this.collisions.clear();
+        this.layer.clearLayer();
+        this.layer.init();
     }
     update() {
-        this._game.update((game.time.now - game.time.prevTime) / 1000);
+        (!this.pause) && this.layer.update((this.game.time.now - this.game.time.prevTime) / 1000);
     }
     render() {
-        this._game.render((game.time.now - game.time.prevTime) / 1000);
+        super.render();
+        (!this.pause) && this.layer.render((this.game.time.now - this.game.time.prevTime) / 1000);
     }
 }
 

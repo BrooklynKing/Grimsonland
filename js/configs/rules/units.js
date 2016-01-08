@@ -4,7 +4,7 @@ var config = {
     playerDeath: {
         update: function (dt, obj) {
             if (obj.getParameter('health') <= 0) {
-                obj.layer.game.triggerGlobalEvent('player_dead');
+                obj.layer.state.showRestartMenu();
             }
         }
     },
@@ -306,10 +306,10 @@ var config = {
         update: function (dt, obj) {
             var pos = obj.pos.clone();
             var direction = {};
-            direction.left = obj.layer.game.input.isDown(65);
-            direction.up = obj.layer.game.input.isDown(87);
-            direction.down = obj.layer.game.input.isDown(83);
-            direction.right = obj.layer.game.input.isDown(68);
+            direction.left = obj.layer.game.input.keyboard.isDown(65);
+            direction.up = obj.layer.game.input.keyboard.isDown(87);
+            direction.down = obj.layer.game.input.keyboard.isDown(83);
+            direction.right = obj.layer.game.input.keyboard.isDown(68);
             if (direction.right) {
                 pos.x = obj.pos.x + 1;
             }
@@ -333,9 +333,9 @@ var config = {
     },
     selectSpellWithKeyboard: {
         update: function (dt, obj) {
-            (obj.layer.game.input.isDown(49)) && (obj.setParameter('currentSpell', 'fireball'));
-            (obj.layer.game.input.isDown(50)) && (obj.setParameter('currentSpell', 'frostShard'));
-            (obj.layer.game.input.isDown(51)) && (obj.setParameter('currentSpell', 'teleport'));
+            (obj.layer.game.input.keyboard.isDown(49)) && (obj.setParameter('currentSpell', 'fireball'));
+            (obj.layer.game.input.keyboard.isDown(50)) && (obj.setParameter('currentSpell', 'frostShard'));
+            (obj.layer.game.input.keyboard.isDown(51)) && (obj.setParameter('currentSpell', 'teleport'));
         }
     },
     triggerOnPlayerCollisionPowerUp : {

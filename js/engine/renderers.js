@@ -1,7 +1,6 @@
-import resources from './resources';
 import utils from './utils';
 
-function healthBar(obj, dt) {
+function healthBar(obj) {
     var ctx = obj.layer.ctx,
         x = Math.round(- obj.sprite.size[0] / 2 ),
         y = Math.round(- obj.sprite.size[1] / 2 - 7),
@@ -51,7 +50,7 @@ function sprite(obj, dt) {
     dt && obj.sprite.update(dt);
     obj.sprite.render(ctx);
 }
-function shadow(obj, dt) {
+function shadow(obj) {
     var ctx = obj.layer.ctx;
 
     ctx.globalAlpha = 0.5;
@@ -63,7 +62,7 @@ function shadow(obj, dt) {
 
     ctx.globalAlpha = 1;
 }
-function effects(obj, dt) {
+function effects(obj) {
     var ctx = obj.layer.ctx,
         effects = obj.getParameter('effects');
 
@@ -78,14 +77,14 @@ function effects(obj, dt) {
 }
 
 function objectRenderer(obj, dt) {
-    shadow(obj, dt);
+    shadow(obj);
     sprite(obj, dt);
 }
 function unitRenderer(obj, dt) {
-    shadow(obj, dt);
-    healthBar(obj, dt);
+    shadow(obj);
+    healthBar(obj);
     sprite(obj, dt);
-    effects(obj, dt);
+    effects(obj);
 }
 function spellRenderer(obj, dt) {
     var ctx = obj.layer.ctx,

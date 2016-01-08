@@ -106,16 +106,16 @@ var config = {
                 collisions = obj.setParameter('collisions', []);
 
             collisions.cells = new Array();
-            obj.layer.game.collisions.updateObject(obj);
+            obj.layer.state.collisions.updateObject(obj);
         },
         update: function(dt, obj) {
             obj.getParameter('collisions').splice(0);
-            obj.layer.game.collisions.updateObject(obj);
+            obj.layer.state.collisions.updateObject(obj);
         }
     },
     rotateToMouse: {
         update: function (dt, obj) {
-            var destination  = new utils.Point(obj.layer.game.mouse.x, obj.layer.game.mouse.y);
+            var destination  = new utils.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y);
 
             destination.x -= obj.layer.translate.x;
             destination.y -= obj.layer.translate.y;
@@ -126,7 +126,7 @@ var config = {
     },
     bindPositionToMouse: {
         update : function(dt, obj) {
-            var mousePosition = new utils.Point(obj.layer.game.mouse.x, obj.layer.game.mouse.y);
+            var mousePosition = new utils.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y);
             obj.setPosition(mousePosition.clone());
         }
     },
