@@ -24,7 +24,7 @@ var config = {
         parameters : {
             power : 15,
             cooldown: 100,
-            speed: 150
+            speed: 200
         },
         rules : ['destroyAfterLeavingLayer', 'setDirectionToPlayer', 'moveToDirection', 'dynamicZIndex']
     },

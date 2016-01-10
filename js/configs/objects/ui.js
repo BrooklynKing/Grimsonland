@@ -18,6 +18,17 @@ var config = {
         },
         rules: ['countMonsterKilled']
     },
+    leftOnWave: {
+        zIndex : 2000,
+        pos: [5, 100],
+        render : "text",
+        parameters : {
+            weight : "bold",
+            color : "#EFEFEF",
+            template : "LEFT ON THIS WAVE: {count}",
+            size : 14
+        }
+    },
     level: {
         zIndex : 2000,
         pos: [35, 45],

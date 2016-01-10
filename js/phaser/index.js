@@ -11,29 +11,28 @@ for (var i in configs) {
 class Loading extends Phaser.State {
     preload() {
         this.game.stage.backgroundColor = 0x0e0e0e;
-        this.game.load.spritesheet('hero', '/img/mainhero.png', 32, 32);
-        this.game.load.spritesheet('fireball', '/img/fireballsprite.png', 33, 33);
-        this.game.load.spritesheet('explosions', '/img/explosions1.png', 39, 39);
-        this.game.load.spritesheet('button', '/img/buttons.png', 293, 54);
-        this.game.load.image('bigMonsters', '/img/bigMonsters.png');
-        this.game.load.image('monsterBlood', '/img/sblood.png');
-        this.game.load.image('bloodEffect', '/img/bloods.png');
-        this.game.load.image('cursor', '/img/cursor.png');
-        this.game.load.image('darkBlast', '/img/darkblast.png');
-        this.game.load.image('demons', '/img/demons.png');
-        this.game.load.image('effects', '/img/effects.png');
-        this.game.load.image('explosions', '/img/explosions.png');
-        this.game.load.image('fireball', '/img/fireballsprite.png');
-        this.game.load.image('frostEffect', '/img/frosteffect.png');
-        this.game.load.image('pumpkin', '/img/heart.png');
-        this.game.load.image('hero', '/img/mainhero.png');
-        this.game.load.image('powerUp', '/img/powerup2.png');
-        this.game.load.image('arcaneGate', '/img/spell.png');
-        this.game.load.image('spellIcons', '/img/spellIcons.png');
-        this.game.load.image('stone', '/img/stones.png');
-        this.game.load.image('terrain', '/img/terrain.png');
-        this.game.load.image('tree', '/img/tree.png');
-        this.game.load.audio('main', '/music/main.mp3');
+        this.game.load.spritesheet('hero', './img/mainhero.png', 32, 32);
+        this.game.load.spritesheet('fireball', './img/fireballsprite.png', 33, 33);
+        this.game.load.spritesheet('button', './img/buttons.png', 293, 54);
+        this.game.load.image('bigMonsters', './img/bigMonsters.png');
+        this.game.load.image('monsterBlood', './img/sblood.png');
+        this.game.load.image('bloodEffect', './img/bloods.png');
+        this.game.load.image('cursor', './img/cursor.png');
+        this.game.load.image('darkBlast', './img/darkblast.png');
+        this.game.load.image('demons', './img/demons.png');
+        this.game.load.image('effects', './img/effects.png');
+        this.game.load.image('explosions', './img/explosions.png');
+        this.game.load.image('fireball', './img/fireballsprite.png');
+        this.game.load.image('frostEffect', './img/frosteffect.png');
+        this.game.load.image('pumpkin', './img/heart.png');
+        this.game.load.image('hero', './img/mainhero.png');
+        this.game.load.image('powerUp', './img/powerup2.png');
+        this.game.load.image('arcaneGate', './img/spell.png');
+        this.game.load.image('spellIcons', './img/spellicons.png');
+        this.game.load.image('stone', './img/stones.png');
+        this.game.load.image('terrain', './img/terrain.png');
+        this.game.load.image('tree', './img/tree.png');
+        this.game.load.audio('main', './music/main.mp3');
     }
     create() {
         this.game.state.start('menu');
@@ -73,17 +72,20 @@ class GameState extends Phaser.State {
         this.game.parameters = {};
         this.game.parameters.bestTime = localStorage.getItem('bestTime') || 0;
         this.game.parameters.bestScore = localStorage.getItem('bestScore') || 0;
+        this.restartButton = this.add.button(512, 384, 'button', this.restart, this, 2, 0 , 1, 2);
+        this.restartButton.addChild(this.add.text(-65, -15,'RESTART', {
+            fill: '#efefef'
+        }));
+        this.restartButton.addChild(this.add.text(-70, -70,'YOU DIED!', {
+            fill: '#EF0000'
+        }));
+        this.restartButton.anchor.setTo(0.5, 0.5);
+        this.restartButton.kill();
+
         this.layer.init();
     }
     showRestartMenu() {
-        var button  = this.add.button(512, 384, 'button', this.restart, this, 2, 0 , 1, 2);
-        button.addChild(this.add.text(-65, -15,'RESTART', {
-            fill: '#efefef'
-        }));
-        button.addChild(this.add.text(-70, -70,'YOU DIED!', {
-            fill: '#EF0000'
-        }));
-        button.anchor.setTo(0.5, 0.5);
+        this.restartButton.revive();
         this.pause = true;
     }
     restart() {
@@ -97,15 +99,16 @@ class GameState extends Phaser.State {
             localStorage.setItem('bestScore', this.game.parameters.bestScore);
         }
         this.collisions.clear();
+        this.restartButton.kill();
         this.layer.clearLayer();
         this.layer.init();
     }
     update() {
-        (!this.pause) && this.layer.update((this.game.time.now - this.game.time.prevTime) / 1000);
+        (!this.pause) && this.layer.update(this.game.time.physicsElapsed);
     }
     render() {
         super.render();
-        (!this.pause) && this.layer.render((this.game.time.now - this.game.time.prevTime) / 1000);
+        (!this.pause) && this.layer.render(this.game.time.physicsElapsed);
     }
 }
 

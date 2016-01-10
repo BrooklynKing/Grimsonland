@@ -75,7 +75,7 @@ var config = {
         type : 'spellElement',
         size : [500, 500],
         parameters : {
-            power : 100,
+            power : 50,
             cooldown: 150
         },
         conditions: ['slowEnemies'],

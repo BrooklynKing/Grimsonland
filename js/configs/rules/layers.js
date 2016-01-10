@@ -1,4 +1,5 @@
 import utils from './../../engine/utils';
+import format from 'string-template';
 var Victor = require('victor');
 
 var config = {
@@ -34,17 +35,25 @@ var config = {
         }
     },
     spawn_monster: {
+        init: function() {
+            this.parameters.currentWave = 1;
+            this.parameters.monseterOnWave = this.parameters.waveMultiplier * (this.parameters.currentWave);
+            this.parameters.monsterLeft = 0;
+            this.parameters.lastWaveMonsters = 0;
+            this.parameters.monsterSpawned = 0;
+            this.leftOnWave = this.context.addObject(this.context.game.getConfig('leftOnWave'));
+        },
         update: function (dt, obj) {
-            if (this.parameters.monsterSpawned < 10000) {
-
-                if ((!this.parameters.currentMonsterCooldown) && (this.context.getObjectsByType('monster').length < this.parameters.maxOnMap)) {
+            this.parameters.monsterLeft = (obj.game.parameters.monstersKilled - this.parameters.lastWaveMonsters);
+            if (this.parameters.monsterSpawned < this.parameters.waveMultiplier * (this.parameters.currentWave)) {
+                if ((!this.parameters.currentMonsterCooldown)) {
                     var topLeft = new Victor(50, 50);
                     var bottomRight = new Victor(1154, 918);
+                    var summonGate = obj.game.getConfig('summonGate');
 
-                    var monsterConfig = obj.game.getConfig('summonGate');
-                    monsterConfig.pos = new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray());
+                    summonGate.pos = new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray());
 
-                    this.context.addObject(monsterConfig);
+                    this.context.addObject(summonGate);
 
                     this.parameters.monsterSpawned++;
                     this.parameters.currentMonsterCooldown = this.parameters.monsterCooldown;
@@ -52,13 +61,22 @@ var config = {
                 } else {
                     this.parameters.currentMonsterCooldown && this.parameters.currentMonsterCooldown--;
                 }
+            } else {
+                if (this.parameters.monsterLeft == this.parameters.monseterOnWave  ) {
+                    this.parameters.currentWave++;
+                    this.parameters.monsterSpawned = 0;
+                    this.parameters.monseterOnWave = this.parameters.waveMultiplier * (this.parameters.currentWave);
+                    this.parameters.lastWaveMonsters = obj.game.parameters.monstersKilled;
+                }
             }
+            this.leftOnWave.setParameter('text', format(this.leftOnWave.getParameter('template'), {
+                count: this.parameters.monsterLeft + '/' + this.parameters.monseterOnWave
+            }));
         },
         parameters: {
             area: [[50, 50], [1154 , 918]],
-            maxOnMap: 200,
-            monsterCooldown: 10,
-            monsterSpawned: 0
+            waveMultiplier: 25,
+            monsterCooldown: 10
         }
     },
     spawn_heart: {

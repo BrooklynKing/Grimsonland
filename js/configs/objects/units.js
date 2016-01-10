@@ -16,15 +16,15 @@ var config = {
             currentSpell: 'fireball',
             direction : {},
             levelTable: {
-                1 : 400,
-                2 : 900,
-                3 : 1400,
-                4 : 2100,
-                5 : 2800,
-                6 : 3600,
-                7 : 4500,
-                8 : 5400,
-                9 : 6500
+                1 : 600,
+                2 : 1200,
+                3 : 2000,
+                4 : 3000,
+                5 : 4500,
+                6 : 6500,
+                7 : 8000,
+                8 : 10000,
+                9 : 15000
             }
         },
         type : 'player',
@@ -40,7 +40,7 @@ var config = {
         collisions: true,
         parameters : {
             cooldown: 80,
-            exp: 5,
+            exp: 3,
             chanceOfBoss : 3,
             chanceOfBoss2 : 8,
             chanceOfBoomer : 23,
@@ -60,8 +60,8 @@ var config = {
             speed : 25,
             cooldown : 70 ,
             scentSpeed: 120,
-            scentRange: 400,
-            exp: 20,
+            scentRange: 600,
+            exp: 15,
             wanderCooldown: 500,
             effects : [],
             health : 20,
@@ -79,7 +79,7 @@ var config = {
         render : 'unit',
         parameters : {
             speed : 100,
-            exp : 40,
+            exp : 30,
             effects : [],
             health : 10,
             power : 10
@@ -96,7 +96,7 @@ var config = {
         render : 'unit',
         parameters : {
             speed : 50,
-            exp : 100,
+            exp : 60,
             cooldown : 300 ,
             power : 10,
             health : 30,
@@ -115,7 +115,7 @@ var config = {
         parameters : {
             speed : 15,
             cooldown : 200 ,
-            exp: 200,
+            exp: 120,
             fireRange : 300,
             power : 10,
             health : 50,
@@ -144,7 +144,7 @@ var config = {
         sprite : ['powerUp', [0, 0], [72, 65], 15, [0, 1, 2, 1]],
         conditions: ['triggerOnPlayerCollisionPowerUp'],
         parameters : {
-            exp: 1000
+            exp: 250
             //power : 1
         }
     }

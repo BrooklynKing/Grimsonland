@@ -209,7 +209,6 @@ var config = {
                     obj.layer.game.parameters.monstersKilled = 0;
                 }
                 obj.layer.game.parameters.monstersKilled++;
-
                 var player = obj.layer.getObjectsByType('player')[0];
                 player.setParameter('exp', player.getParameter('exp') + obj.getParameter('exp'));
             }
