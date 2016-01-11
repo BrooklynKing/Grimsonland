@@ -8,9 +8,22 @@ var game = new Phaser.Game(1024, 768, Phaser.HEADLESS , 'main', null, null, fals
 for (var i in configs) {
     game[i] = configs[i];
 }
+class PreLoading extends Phaser.State {
+    preload() {
+        this.game.stage.backgroundColor = 0x0e0e0e;
+        this.game.load.image('loading', './img/loading.png');
+    }
+    create() {
+        this.game.state.start('loading');
+    }
+}
 class Loading extends Phaser.State {
     preload() {
         this.game.stage.backgroundColor = 0x0e0e0e;
+        this.text = this.add.text(460, 250,'LOADING', {
+            fill: '#efefef'
+        });
+        this.game.load.setPreloadSprite(this.game.add.image(400, 300, 'loading'));
         this.game.load.spritesheet('hero', './img/mainhero.png', 32, 32);
         this.game.load.spritesheet('fireball', './img/fireballsprite.png', 33, 33);
         this.game.load.spritesheet('button', './img/buttons.png', 293, 54);
@@ -35,6 +48,7 @@ class Loading extends Phaser.State {
         this.game.load.audio('main', './music/main.mp3');
     }
     create() {
+        this.text.destroy();
         this.game.state.start('menu');
     }
 
@@ -111,8 +125,8 @@ class GameState extends Phaser.State {
         (!this.pause) && this.layer.render(this.game.time.physicsElapsed);
     }
 }
-
-game.state.add('loading', Loading, true);
+game.state.add('preloading', PreLoading, true);
+game.state.add('loading', Loading);
 game.state.add('game', GameState);
 game.state.add('menu', MainMenu);
 
