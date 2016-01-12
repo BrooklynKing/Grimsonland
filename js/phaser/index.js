@@ -111,7 +111,7 @@ class GameState extends Phaser.State {
         this.pause = false;
         if (this.game.parameters.gameTimer > this.game.parameters.bestTime) {
             this.game.parameters.bestTime = this.game.parameters.gameTimer;
-            localStorage.setItem('bestTime', this.parameters.bestTime);
+            localStorage.setItem('bestTime', this.game.parameters.bestTime);
         }
         if (this.game.parameters.monstersKilled > this.game.parameters.bestScore) {
             this.game.parameters.bestScore = this.game.parameters.monstersKilled;
