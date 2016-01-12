@@ -55,7 +55,6 @@ function GameObject(config) {
 
     this.inited = false;
 }
-GameObject.prototype.objectCount = 0;
 GameObject.prototype.render = function (dt) {
     if (this.customRender) {
         if (Array.isArray(this.customRender)) {

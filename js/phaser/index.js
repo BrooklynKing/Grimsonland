@@ -57,15 +57,18 @@ class Loading extends Phaser.State {
 class MainMenu extends Phaser.State {
     create() {
         var button  = this.add.button(512, 384, 'button', this.startGame, this, 2, 0 , 1, 2);
-        var start = this.add.text(-45, -15,'START', {
+        var start = this.add.text(0, 3,'START', {
             fill: '#efefef'
         });
-        var info = this.add.text(-90, -150, 'Moving: WASD \nAim: Mouse\nCast spell: Mouse or Space\nSelect spell: 1,2,3 etc.', {
+        var info = this.add.text(0, -150, 'Moving: WASD\nAim: Mouse\nCast spell: Mouse or Space\nSelect spell: 1,2,3 etc.', {
             fontSize : '14px',
             fill: '#efefef'
         });
 
+        start.anchor.setTo(0.5, 0.5);
+        info.anchor.setTo(0.5, 0.5);
         button.anchor.setTo(0.5, 0.5);
+
         button.addChild(start);
         button.addChild(info);
 
@@ -78,19 +81,19 @@ class MainMenu extends Phaser.State {
 
 class GameState extends Phaser.State {
     create() {
-        var layerConfig = this.game.getLayerConfig('mainLayer');
-        layerConfig.state = this;
         this.pause = false;
+
         this.collisions = collisions({
             n: 6,
             width: 1024 + 200,
             height: 768 + 200
         });
 
-        this.layer = new GameLayer(layerConfig);
-        this.game.parameters = {};
-        this.game.parameters.bestTime = localStorage.getItem('bestTime') || 0;
-        this.game.parameters.bestScore = localStorage.getItem('bestScore') || 0;
+        this.initGameParameters();
+        this.initControls();
+        this.initGameLayer();
+    }
+    initControls() {
         this.restartButton = this.add.button(512, 384, 'button', this.restart, this, 2, 0 , 1, 2);
         this.restartButton.addChild(this.add.text(-65, -15,'RESTART', {
             fill: '#efefef'
@@ -100,7 +103,17 @@ class GameState extends Phaser.State {
         }));
         this.restartButton.anchor.setTo(0.5, 0.5);
         this.restartButton.kill();
+    }
+    initGameParameters() {
+        this.game.parameters = {};
+        this.game.parameters.bestTime = localStorage.getItem('bestTime') || 0;
+        this.game.parameters.bestScore = localStorage.getItem('bestScore') || 0;
+    }
+    initGameLayer() {
+        var layerConfig = this.game.getLayerConfig('mainLayer');
+        layerConfig.state = this;
 
+        this.layer = new GameLayer(layerConfig);
         this.layer.init();
     }
     showRestartMenu() {

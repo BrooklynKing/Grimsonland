@@ -26,12 +26,10 @@ function generate(config) {
             cellGrid[oldCells[i]] && cellGrid[oldCells[i]].splice(cellGrid[oldCells[i]].indexOf(object), 1);
         }
     }
-
-    function updateObject(object) {
+    function getPointsOfObject(object) {
         var pos = object.pos,
             size = object.size,
             cells = [],
-            oldCells = object.getParameter('collisions').cells,
             xIndex = size[0] >> n,
             yIndex = size[1] >> n;
 
@@ -43,6 +41,12 @@ function generate(config) {
                 ]));
             }
         }
+
+        return cells;
+    }
+    function updateObject(object) {
+        var cells = getPointsOfObject(object),
+            oldCells = object.getParameter('collisions').cells;
 
         for (var i = 0; i < cells.length; i++) {
             if (oldCells[i] != cells[i]) {
