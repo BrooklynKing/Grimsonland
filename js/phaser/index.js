@@ -57,12 +57,17 @@ class Loading extends Phaser.State {
 class MainMenu extends Phaser.State {
     create() {
         var button  = this.add.button(512, 384, 'button', this.startGame, this, 2, 0 , 1, 2);
-        var text = this.add.text(-45, -15,'START', {
+        var start = this.add.text(-45, -15,'START', {
+            fill: '#efefef'
+        });
+        var info = this.add.text(-90, -150, 'Moving: WASD \nAim: Mouse\nCast spell: Mouse or Space\nSelect spell: 1,2,3 etc.', {
+            fontSize : '14px',
             fill: '#efefef'
         });
 
         button.anchor.setTo(0.5, 0.5);
-        button.addChild(text);
+        button.addChild(start);
+        button.addChild(info);
 
         this.world.mainTheme = this.sound.play('main',1, true);
     }
