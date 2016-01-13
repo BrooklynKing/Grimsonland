@@ -47,8 +47,8 @@ var config = {
             this.parameters.monsterLeft = (obj.state.parameters.monstersKilled - this.parameters.lastWaveMonsters);
             if (this.parameters.monsterSpawned < this.parameters.waveMultiplier * (this.parameters.currentWave)) {
                 if ((!this.parameters.currentMonsterCooldown)) {
-                    var topLeft = new Victor(50, 50);
-                    var bottomRight = new Victor(1154, 918);
+                    var topLeft = new Victor(50 - obj.translate.x, 50 - obj.translate.y);
+                    var bottomRight = new Victor(900 - obj.translate.x, 650 - obj.translate.y);
                     var summonGate = gameConfigs.getConfig('summonGate');
 
                     summonGate.pos = new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray());
@@ -74,7 +74,6 @@ var config = {
             }));
         },
         parameters: {
-            area: [[50, 50], [1154 , 918]],
             waveMultiplier: 25,
             monsterCooldown: 10
         }

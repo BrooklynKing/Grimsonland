@@ -21,7 +21,7 @@ var config = {
         render : 'spell',
         parameters : {
             shardsFired: 0,
-            cooldown: 75,
+            cooldown: 2000,
         },
         type : 'spell',
         rules : ['frostShard']
@@ -47,7 +47,7 @@ var config = {
         pos : [466, 580],
         size : [32, 32],
         parameters : {
-            cooldown: 50
+            cooldown: 200
         },
         type : 'spellElement',
         rules : ['removeOnCooldown', 'dynamicZIndex']
@@ -62,10 +62,11 @@ var config = {
         type : 'spellElement',
         parameters : {
             power : 10,
-            speed: 400
+            cooldown: 100,
+            speed: 300
         },
         conditions: ['bulletMonsterCollision'],
-        rules : ['destroyAfterLeavingLayer', 'moveToDirection', 'dynamicZIndex']
+        rules : ['destroyAfterLeavingLayer', 'moveToDirection', 'dynamicZIndex' , 'explosionOnCooldown']
     },
     frostShard : {
         zIndex : 3,
@@ -75,8 +76,8 @@ var config = {
         type : 'spellElement',
         size : [500, 500],
         parameters : {
-            power : 50,
-            cooldown: 150
+            power : 60,
+            cooldown: 500
         },
         conditions: ['slowEnemies'],
         rules : ['removeOnCooldown', 'dynamicZIndex']

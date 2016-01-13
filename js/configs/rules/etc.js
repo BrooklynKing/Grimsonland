@@ -141,6 +141,24 @@ var config = {
             }
         }
     },
+    explosionOnCooldown: {
+        update: function(dt, obj) {
+            var cooldown = obj.getParameter('cooldown');
+
+            if (cooldown == 0) {
+                obj._removeInNextTick = true;
+
+                var explosionConfig = gameConfigs.getConfig('monsterExplosion');
+                explosionConfig.pos = new utils.Point([obj.pos.x, obj.pos.y]);
+                var expl = obj.layer.addObject(explosionConfig);
+                expl.setParameter('power', obj.getParameter('power'));
+
+                return;
+            } else {
+                obj.setParameter('cooldown', cooldown - 1);
+            }
+        }
+    },
     destroyAfterSpriteDone: {
         update : function (dt, obj) {
             if(obj.sprite.done) {

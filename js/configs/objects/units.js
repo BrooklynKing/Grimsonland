@@ -41,9 +41,9 @@ var config = {
         parameters : {
             cooldown: 80,
             exp: 3,
-            chanceOfBoss : 3,
+            chanceOfBoss : 5,
             chanceOfBoss2 : 8,
-            chanceOfBoomer : 23,
+            chanceOfBoomer : 20,
             health : 10
         },
         conditions : ['monsterHealthStatus'],
@@ -97,9 +97,9 @@ var config = {
         parameters : {
             speed : 50,
             exp : 60,
-            cooldown : 300 ,
+            cooldown : 75,
             power : 10,
-            health : 30,
+            health : 50,
             effects : []
         },
         conditions : ['monsterHealthStatus' , 'stopOnCollisionWithPlayer'],
@@ -118,7 +118,7 @@ var config = {
             exp: 120,
             fireRange : 300,
             power : 10,
-            health : 50,
+            health : 30,
             effects : []
         },
         conditions : ['monsterHealthStatus' , 'stopOnCollisionWithPlayer'],

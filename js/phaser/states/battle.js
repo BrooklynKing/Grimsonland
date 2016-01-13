@@ -4,7 +4,12 @@ import {GameLayer} from '../../engine/objects';
 
 class GameState extends Phaser.State {
     init() {
-        this.battleTheme = this.sound.add('battleTheme', 0.2, true);
+        this.battleTheme = this.sound.add('battleTheme', 0.3, true);
+        this.deathTheme = this.sound.add('deathTheme', 0.3, true);
+        this.background = this.game.add.image(512, 768, 'deathmenu');
+        this.background.anchor.set(0.5, 1);
+        this.background.alpha = 0.5;
+        this.background.kill();
     }
     create() {
         this.pause = false;
@@ -14,7 +19,9 @@ class GameState extends Phaser.State {
             width: 1024 + 200,
             height: 768 + 200
         });
+
         this.battleTheme.play();
+
         this.initGameParameters();
         this.initControls();
         this.initGameLayer();
@@ -43,11 +50,16 @@ class GameState extends Phaser.State {
         this.layer.init();
     }
     showRestartMenu() {
+        this.battleTheme.stop();
+        this.deathTheme.play();
+        this.background.revive();
         this.restartButton.revive();
         this.pause = true;
     }
     restart() {
         this.pause = false;
+        this.battleTheme.play();
+        this.deathTheme.stop();
         if (this.parameters.gameTimer > this.parameters.bestTime) {
             this.parameters.bestTime = this.parameters.gameTimer;
             localStorage.setItem('bestTime', this.parameters.bestTime);
@@ -57,6 +69,7 @@ class GameState extends Phaser.State {
             localStorage.setItem('bestScore', this.parameters.bestScore);
         }
         this.collisions.clear();
+        this.background.kill();
         this.restartButton.kill();
         this.layer.clearLayer();
         this.layer.init();

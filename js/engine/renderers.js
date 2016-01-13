@@ -123,6 +123,13 @@ function spellRenderer(obj, dt) {
 
     ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }
+function ui(obj, dt) {
+    var ctx = obj.layer.ctx;
+
+    ctx.translate(-obj.layer.translate.x, -obj.layer.translate.y);
+    sprite(obj, dt);
+    ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
+}
 function textRender(obj) {
     var ctx = obj.layer.ctx,
         fontConfig = '';
@@ -152,12 +159,13 @@ function cursor(obj, dt) {
     ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }
 var renders = {
-    shadow: shadow,
-    expBar: expBar,
-    healthBar: healthBar,
-    cursor: cursor,
-    sprite: sprite,
-    effects: effects,
+    shadow,
+    expBar,
+    healthBar,
+    cursor,
+    sprite,
+    effects,
+    ui,
     object : objectRenderer,
     text: textRender,
     spell : spellRenderer,

@@ -3,14 +3,17 @@ import 'phaser-shim';
 class MainMenu extends Phaser.State {
     init() {
         this.menuTheme = this.sound.add('menuTheme', 0.3, true);
+        this.background = this.game.add.image(512, 768, 'mainmenu');
+        this.background.anchor.set(0.5, 1);
+        this.background.alpha = 0.8;
     }
     create() {
         var button  = this.add.button(512, 384, 'button', this.startGame, this, 2, 0 , 1, 2);
         var start = this.add.text(0, 3,'START', {
             fill: '#efefef'
         });
-        var info = this.add.text(0, -150, 'Moving: WASD\nAim: Mouse\nCast spell: Mouse or Space\nSelect spell: 1,2,3 etc.', {
-            fontSize : '14px',
+        var info = this.add.text(0, -150, ' Moving: WASD\n Aim: Mouse\n Cast spell: Mouse or Space\n Select spell: 1,2,3 etc.', {
+            fontSize : '18px',
             fill: '#efefef'
         });
 

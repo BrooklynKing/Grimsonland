@@ -354,23 +354,37 @@ var config = {
     summonOnCooldown : {
         update: function(dt, obj) {
             var cooldown = obj.getParameter('cooldown');
+            function getProperMonster() {
+                var random = Math.random() * 100,
+                    config;
 
+                if (random <= obj.getParameter('chanceOfBoss')) {
+                    config = gameConfigs.getConfig('monsterBoss');
+                } else {
+                    random -= obj.getParameter('chanceOfBoss');
+                }
+                if (!config && random <= obj.getParameter('chanceOfBoss2')) {
+                    config = gameConfigs.getConfig('monsterBoss2');
+                } else {
+                    random -= obj.getParameter('chanceOfBoss2');
+                }
+                if (!config && random <= obj.getParameter('chanceOfBoomer')) {
+                    config = gameConfigs.getConfig('monsterBoomer');
+                } else {
+                    random -= obj.getParameter('monsterBoomer');
+                }
+
+                if (!config) {
+                    config = gameConfigs.getConfig('monster');
+                }
+
+                return config;
+            }
             if (cooldown == 0) {
                 obj._removeInNextTick = true;
 
-                var random = Math.random() * 100,
-                    player = obj.layer.getObjectsByType('player')[0],
-                    monsterConfig;
-
-                if (random <= obj.getParameter('chanceOfBoss2')) {
-                    monsterConfig = gameConfigs.getConfig('monsterBoss2');
-                } else if (random <= obj.getParameter('chanceOfBoss')) {
-                    monsterConfig = gameConfigs.getConfig('monsterBoss');
-                } else if (random <= obj.getParameter('chanceOfBoomer')) {
-                    monsterConfig = gameConfigs.getConfig('monsterBoomer');
-                } else {
-                    monsterConfig = gameConfigs.getConfig('monster');
-                }
+                let monsterConfig = getProperMonster(),
+                    player = obj.layer.getObjectsByType('player')[0];
 
                 monsterConfig.pos = obj.pos.clone();
 
