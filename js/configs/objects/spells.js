@@ -1,6 +1,6 @@
 var config = {
     fireballSpell: {
-        zIndex : 2000,
+        zIndex : 5000,
         sprite: ['spellIcons', [0, 0], [32, 32]],
         pos : [470, 748],
 
@@ -14,7 +14,7 @@ var config = {
         rules : ['fireball']
     },
     frostShardSpell: {
-        zIndex : 2000,
+        zIndex : 5000,
         sprite: ['spellIcons', [224, 96], [32, 32]],
         pos : [512, 748],
         size : [32, 32],
@@ -27,7 +27,7 @@ var config = {
         rules : ['frostShard']
     },
     teleportSpell: {
-        zIndex : 2000,
+        zIndex : 5000,
         sprite: ['spellIcons', [64, 32], [32, 32]],
         pos : [554, 748],
         size : [32, 32],

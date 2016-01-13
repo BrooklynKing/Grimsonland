@@ -5,8 +5,8 @@ var config = {
 		background: 'terrain',
 		initList : ['player', 'cursor', 'counter', 'timer', 'bestTime', 'fireballSpell', 'frostShardSpell', 'teleportSpell', 'bestScore', 'level'],
 		init: function() {
-			this.game.parameters.monstersKilled = 0;
-			this.game.parameters.gameTimer = 0;
+			this.state.parameters.monstersKilled = 0;
+			this.state.parameters.gameTimer = 0;
 		},
 		translate: {
 			x: -100,

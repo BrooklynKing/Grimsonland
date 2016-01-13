@@ -79,17 +79,17 @@ GameObject.prototype.init = function () {
         this._init && this._init();
 
         if (this.collisions) {
-            this.collisions = new GameRule(this.layer.game.getRuleConfig('collisions'));
+            this.collisions = new GameRule(gameConfigs.getRuleConfig('collisions'));
             this.collisions.setContext(this);
             this.collisions.init();
         }
 
         for (let i = 0, l = rules.length; i < l; i++) {
-            this.addRule(this.layer.game.getRuleConfig(rules[i]));
+            this.addRule(gameConfigs.getRuleConfig(rules[i]));
         }
 
         for (let i = 0, l = conditions.length; i < l; i++) {
-            this.addCondition(this.layer.game.getRuleConfig(conditions[i]));
+            this.addCondition(gameConfigs.getRuleConfig(conditions[i]));
         }
 
         this.inited = true;
@@ -191,7 +191,7 @@ export function GameLayer(config) {
 GameLayer.prototype.init = function () {
     if (!this.inited) {
         for (let i = 0; i < this.initList.length; i++) {
-            this.addObject(this.game.getConfig(this.initList[i]));
+            this.addObject(gameConfigs.getConfig(this.initList[i]));
         }
 
         this._init && this._init();
@@ -200,7 +200,7 @@ GameLayer.prototype.init = function () {
         this.rules = [];
 
         for (let i = 0, l = rules.length; i < l; i++) {
-            this.addRule(this.game.getRuleConfig(rules[i]));
+            this.addRule(gameConfigs.getRuleConfig(rules[i]));
         }
 
         this.inited = true;

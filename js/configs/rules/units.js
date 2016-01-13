@@ -25,7 +25,7 @@ var config = {
 
             for (var i = 0; i < objects.length; i++) {
                 if (objects[i].type == 'player') {
-                    var explosionConfig = obj.layer.game.getConfig('explosion');
+                    var explosionConfig = gameConfigs.getConfig('explosion');
                     explosionConfig.pos = obj.pos.clone();
 
                     obj.layer.addObject(explosionConfig);
@@ -64,7 +64,7 @@ var config = {
                     if (objects[i].type == 'player') {
                         objects[i].setParameter('health', objects[i].getParameter('health') - obj.getParameter('power'));
 
-                        var blood = obj.layer.game.getConfig('bloodSpray');
+                        var blood = gameConfigs.getConfig('bloodSpray');
                         blood.pos = objects[i].pos.clone();
                         blood.pos.x += 2;
                         blood.pos.y += - 10;
@@ -102,32 +102,32 @@ var config = {
 
                 obj._removeInNextTick = true;
 
-                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
+                explosionConfig = gameConfigs.getConfig('monsterExplosion');
                 explosionConfig.pos = new utils.Point([pos.x - obj.size[0], pos.y - obj.size[1]]);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
 
-                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
+                explosionConfig = gameConfigs.getConfig('monsterExplosion');
                 explosionConfig.pos = new utils.Point([pos.x + obj.size[0], pos.y - obj.size[1]]);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
 
-                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
+                explosionConfig = gameConfigs.getConfig('monsterExplosion');
                 explosionConfig.pos = new utils.Point([pos.x - obj.size[0], pos.y + obj.size[1]]);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
 
-                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
+                explosionConfig = gameConfigs.getConfig('monsterExplosion');
                 explosionConfig.pos = new utils.Point([pos.x + obj.size[0], pos.y + obj.size[1]]);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
 
-                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
+                explosionConfig = gameConfigs.getConfig('monsterExplosion');
                 explosionConfig.pos = new utils.Point([pos.x - 3 / 2 * obj.size[0], pos.y]);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
 
-                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
+                explosionConfig = gameConfigs.getConfig('monsterExplosion');
                 explosionConfig.pos = new utils.Point([pos.x + 3 / 2 * obj.size[0], pos.y]);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
@@ -196,19 +196,19 @@ var config = {
             if (obj.getParameter('health') <= 0) {
                 obj._removeInNextTick = true;
 
-                var explosionConfig = obj.layer.game.getConfig('explosion');
+                var explosionConfig = gameConfigs.getConfig('explosion');
                 explosionConfig.pos = obj.pos.clone();
 
                 obj.layer.addObject(explosionConfig);
 
-                var blood = obj.layer.game.getConfig('blood');
+                var blood = gameConfigs.getConfig('blood');
                 blood.pos = obj.pos.clone();
                 obj.layer.addObject(blood);
 
-                if (!obj.layer.game.parameters.monstersKilled) {
-                    obj.layer.game.parameters.monstersKilled = 0;
+                if (!obj.layer.state.parameters.monstersKilled) {
+                    obj.layer.state.parameters.monstersKilled = 0;
                 }
-                obj.layer.game.parameters.monstersKilled++;
+                obj.layer.state.parameters.monstersKilled++;
                 var player = obj.layer.getObjectsByType('player')[0];
                 player.setParameter('exp', player.getParameter('exp') + obj.getParameter('exp'));
             }
@@ -231,7 +231,7 @@ var config = {
         update : function(dt, obj) {
             var player = obj.layer.getObjectsByType('player')[0];
             if (!obj.getParameter('fireCooldown')) {
-                var	bulletConfig = obj.layer.game.getConfig('mbullet'),
+                var	bulletConfig = gameConfigs.getConfig('mbullet'),
                     direction = new utils.Line(obj.pos, player.pos);
 
                 bulletConfig.pos = obj.pos.clone();
@@ -250,7 +250,7 @@ var config = {
 
             if (utils.getDistance(obj.pos, player.pos) < obj.getParameter('fireRange')) {
                 if (!obj.getParameter('fireCooldown')) {
-                    var	bulletConfig = obj.layer.game.getConfig('mbullet2');
+                    var	bulletConfig = gameConfigs.getConfig('mbullet2');
                     bulletConfig.pos = obj.pos.clone();
 
                     var bull = obj.layer.addObject(bulletConfig);
@@ -294,7 +294,7 @@ var config = {
                     power = obj.getParameter('power'),
                     expl;
 
-                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
+                explosionConfig = gameConfigs.getConfig('monsterExplosion');
                 explosionConfig.pos = new utils.Point([pos.x, pos.y]);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
@@ -363,13 +363,13 @@ var config = {
                     monsterConfig;
 
                 if (random <= obj.getParameter('chanceOfBoss2')) {
-                    monsterConfig = obj.layer.game.getConfig('monsterBoss2');
+                    monsterConfig = gameConfigs.getConfig('monsterBoss2');
                 } else if (random <= obj.getParameter('chanceOfBoss')) {
-                    monsterConfig = obj.layer.game.getConfig('monsterBoss');
+                    monsterConfig = gameConfigs.getConfig('monsterBoss');
                 } else if (random <= obj.getParameter('chanceOfBoomer')) {
-                    monsterConfig = obj.layer.game.getConfig('monsterBoomer');
+                    monsterConfig = gameConfigs.getConfig('monsterBoomer');
                 } else {
-                    monsterConfig = obj.layer.game.getConfig('monster');
+                    monsterConfig = gameConfigs.getConfig('monster');
                 }
 
                 monsterConfig.pos = obj.pos.clone();

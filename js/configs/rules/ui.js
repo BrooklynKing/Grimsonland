@@ -6,7 +6,7 @@ var config = {
         update: function (dt, obj) {
             var template = obj.getParameter('template');
             obj.setParameter('text', format(template, {
-                kills: obj.layer.game.parameters.monstersKilled || 0
+                kills: obj.layer.state.parameters.monstersKilled || 0
             }));
         }
     },
@@ -14,7 +14,7 @@ var config = {
         update: function (dt, obj) {
             var template = obj.getParameter('template');
             obj.setParameter('text', format(template, {
-                time: ((obj.layer.game.parameters.gameTimer++) / 60).toFixed(2)
+                time: ((obj.layer.state.parameters.gameTimer++) / 60).toFixed(2)
             }));
         }
     },
@@ -43,7 +43,7 @@ var config = {
             var obj = this.context;
             var template = obj.getParameter('template');
             obj.setParameter('text', format(template, {
-                time: ((obj.layer.game.parameters.bestTime) / 60).toFixed(2)
+                time: ((obj.layer.state.parameters.bestTime) / 60).toFixed(2)
             }));
         }
     },
@@ -52,7 +52,7 @@ var config = {
             var obj = this.context;
             var template = obj.getParameter('template');
             obj.setParameter('text', format(template, {
-                score: obj.layer.game.parameters.bestScore
+                score: obj.layer.state.parameters.bestScore
             }));
         }
     }

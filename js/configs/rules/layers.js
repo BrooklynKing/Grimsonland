@@ -12,7 +12,7 @@ var config = {
             }
 
             for (let i = 0; i < this.parameters.trees; i++) {
-                let config = obj.game.getConfig('tree');
+                let config = gameConfigs.getConfig('tree');
 
                 config.pos = new utils.Point(getRandomPointInArea(this.parameters.area));
 
@@ -20,7 +20,7 @@ var config = {
             }
 
             for (let i = 0; i < this.parameters.stones; i++) {
-                let config = obj.game.getConfig('stones');
+                let config = gameConfigs.getConfig('stones');
 
                 config.pos = new utils.Point(getRandomPointInArea(this.parameters.area));
 
@@ -41,15 +41,15 @@ var config = {
             this.parameters.monsterLeft = 0;
             this.parameters.lastWaveMonsters = 0;
             this.parameters.monsterSpawned = 0;
-            this.leftOnWave = this.context.addObject(this.context.game.getConfig('leftOnWave'));
+            this.leftOnWave = this.context.addObject(gameConfigs.getConfig('leftOnWave'));
         },
         update: function (dt, obj) {
-            this.parameters.monsterLeft = (obj.game.parameters.monstersKilled - this.parameters.lastWaveMonsters);
+            this.parameters.monsterLeft = (obj.state.parameters.monstersKilled - this.parameters.lastWaveMonsters);
             if (this.parameters.monsterSpawned < this.parameters.waveMultiplier * (this.parameters.currentWave)) {
                 if ((!this.parameters.currentMonsterCooldown)) {
                     var topLeft = new Victor(50, 50);
                     var bottomRight = new Victor(1154, 918);
-                    var summonGate = obj.game.getConfig('summonGate');
+                    var summonGate = gameConfigs.getConfig('summonGate');
 
                     summonGate.pos = new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray());
 
@@ -66,7 +66,7 @@ var config = {
                     this.parameters.currentWave++;
                     this.parameters.monsterSpawned = 0;
                     this.parameters.monseterOnWave = this.parameters.waveMultiplier * (this.parameters.currentWave);
-                    this.parameters.lastWaveMonsters = obj.game.parameters.monstersKilled;
+                    this.parameters.lastWaveMonsters = obj.state.parameters.monstersKilled;
                 }
             }
             this.leftOnWave.setParameter('text', format(this.leftOnWave.getParameter('template'), {
@@ -82,7 +82,7 @@ var config = {
     spawn_heart: {
         update: function (dt, obj) {
             if (!this.parameters.currentCooldown) {
-                var config = obj.game.getConfig('heart');
+                var config = gameConfigs.getConfig('heart');
 
                 var topLeft = new Victor(50, 50);
                 var bottomRight = new Victor(1154, 918);
@@ -106,7 +106,7 @@ var config = {
     spawn_powerup: {
         update: function (dt, obj) {
             if (!this.parameters.currentCooldown) {
-                var config = obj.game.getConfig('powerup');
+                var config = gameConfigs.getConfig('powerup');
 
                 var topLeft = new Victor(100, 100);
                 var bottomRight = new Victor(1100, 850);
@@ -131,11 +131,11 @@ var config = {
     spawn_terrain: {
         init: function() {
             var obj = this.context,
-                gateConfig = obj.game.getConfig('gate'),
+                gateConfig = gameConfigs.getConfig('gate'),
                 wallConfig;
 
             for (var i = 0; i < 7; i++) {
-                wallConfig = obj.game.getConfig('wall');
+                wallConfig = gameConfigs.getConfig('wall');
                 wallConfig.pos = [wallConfig.size[0] * i + wallConfig.size[0] / 2, wallConfig.size[1]/2];
                 var wall = this.context.addObject(wallConfig);
                 //stone.sprite.setDegree(utils.getDegree(obj.pos, getRandomPointInArea(this.parameters.area))[0]);

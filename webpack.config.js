@@ -4,13 +4,14 @@ module.exports = {
     context: require('path').join(__dirname, '/js'),
 
     entry: {
-        phaser: "./phaser/index"
+        phaser: "./phaser/index",
+        gameConfigs: "./configs/index"
     },
 
     output: {
         path: __dirname + '/public',
-        filename: "[name].js"
-        //library: "[name]"
+        filename: "[name].js",
+        library: "[name]"
     },
 
     watch: true,

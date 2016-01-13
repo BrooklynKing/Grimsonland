@@ -31,7 +31,7 @@ var config = {
 
                         function createBullet(direction, destination) {
 
-                            var bulletConfig = obj.layer.game.getConfig('bullet');
+                            var bulletConfig = gameConfigs.getConfig('bullet');
                             bulletConfig.pos = player.pos.clone();
 
                             var bull = obj.layer.addObject(bulletConfig);
@@ -88,12 +88,12 @@ var config = {
                             cooldown = obj.getDefaultParameter('cooldown', cooldown) - (30 * (spellPower - 1)),
                             teleportGate;
 
-                        teleportGate = obj.layer.game.getConfig('teleportGate');
+                        teleportGate = gameConfigs.getConfig('teleportGate');
                         teleportGate.pos = player.pos.clone();
 
                         obj.layer.addObject(teleportGate);
 
-                        teleportGate = obj.layer.game.getConfig('teleportGate');
+                        teleportGate = gameConfigs.getConfig('teleportGate');
                         teleportGate.pos = destination.clone();
 
                         obj.layer.addObject(teleportGate);
@@ -116,7 +116,7 @@ var config = {
             if (player.getParameter('currentSpell') == 'frostShard') {
                 if (obj.layer.game.input.mousePointer.isDown || obj.layer.game.input.keyboard.isDown(32)) {
                     if (!fireCooldown) {
-                        var frostShard = obj.layer.game.getConfig('frostShard'),
+                        var frostShard = gameConfigs.getConfig('frostShard'),
                             mousePosition = new utils.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y),
                             spellPower = player.getParameter('spellPower'),
                             destination = mousePosition.clone();
@@ -151,7 +151,7 @@ var config = {
                 if (objects[i].type == 'monster') {
                     objects[i].setParameter('health', objects[i].getParameter('health') - obj.getParameter('power'));
 
-                    var blood = obj.layer.game.getConfig('bloodSpray');
+                    var blood = gameConfigs.getConfig('bloodSpray');
                     blood.pos = objects[i].pos.clone();
                     blood.pos.x += 2;
                     blood.pos.y += - 10;

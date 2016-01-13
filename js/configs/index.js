@@ -15,7 +15,7 @@ function getConfig(id) {
 function getLayerConfig(id) {
     return layers[id];
 }
-export default {
+export {
     getRuleConfig,
     getConfig,
     getLayerConfig
