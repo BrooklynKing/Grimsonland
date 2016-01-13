@@ -51,16 +51,18 @@ function sprite(obj, dt) {
     obj.sprite.render(ctx);
 }
 function shadow(obj) {
-    var ctx = obj.layer.ctx;
+    if (obj.size) {
+        var ctx = obj.layer.ctx;
 
-    ctx.globalAlpha = 0.5;
+        ctx.globalAlpha = 0.5;
 
-    ctx.beginPath();
-    utils.ellipse(ctx, 0 , + obj.sprite.size[1] / 2 - 3, obj.sprite.size[0] / 2, 5, utils.getRadians(0), utils.getRadians(0), utils.getRadians(360));
-    ctx.fillStyle = 'black';
-    ctx.fill();
+        ctx.beginPath();
+        utils.ellipse(ctx, 0, +obj.sprite.size[1] / 2 - 3, obj.size[0] / 2 + 8, 5, utils.getRadians(0), utils.getRadians(0), utils.getRadians(360));
+        ctx.fillStyle = 'black';
+        ctx.fill();
 
-    ctx.globalAlpha = 1;
+        ctx.globalAlpha = 1;
+    }
 }
 function effects(obj) {
     var ctx = obj.layer.ctx,

@@ -109,8 +109,8 @@ var config = {
     monsterBoss2 : {
         zIndex : 1,
         collisions: true,
-        sprite: ['bigMonsters', [192, 200], [32, 50], 6, [0, 1, 2]],
-        size : [25, 40],
+        sprite: ['boss', [0, 0], [96, 48], 6, [0, 1, 2]],
+        size : [40, 45],
         render : 'unit',
         parameters : {
             speed : 15,
