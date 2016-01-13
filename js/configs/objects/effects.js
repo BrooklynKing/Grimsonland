@@ -2,7 +2,7 @@ var config = {
     mbullet : {
         zIndex : 3,
         collisions: true,
-        sprite: ['img/darkblast.png',[0, 0], [38, 38], 12, [0, 1, 2 ,3]],
+        sprite: ['img/darkblast.png', [0, 0], [38, 38], 12, [0, 1, 2 ,3]],
         type : 'monsterSpellElement',
         render: 'object',
         size : [32, 32],
@@ -16,17 +16,17 @@ var config = {
     mbullet2 : {
         zIndex : 3,
         collisions: true,
-        sprite: ['effects',[0, 0], [32, 32], 10, [0, 1, 2]],
+        sprite: ['bossSpell', [0, 0], [30, 26], 10, [0, 1, 2]],
         type : 'monsterSpellElement',
         render: 'object',
-        size : [32, 32],
+        size : [28, 24],
         conditions : ['monsterBoss2Bullet'],
         parameters : {
             power : 15,
             cooldown: 100,
             speed: 200
         },
-        rules : ['destroyAfterLeavingLayer', 'setDirectionToPlayer', 'moveToDirection', 'dynamicZIndex']
+        rules : ['destroyAfterLeavingLayer', 'setDirectionToPlayer', 'rotateByDirection', 'moveToDirection', 'dynamicZIndex']
     },
     blood : {
         zIndex : 2,

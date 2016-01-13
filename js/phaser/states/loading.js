@@ -14,6 +14,7 @@ class Loading extends Phaser.State {
 
         this.game.load.image('bigMonsters', './img/bigMonsters.png');
         this.game.load.image('boss', './img/boss.png');
+        this.game.load.image('bossSpell', './img/bossSpell.png');
         this.game.load.image('monsterBlood', './img/sblood.png');
         this.game.load.image('bloodEffect', './img/bloods.png');
         this.game.load.image('cursor', './img/cursor.png');

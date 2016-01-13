@@ -57,7 +57,7 @@ function shadow(obj) {
         ctx.globalAlpha = 0.5;
 
         ctx.beginPath();
-        utils.ellipse(ctx, 0, +obj.sprite.size[1] / 2 - 3, obj.size[0] / 2 + 8, 5, utils.getRadians(0), utils.getRadians(0), utils.getRadians(360));
+        utils.ellipse(ctx, 0, + obj.sprite.size[1] / 2 - 3, Math.min(obj.sprite.size[0], obj.size[0]) / 2 + 8, 5, utils.getRadians(0), utils.getRadians(0), utils.getRadians(360));
         ctx.fillStyle = 'black';
         ctx.fill();
 
@@ -72,7 +72,7 @@ function effects(obj) {
         var effect = effects[i];
         if (effect == 'frozen') {
             ctx.globalAlpha = 0.8;
-            ctx.drawImage(obj.layer.game.cache.getImage('frostEffect'), - obj.sprite.size[0] / 2, -8, 32, 32);
+            ctx.drawImage(obj.layer.game.cache.getImage('frostEffect'), -16, + (obj.sprite.size[1] / 2) - 32, 32, 32);
             ctx.globalAlpha = 1;
         }
     }
