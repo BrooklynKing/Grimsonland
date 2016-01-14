@@ -52,7 +52,8 @@ var config = {
                     var summonGate = gameConfigs.getConfig('summonGate');
 
                     summonGate.pos = new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray());
-
+                    summonGate.pos.x = Math.min(1150, Math.max(50, summonGate.pos.x));
+                    summonGate.pos.y = Math.min(968, Math.max(50, summonGate.pos.y));
                     this.context.addObject(summonGate);
 
                     this.parameters.monsterSpawned++;
