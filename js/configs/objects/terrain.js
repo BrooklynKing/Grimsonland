@@ -1,7 +1,12 @@
 var config = {
-    tree : {
-        sprite : ['tree', [0, 0], [76, 76]],
-        size : [70, 70],
+    tree1 : {
+        sprite : ['tree1', [0, 0], [62, 87]],
+        size : [62, 88],
+        rules: ['dynamicZIndex']
+    },
+    tree2 : {
+        sprite : ['tree2', [0, 0], [59, 87]],
+        size : [60, 88],
         rules: ['dynamicZIndex']
     },
     stones : {

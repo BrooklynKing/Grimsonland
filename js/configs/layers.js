@@ -1,7 +1,7 @@
 var config = {
 	mainLayer : {
 		id: 'mainLayer',
-		size : [1224,968],
+		size : [1324,1068],
 		background: 'terrain',
 		initList : ['player', 'cursor', 'counter', 'timer', 'bestTime', 'fireballSpell', 'frostShardSpell', 'teleportSpell', 'bestScore', 'level'],
 		init: function() {
@@ -9,8 +9,8 @@ var config = {
 			this.state.parameters.gameTimer = 0;
 		},
 		translate: {
-			x: -100,
-			y: -100
+			x: -150,
+			y: -150
 		},
 		rules: ['spawn_monster', 'random_trees' ,'spawn_heart','spawn_powerup', 'goWithPlayer']
 	}

@@ -60,6 +60,7 @@ class GameState extends Phaser.State {
         this.pause = false;
         this.battleTheme.play();
         this.deathTheme.stop();
+
         if (this.parameters.gameTimer > this.parameters.bestTime) {
             this.parameters.bestTime = this.parameters.gameTimer;
             localStorage.setItem('bestTime', this.parameters.bestTime);
@@ -68,9 +69,12 @@ class GameState extends Phaser.State {
             this.parameters.bestScore = this.parameters.monstersKilled;
             localStorage.setItem('bestScore', this.parameters.bestScore);
         }
+
         this.collisions.clear();
+
         this.background.kill();
         this.restartButton.kill();
+
         this.layer.clearLayer();
         this.layer.init();
     }
@@ -78,8 +82,8 @@ class GameState extends Phaser.State {
         (!this.pause) && this.layer.update(this.game.time.physicsElapsed);
     }
     render() {
-        super.render();
         (!this.pause) && this.layer.render(this.game.time.physicsElapsed);
+        super.render();
     }
 }
 

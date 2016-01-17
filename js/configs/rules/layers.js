@@ -12,7 +12,8 @@ var config = {
             }
 
             for (let i = 0; i < this.parameters.trees; i++) {
-                let config = gameConfigs.getConfig('tree');
+                console.log(Math.round(Math.random()) + 1);
+                let config = gameConfigs.getConfig('tree' + (Math.round(Math.random()) + 1));
 
                 config.pos = new utils.Point(getRandomPointInArea(this.parameters.area));
 
@@ -37,24 +38,29 @@ var config = {
     spawn_monster: {
         init: function() {
             this.parameters.currentWave = 1;
-            this.parameters.monseterOnWave = this.parameters.waveMultiplier * (this.parameters.currentWave);
-            this.parameters.monsterLeft = 0;
+            this.parameters.monseterOnWave = this.parameters.monsterCount[this.parameters.currentWave - 1];
+            this.parameters.monsterKilled = 0;
             this.parameters.lastWaveMonsters = 0;
             this.parameters.monsterSpawned = 0;
             this.leftOnWave = this.context.addObject(gameConfigs.getConfig('leftOnWave'));
         },
         update: function (dt, obj) {
-            this.parameters.monsterLeft = (obj.state.parameters.monstersKilled - this.parameters.lastWaveMonsters);
-            if (this.parameters.monsterSpawned < this.parameters.waveMultiplier * (this.parameters.currentWave)) {
-                if ((!this.parameters.currentMonsterCooldown)) {
-                    var topLeft = new Victor(50 - obj.translate.x, 50 - obj.translate.y);
-                    var bottomRight = new Victor(900 - obj.translate.x, 650 - obj.translate.y);
-                    var summonGate = gameConfigs.getConfig('summonGate');
+            function createSpawn() {
+                var topLeft = new Victor(50 - obj.translate.x, 50 - obj.translate.y);
+                var bottomRight = new Victor(900 - obj.translate.x, 650 - obj.translate.y);
+                var summonGate = gameConfigs.getConfig('summonGate');
 
-                    summonGate.pos = new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray());
-                    summonGate.pos.x = Math.min(1150, Math.max(50, summonGate.pos.x));
-                    summonGate.pos.y = Math.min(968, Math.max(50, summonGate.pos.y));
-                    this.context.addObject(summonGate);
+                summonGate.pos = new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray());
+                summonGate.pos.x = Math.min(1100, Math.max(50, summonGate.pos.x));
+                summonGate.pos.y = Math.min(900, Math.max(50, summonGate.pos.y));
+                obj.addObject(summonGate);
+            }
+
+            this.parameters.monsterKilled = (obj.state.parameters.monstersKilled - this.parameters.lastWaveMonsters);
+
+            if (this.parameters.monsterSpawned < this.parameters.monseterOnWave) {
+                if ((!this.parameters.currentMonsterCooldown)) {
+                    createSpawn();
 
                     this.parameters.monsterSpawned++;
                     this.parameters.currentMonsterCooldown = this.parameters.monsterCooldown;
@@ -63,19 +69,19 @@ var config = {
                     this.parameters.currentMonsterCooldown && this.parameters.currentMonsterCooldown--;
                 }
             } else {
-                if (this.parameters.monsterLeft == this.parameters.monseterOnWave  ) {
+                if (this.parameters.monsterKilled == this.parameters.monseterOnWave  ) {
                     this.parameters.currentWave++;
                     this.parameters.monsterSpawned = 0;
-                    this.parameters.monseterOnWave = this.parameters.waveMultiplier * (this.parameters.currentWave);
-                    this.parameters.lastWaveMonsters = obj.state.parameters.monstersKilled;
+                    this.parameters.monseterOnWave = this.parameters.monsterCount[this.parameters.currentWave - 1];
+                    this.parameters.lastWaveMonsters = this.parameters.monsterKilled;
                 }
             }
             this.leftOnWave.setParameter('text', format(this.leftOnWave.getParameter('template'), {
-                count: this.parameters.monsterLeft + '/' + this.parameters.monseterOnWave
+                count: this.parameters.monsterKilled + '/' + this.parameters.monseterOnWave
             }));
         },
         parameters: {
-            waveMultiplier: 25,
+            monsterCount: [10, 25, 50, 75, 100, 150, 200, 500, 1000, 2500, 5000, 10000],
             monsterCooldown: 10
         }
     },
@@ -156,7 +162,7 @@ var config = {
                 }
             }
             if (px > 70) {
-                if (obj.translate.x > - 200) {
+                if (obj.translate.x > - 300) {
                     obj.translate.x -= Math.round(player.getParameter('speed') * dt);
                 }
             }
@@ -167,7 +173,7 @@ var config = {
                 }
             }
             if (py > 75) {
-                if (obj.translate.y > - 200) {
+                if (obj.translate.y > - 300) {
                     obj.translate.y -= Math.round(player.getParameter('speed') * dt);
                 }
             }

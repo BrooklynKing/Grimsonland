@@ -34,8 +34,9 @@ class Loading extends Phaser.State {
         this.game.load.image('arcaneGate', './img/spell.png');
         this.game.load.image('spellIcons', './img/spellicons.png');
         this.game.load.image('stone', './img/stones.png');
-        this.game.load.image('terrain', './img/terrain2.png');
-        this.game.load.image('tree', './img/tree2.png');
+        this.game.load.image('terrain', './img/terrain3.png');
+        this.game.load.image('tree1', './img/tree1.png');
+        this.game.load.image('tree2', './img/tree2.png');
 
         this.game.load.audio('menuTheme', './music/menu.mp3');
         this.game.load.audio('deathTheme', './music/death.mp3');

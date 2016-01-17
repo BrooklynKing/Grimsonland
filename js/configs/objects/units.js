@@ -2,7 +2,7 @@ var config = {
     player : {
         zIndex : 20,
         sprite: ['hero', [0, 0], [32, 32], 6, [0, 1, 2]],
-        pos : [612, 484],
+        pos : [662, 534],
         size : [25, 32],
         render : 'unit',
         collisions: true,

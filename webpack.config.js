@@ -47,6 +47,10 @@ module.exports = {
                 exclude: /node_modules/
             }
         ]
+    },
+    devServer: {
+        host: 'localhost',
+        port: '8080'
     }
 };
 
