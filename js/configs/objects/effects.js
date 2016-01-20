@@ -8,7 +8,7 @@ var config = {
         size : [32, 32],
         conditions : ['damageOnPlayerCollision', 'destroyOnPlayerCollision'],
         parameters : {
-            power : 1,
+            power : 8,
             speed: 100
         },
         rules : ['destroyAfterLeavingLayer', 'moveToDirection', 'dynamicZIndex']

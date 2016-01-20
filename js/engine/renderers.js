@@ -47,7 +47,7 @@ function sprite(obj, dt) {
     var ctx = obj.layer.ctx;
 
     ctx.globalAlpha = 1;
-    dt && obj.sprite.update(dt);
+    obj.sprite.update(dt);
     obj.sprite.render(ctx);
 }
 function shadow(obj) {

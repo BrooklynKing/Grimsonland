@@ -171,12 +171,12 @@ export function GameLayer(config) {
     this.id = config.id;
     this.state = config.state;
     this.game = this.state.game;
-    this.ctx = this.game.canvas.getContext('2d');
+    this.ctx = config.ctx;
     this.initList = config.initList;
     this.background = this.ctx.createPattern(this.game.cache.getImage(config.background), 'repeat');
     this.pos = config.pos ? new utils.Point(config.pos) : new utils.Point(0, 0);
     this.size = config.size || [config.ctx.canvas.width, config.ctx.canvas.height];
-    this.translate = config.translate || {
+    this.defaultTranslate = config.translate || {
         x: 0,
         y: 0
     };
@@ -188,8 +188,10 @@ export function GameLayer(config) {
     this._init = config.init;
     this.inited = false;
 }
+
 GameLayer.prototype.init = function () {
     if (!this.inited) {
+        this.translate = utils.clone(this.defaultTranslate);
         for (let i = 0; i < this.initList.length; i++) {
             this.addObject(gameConfigs.getConfig(this.initList[i]));
         }
@@ -207,6 +209,8 @@ GameLayer.prototype.init = function () {
     }
 };
 GameLayer.prototype.render = function (dt) {
+    if (!this.inited) return;
+
     var arr = {},
         ctx = this.ctx;
 

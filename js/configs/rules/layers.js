@@ -12,7 +12,6 @@ var config = {
             }
 
             for (let i = 0; i < this.parameters.trees; i++) {
-                console.log(Math.round(Math.random()) + 1);
                 let config = gameConfigs.getConfig('tree' + (Math.round(Math.random()) + 1));
 
                 config.pos = new utils.Point(getRandomPointInArea(this.parameters.area));

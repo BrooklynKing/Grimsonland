@@ -1,7 +1,7 @@
 import 'phaser-shim';
 import states from './states/index'
 
-var game = new Phaser.Game(1024, 768, Phaser.HEADLESS , 'main', null, false, false);
+var game = new Phaser.Game(1024, 768, Phaser.CANVAS , 'main', null, true, false);
 
 window.game = game;
 
