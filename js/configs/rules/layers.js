@@ -30,8 +30,8 @@ var config = {
 
         },
         parameters: {
-            trees: 40,
-            stones: 40
+            trees: 100,
+            stones: 100
         }
     },
     spawn_monster: {
@@ -68,7 +68,7 @@ var config = {
                     this.parameters.currentMonsterCooldown && this.parameters.currentMonsterCooldown--;
                 }
             } else {
-                if (this.parameters.monsterKilled == this.parameters.monseterOnWave  ) {
+                if (this.parameters.monsterKilled >= this.parameters.monseterOnWave  ) {
                     this.parameters.currentWave++;
                     this.parameters.monsterSpawned = 0;
                     this.parameters.monseterOnWave = this.parameters.monsterCount[this.parameters.currentWave - 1];

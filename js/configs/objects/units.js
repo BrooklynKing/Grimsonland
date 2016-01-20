@@ -132,6 +132,7 @@ var config = {
         size: [25, 25],
         sprite : ['pumpkin', [0, 0], [32, 32], 5, [0,1]],
         conditions: ['triggerOnPlayerCollision'],
+        rules: ['dynamicZIndex'],
         parameters : {
             power : 10
         }
