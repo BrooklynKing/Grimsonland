@@ -45,8 +45,10 @@ class GameState extends Phaser.State {
 
     initGameLayer() {
         this.bitmap = this.add.bitmapData(this.game.canvas.width, this.game.canvas.height, 'battleBitmap');
-        this.image = this.add.image(0, 0, this.bitmap);
 
+
+
+        this.image = this.add.image(0, 0, this.bitmap);
         var layerConfig = gameConfigs.getLayerConfig('mainLayer');
         layerConfig.state = this;
         layerConfig.ctx = this.bitmap.ctx;

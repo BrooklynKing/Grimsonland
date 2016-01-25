@@ -12,7 +12,7 @@ var config = {
         render : "text",
         parameters : {
             weight : "bold",
-            color : "#EFEFEF",
+            color : "#DAA520",
             template : "SCORE: {kills}",
             size : 14
         },
@@ -24,7 +24,7 @@ var config = {
         render : "text",
         parameters : {
             weight : "bold",
-            color : "#EFEFEF",
+            color : "#DAA520",
             template : "LEFT ON THIS WAVE: {count}",
             size : 14
         }
@@ -47,7 +47,7 @@ var config = {
         render : "text",
         parameters : {
             weight : "bold",
-            color : "#EFEFEF",
+            color : "#DAA520",
             template : "TIMER: {time}",
             size : 14
         },
@@ -59,7 +59,7 @@ var config = {
         render : "text",
         parameters : {
             weight : "bold",
-            color : "#EFEFEF",
+            color : "#DAA520",
             size : 14,
             template : "BEST TIME: {time}"
         },
@@ -71,7 +71,7 @@ var config = {
         render : "text",
         parameters : {
             weight : "bold",
-            color : "#EFEFEF",
+            color : "#DAA520",
             size : 14,
             template : "BEST SCORE: {score}"
         },

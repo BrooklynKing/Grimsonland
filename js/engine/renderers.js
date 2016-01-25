@@ -1,5 +1,22 @@
 import utils from './utils';
 
+function fog(obj) {
+    var ctx = obj.layer.ctx;
+    var x = obj.layer.getObjectsByType('player')[0].pos.x;
+    var y = obj.layer.getObjectsByType('player')[0].pos.y;
+    var grad = obj.layer.ctx.createRadialGradient(x, y, 0, x, y, 420);
+    grad.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    grad.addColorStop(1, 'rgba(0, 0, 0, 0.97)');
+
+    ctx.fillStyle = grad;
+
+    ctx.beginPath();
+    ctx.arc(x, y, 2000, 0, Math.PI * 2, false);
+    ctx.closePath();
+
+    ctx.fill();
+}
+
 function healthBar(obj) {
     var ctx = obj.layer.ctx,
         x = Math.round(- obj.sprite.size[0] / 2 ),
@@ -27,7 +44,7 @@ function expBar(obj) {
 
     ctx.translate(-obj.layer.translate.x, -obj.layer.translate.y);
     ctx.globalAlpha = 0.3;
-    ctx.fillStyle = "rgb(0, 0, 0)";
+    ctx.fillStyle = "rgb(220, 220, 220)";
     ctx.fillRect(x, y, width, height);
     ctx.globalAlpha = 1;
     ctx.fillStyle = "#DAA520";
@@ -160,6 +177,7 @@ function cursor(obj, dt) {
 }
 var renders = {
     shadow,
+    fog,
     expBar,
     healthBar,
     cursor,

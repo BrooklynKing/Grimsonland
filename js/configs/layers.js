@@ -3,7 +3,7 @@ var config = {
 		id: 'mainLayer',
 		size : [1324,1068],
 		background: 'terrain',
-		initList : ['player', 'cursor', 'counter', 'timer', 'bestTime', 'fireballSpell', 'frostShardSpell', 'teleportSpell', 'bestScore', 'level'],
+		initList : ['player', 'cursor', 'counter', 'timer', 'bestTime', 'fireballSpell', 'frostShardSpell', 'teleportSpell', 'bestScore', 'level','fog'],
 		init: function() {
 			this.state.parameters.monstersKilled = 0;
 			this.state.parameters.gameTimer = 0;

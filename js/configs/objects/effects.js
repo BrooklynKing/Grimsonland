@@ -55,6 +55,11 @@ var config = {
         size : [39, 39],
         sprite: ['explosions', [0, 0], [39, 39], 16, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], null, true],
         rules: ['destroyAfterSpriteDone', 'dynamicZIndex']
+    },
+    fog : {
+        render: 'fog',
+        zIndex: 1800,
+        type : 'effect'
     }
 };
 
