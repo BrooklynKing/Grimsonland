@@ -1,13 +1,13 @@
 var config = {
     cursor : {
-        zIndex : 2000,
+        zIndex : 3000,
         render: 'cursor',
         pos: [400,350],
         sprite : ['cursor', [0, 0], [30, 30]],
         rules: ['bindPositionToMouse']
     },
     counter: {
-        zIndex : 2000,
+        zIndex : 3000,
         pos: [5, 13],
         render : "text",
         parameters : {
@@ -19,7 +19,7 @@ var config = {
         rules: ['countMonsterKilled']
     },
     leftOnWave: {
-        zIndex : 2000,
+        zIndex : 3000,
         pos: [5, 100],
         render : "text",
         parameters : {
@@ -30,7 +30,7 @@ var config = {
         }
     },
     level: {
-        zIndex : 2000,
+        zIndex : 3000,
         pos: [35, 45],
         render : "expBar",
         parameters : {
@@ -42,7 +42,7 @@ var config = {
         rules: ['level']
     },
     timer: {
-        zIndex : 2000,
+        zIndex : 3000,
         pos: [5, 23],
         render : "text",
         parameters : {
@@ -55,7 +55,7 @@ var config = {
     },
     bestTime: {
         pos: [5, 370],
-        zIndex : 2000,
+        zIndex : 3000,
         render : "text",
         parameters : {
             weight : "bold",
@@ -67,7 +67,7 @@ var config = {
     },
     bestScore: {
         pos: [5, 380],
-        zIndex : 2000,
+        zIndex : 3000,
         render : "text",
         parameters : {
             weight : "bold",

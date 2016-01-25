@@ -58,7 +58,7 @@ var config = {
     },
     fog : {
         render: 'fog',
-        zIndex: 1800,
+        zIndex: 2500,
         type : 'effect'
     }
 };
