@@ -18,7 +18,7 @@ var config = {
         },
         rules: ['countMonsterKilled']
     },
-    leftOnWave: {
+    leftOnWaveLabel: {
         zIndex : 3000,
         pos: [5, 100],
         render : "text",

@@ -208,6 +208,10 @@ var config = {
                 if (!obj.layer.state.parameters.monstersKilled) {
                     obj.layer.state.parameters.monstersKilled = 0;
                 }
+
+                var monsterController = obj.layer.getObjectsByType('monsterController')[0];
+                monsterController.setParameter('monsterKilled', monsterController.getParameter('monsterKilled') + 1);
+
                 obj.layer.state.parameters.monstersKilled++;
                 var player = obj.layer.getObjectsByType('player')[0];
                 player.setParameter('exp', player.getParameter('exp') + obj.getParameter('exp'));

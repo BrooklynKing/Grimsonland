@@ -1,4 +1,5 @@
 import spells from './spells';
+import logic from './logic';
 import units from './units';
 import effects from './effects';
 import terrain from './terrain';
@@ -6,6 +7,7 @@ import ui from './ui';
 
 var objects = {};
 
+Object.assign(objects, logic);
 Object.assign(objects, spells);
 Object.assign(objects, units);
 Object.assign(objects, effects);

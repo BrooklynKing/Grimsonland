@@ -27,10 +27,10 @@ class GameState extends Phaser.State {
 
     initControls() {
         this.restartButton = this.add.button(512, 384, 'button', this.restart, this, 2, 0 , 1, 2);
-        this.restartButton.addChild(this.add.text(-65, -15,'RESTART', {
+        this.restartButton.addChild(this.add.text(-65, -15, 'RESTART', {
             fill: '#efefef'
         }));
-        this.restartButton.addChild(this.add.text(-70, -70,'YOU DIED!', {
+        this.restartButton.addChild(this.add.text(-70, -70, 'YOU DIED!', {
             fill: '#EF0000'
         }));
         this.restartButton.anchor.setTo(0.5, 0.5);
@@ -46,9 +46,8 @@ class GameState extends Phaser.State {
     initGameLayer() {
         this.bitmap = this.add.bitmapData(this.game.canvas.width, this.game.canvas.height, 'battleBitmap');
 
-
-
         this.image = this.add.image(0, 0, this.bitmap);
+
         var layerConfig = gameConfigs.getLayerConfig('mainLayer');
         layerConfig.state = this;
         layerConfig.ctx = this.bitmap.ctx;

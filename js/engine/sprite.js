@@ -18,10 +18,10 @@ function Sprite(cache, url, pos, size, speed, frames, dir, once, degree) {
     this.degree = degree || 0;
 }
 
-
 Sprite.prototype.update = function (dt) {
     this._index += this.speed * dt;
 };
+
 Sprite.prototype.updateConfig = function (config) {
     if (config) {
         config.pos && (this.pos = config.pos);
@@ -34,6 +34,7 @@ Sprite.prototype.updateConfig = function (config) {
         config.degree && (this.degree = config.degree);
     }
 };
+
 Sprite.prototype.rotateToDirection = function (direction) {
     var pos = this.defaultPosition,
         config = {};
@@ -55,6 +56,7 @@ Sprite.prototype.rotateToDirection = function (direction) {
     config.pos = new utils.Point(config.pos);
     this.updateConfig(config);
 };
+
 Sprite.prototype.render = function (ctx) {
     var frame;
 
@@ -89,6 +91,7 @@ Sprite.prototype.render = function (ctx) {
         Math.round(-this.size[0] / 2), Math.round(-this.size[1] / 2),
         this.size[0], this.size[1]);
 };
+
 Sprite.prototype.setDegree = function (degree) {
     this.degree = degree;
 };

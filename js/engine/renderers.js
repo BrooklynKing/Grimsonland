@@ -4,7 +4,7 @@ function fog(obj) {
     var ctx = obj.layer.ctx;
     var x = obj.layer.getObjectsByType('player')[0].pos.x;
     var y = obj.layer.getObjectsByType('player')[0].pos.y;
-    var grad = obj.layer.ctx.createRadialGradient(x, y, 0, x, y, 420);
+    var grad = obj.layer.ctx.createRadialGradient(x, y, 0, x, y, 700);
     grad.addColorStop(0, 'rgba(0, 0, 0, 0)');
     grad.addColorStop(1, 'rgba(0, 0, 0, 0.97)');
 
@@ -35,6 +35,7 @@ function healthBar(obj) {
 
     ctx.globalAlpha = 1;
 }
+
 function expBar(obj) {
     var x = -22,
         y = 17,
@@ -60,6 +61,7 @@ function expBar(obj) {
     ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
     textRender(obj);
 }
+
 function sprite(obj, dt) {
     var ctx = obj.layer.ctx;
 
@@ -67,6 +69,7 @@ function sprite(obj, dt) {
     obj.sprite.update(dt);
     obj.sprite.render(ctx);
 }
+
 function shadow(obj) {
     if (obj.size) {
         var ctx = obj.layer.ctx;
@@ -81,6 +84,7 @@ function shadow(obj) {
         ctx.globalAlpha = 1;
     }
 }
+
 function effects(obj) {
     var ctx = obj.layer.ctx,
         effects = obj.getParameter('effects');
@@ -99,12 +103,14 @@ function objectRenderer(obj, dt) {
     shadow(obj);
     sprite(obj, dt);
 }
+
 function unitRenderer(obj, dt) {
     shadow(obj);
     healthBar(obj);
     sprite(obj, dt);
     effects(obj);
 }
+
 function spellRenderer(obj, dt) {
     var ctx = obj.layer.ctx,
         x = Math.round(- obj.sprite.size[0] / 2 - 4),
@@ -140,6 +146,7 @@ function spellRenderer(obj, dt) {
 
     ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }
+
 function ui(obj, dt) {
     var ctx = obj.layer.ctx;
 
@@ -147,6 +154,7 @@ function ui(obj, dt) {
     sprite(obj, dt);
     ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }
+
 function textRender(obj) {
     var ctx = obj.layer.ctx,
         fontConfig = '';
@@ -168,6 +176,7 @@ function textRender(obj) {
 
     ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }
+
 function cursor(obj, dt) {
     var ctx = obj.layer.ctx;
 
@@ -175,6 +184,7 @@ function cursor(obj, dt) {
     sprite(obj, dt);
     ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }
+
 var renders = {
     shadow,
     fog,

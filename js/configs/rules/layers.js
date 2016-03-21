@@ -34,56 +34,6 @@ var config = {
             stones: 100
         }
     },
-    spawn_monster: {
-        init: function() {
-            this.parameters.currentWave = 1;
-            this.parameters.monseterOnWave = this.parameters.monsterCount[this.parameters.currentWave - 1];
-            this.parameters.monsterKilled = 0;
-            this.parameters.lastWaveMonsters = 0;
-            this.parameters.monsterSpawned = 0;
-            this.leftOnWave = this.context.addObject(gameConfigs.getConfig('leftOnWave'));
-        },
-        update: function (dt, obj) {
-            function createSpawn() {
-                var topLeft = new Victor(50 - obj.translate.x, 50 - obj.translate.y);
-                var bottomRight = new Victor(900 - obj.translate.x, 650 - obj.translate.y);
-                var summonGate = gameConfigs.getConfig('summonGate');
-
-                summonGate.pos = new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray());
-                summonGate.pos.x = Math.min(1100, Math.max(50, summonGate.pos.x));
-                summonGate.pos.y = Math.min(900, Math.max(50, summonGate.pos.y));
-                obj.addObject(summonGate);
-            }
-
-            this.parameters.monsterKilled = (obj.state.parameters.monstersKilled - this.parameters.lastWaveMonsters);
-
-            if (this.parameters.monsterSpawned < this.parameters.monseterOnWave) {
-                if ((!this.parameters.currentMonsterCooldown)) {
-                    createSpawn();
-
-                    this.parameters.monsterSpawned++;
-                    this.parameters.currentMonsterCooldown = this.parameters.monsterCooldown;
-
-                } else {
-                    this.parameters.currentMonsterCooldown && this.parameters.currentMonsterCooldown--;
-                }
-            } else {
-                if (this.parameters.monsterKilled >= this.parameters.monseterOnWave  ) {
-                    this.parameters.currentWave++;
-                    this.parameters.monsterSpawned = 0;
-                    this.parameters.monseterOnWave = this.parameters.monsterCount[this.parameters.currentWave - 1];
-                    this.parameters.lastWaveMonsters = this.parameters.monsterKilled;
-                }
-            }
-            this.leftOnWave.setParameter('text', format(this.leftOnWave.getParameter('template'), {
-                count: this.parameters.monsterKilled + '/' + this.parameters.monseterOnWave
-            }));
-        },
-        parameters: {
-            monsterCount: [10, 25, 50, 75, 100, 150, 200, 500, 1000, 2500, 5000, 10000],
-            monsterCooldown: 10
-        }
-    },
     spawn_heart: {
         update: function (dt, obj) {
             if (!this.parameters.currentCooldown) {
@@ -135,8 +85,7 @@ var config = {
     },
     spawn_terrain: {
         init: function() {
-            var obj = this.context,
-                gateConfig = gameConfigs.getConfig('gate'),
+            var gateConfig = gameConfigs.getConfig('gate'),
                 wallConfig;
 
             for (var i = 0; i < 7; i++) {

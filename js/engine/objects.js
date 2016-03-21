@@ -50,24 +50,33 @@ function GameObject(config) {
         } else {
             this.customRender = config.render;
         }
+    } else {
+        if (config.render === false) {
+            this.noRender = true;
+        }
     }
+
     this._init = config.init;
 
     this.inited = false;
 }
+
 GameObject.prototype.render = function (dt) {
-    if (this.customRender) {
-        if (Array.isArray(this.customRender)) {
-            for (var i = 0; i < this.customRender.length; i++) {
-                this.customRender[i](this, dt);
+    if (!this.noRender) {
+        if (this.customRender) {
+            if (Array.isArray(this.customRender)) {
+                for (var i = 0; i < this.customRender.length; i++) {
+                    this.customRender[i](this, dt);
+                }
+            } else {
+                this.customRender(this, dt);
             }
         } else {
-            this.customRender(this, dt);
+            renders.sprite(this, dt);
         }
-    } else {
-        renders.sprite(this, dt);
     }
 };
+
 GameObject.prototype.init = function () {
     if (!this.inited) {
         var rules = this.rules,
@@ -95,27 +104,32 @@ GameObject.prototype.init = function () {
         this.inited = true;
     }
 };
+
 GameObject.prototype.update = function (dt) {
     this._update && this._update();
     for (var i = 0; i < this.rules.length; i++) {
         this.rules[i].update(dt, this);
     }
 };
+
 GameObject.prototype.updateConditions = function(dt) {
     for (var i = 0; i < this.conditions.length; i++) {
         this.conditions[i].update(dt, this);
     }
 };
+
 GameObject.prototype.setPosition = function (point) {
     this.pos.x = point.x;
     this.pos.y = point.y;
 };
+
 GameObject.prototype.removeRule = function (id) {
     if (this.rules.hasOwnProperty(id)) {
         this.rules[id].layer = null;
         delete this.rules[id];
     }
 };
+
 GameObject.prototype.addRule = function (config) {
     if (this.rules.hasOwnProperty(config.id)) {
         console.error('Rule with such id already exist in this layer');
@@ -129,6 +143,7 @@ GameObject.prototype.addRule = function (config) {
 
     return this.rules[config.id];
 };
+
 GameObject.prototype.addCondition = function (config) {
     if (this.conditions.hasOwnProperty(config.id)) {
         console.error('Rule with such id already exist in this layer');
@@ -142,6 +157,7 @@ GameObject.prototype.addCondition = function (config) {
 
     return this.rules[config.id];
 };
+
 GameObject.prototype.updateCollisions = function(dt) {
     this.collisions && this.collisions.update(dt, this);
 };
@@ -153,15 +169,18 @@ function GameRule(config) {
     this._init = config.init;
     this.inited = false;
 }
+
 GameRule.prototype.init = function () {
     if (!this.inited) {
         this._init && this._init();
         this.inited = true;
     }
 };
+
 GameRule.prototype.update = function (dt, obj) {
     this._update && this._update(dt, obj);
 };
+
 GameRule.prototype.setContext = function (context) {
     this.context = context;
 };
@@ -270,12 +289,14 @@ GameLayer.prototype.update = function (dt) {
         }
     }
 };
+
 GameLayer.prototype.removeRule = function (id) {
     if (this.rules.hasOwnProperty(id)) {
         this.rules[id].layer = null;
         delete this.rules[id];
     }
 };
+
 GameLayer.prototype.addRule = function (config) {
     if (this.rules.hasOwnProperty(config.id)) {
         console.error('Rule with such id already exist in this layer');
@@ -288,6 +309,7 @@ GameLayer.prototype.addRule = function (config) {
     }
     return this.rules[config.id];
 };
+
 GameLayer.prototype.removeObject = function (id) {
     if (this.objects.hasOwnProperty(id)) {
         this.objects[id].layer = null;
@@ -300,6 +322,7 @@ GameLayer.prototype.removeObject = function (id) {
         delete this.objects[id];
     }
 };
+
 GameLayer.prototype.addObject = function (config) {
     if (this.objects.hasOwnProperty(config.id)) {
         console.error('Object with such id already exist in this layer: ', config.id);
@@ -320,6 +343,7 @@ GameLayer.prototype.addObject = function (config) {
 
     return this.objects[_obj.id];
 };
+
 GameLayer.prototype.getObjectsByType = function (type) {
     var objectsId = this.sortedObjects[type] || [],
         result = [];
@@ -328,6 +352,7 @@ GameLayer.prototype.getObjectsByType = function (type) {
     }
     return result;
 };
+
 GameLayer.prototype.clearLayer = function () {
     for (let i in this.objects) {
         this.objects.hasOwnProperty(i) && delete this.objects[i];
