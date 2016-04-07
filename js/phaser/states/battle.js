@@ -48,9 +48,23 @@ class GameState extends Phaser.State {
 
         this.image = this.add.image(0, 0, this.bitmap);
 
-        var layerConfig = gameConfigs.getLayerConfig('mainLayer');
-        layerConfig.state = this;
-        layerConfig.ctx = this.bitmap.ctx;
+        var layerConfig = {
+            id: 'mainLayer',
+            size : [1324,1068],
+            background: 'terrain',
+            initList : ['player', 'cursor', 'counter', 'timer', 'bestTime', 'fireballSpell', 'frostShardSpell', 'teleportSpell', 'bestScore', 'level','fog', 'monsterController'],
+            init: function() {
+                this.state.parameters.monstersKilled = 0;
+                this.state.parameters.gameTimer = 0;
+            },
+            translate: {
+                x: -150,
+                y: -150
+            },
+            state: state,
+            ctx: this.bitmap.ctx,
+            rules: ['random_trees' ,'spawn_heart','spawn_powerup', 'goWithPlayer']
+        };
 
         this.layer = new GameLayer(layerConfig);
         this.layer.init();
