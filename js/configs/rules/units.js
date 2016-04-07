@@ -329,7 +329,6 @@ var config = {
             if (obj.pos.x == pos.x && obj.pos.y == pos.y) {
                 obj.getParameter('direction').dir = null;
             } else {
-                //var direction = utils.getDirection(obj.pos, pos);
                 obj.setParameter('direction', new utils.Line(obj.pos, pos));
             }
         }

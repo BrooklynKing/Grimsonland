@@ -15,6 +15,7 @@ function generate(config) {
             cellGrid[i] = [];
         }
     }
+
     function getCell(point) {
         return (point[0]) + point[1] * sizeY;
     }
@@ -68,7 +69,7 @@ function generate(config) {
 
                     for (var k = 0; k < length; k++) {
                         for (var l = k + 1; l < length; l++) {
-                            if (utils.boxCollides(objects[k].pos, objects[k].size, objects[l].pos, objects[l].size)) {
+                            if (boxCollides(objects[k].pos, objects[k].size, objects[l].pos, objects[l].size)) {
                                 (objects[k].getParameter('collisions').indexOf(objects[l]) == -1 ) && objects[k].getParameter('collisions').push(objects[l]);
                                 (objects[l].getParameter('collisions').indexOf(objects[k]) == -1 ) && objects[l].getParameter('collisions').push(objects[k]);
                             }
@@ -77,6 +78,18 @@ function generate(config) {
                 }
             }
         }
+    }
+
+    function boxCollides(pos, size, pos2, size2) {
+        function collides(x, y, r, b, x2, y2, r2, b2) {
+            return !(r >= x2 || x < r2 ||
+            b >= y2 || y < b2);
+        }
+
+        return collides(pos.x + size[0] / 2, pos.y + size[1] / 2,
+            pos.x  - size[0] / 2, pos.y  - size[1] / 2,
+            pos2.x  + size2[0] / 2, pos2.y  + size2[1] / 2,
+            pos2.x  - size2[0] / 2, pos2.y  - size2[1] / 2);
     }
 
     return {

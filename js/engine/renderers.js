@@ -70,6 +70,17 @@ function sprite(obj, dt) {
     obj.sprite.render(ctx);
 }
 
+function ellipse(context, cx, cy, rx, ry, rot, aStart, aEnd){
+    context.save();
+    context.translate(cx, cy);
+    context.rotate(rot);
+    context.translate(-rx, -ry);
+
+    context.scale(rx, ry);
+    context.arc(1, 1, 1, aStart, aEnd, false);
+    context.restore();
+}
+
 function shadow(obj) {
     if (obj.size) {
         var ctx = obj.layer.ctx;
@@ -77,7 +88,7 @@ function shadow(obj) {
         ctx.globalAlpha = 0.5;
 
         ctx.beginPath();
-        utils.ellipse(ctx, 0, + obj.sprite.size[1] / 2 - 3, Math.min(obj.sprite.size[0], obj.size[0]) / 2 + 8, 5, utils.getRadians(0), utils.getRadians(0), utils.getRadians(360));
+        ellipse(ctx, 0, + obj.sprite.size[1] / 2 - 3, Math.min(obj.sprite.size[0], obj.size[0]) / 2 + 8, 5, utils.getRadians(0), utils.getRadians(0), utils.getRadians(360));
         ctx.fillStyle = 'black';
         ctx.fill();
 
