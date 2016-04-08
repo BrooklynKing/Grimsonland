@@ -63,7 +63,7 @@ var config = {
             var topLeft = new Victor(100, 100);
             var bottomRight = new Victor(1100, 850);
             var coords = Victor(10, 20).randomize(topLeft, bottomRight).toArray();
-            this.context.setParameter('direction', Phaser.Point.subtract(new Phaser.Point(coords[0], coords[1]), this.context.pos));
+            this.context.setParameter('direction', new Phaser.Point(coords[0], coords[1]));
         },
         update: function (dt, obj) {
             var player = obj.layer.getObjectsByType('player')[0],
@@ -151,7 +151,6 @@ var config = {
                 var expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', obj.getParameter('power'));
 
-                return;
             } else {
                 obj.setParameter('cooldown', cooldown - 1);
             }

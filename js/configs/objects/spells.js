@@ -8,7 +8,7 @@ var config = {
         render : 'spell',
         parameters : {
             bulletsFired: 0,
-            cooldown: 10
+            cooldown: 20
         },
         type : 'spell',
         rules : ['fireball']

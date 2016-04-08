@@ -22,12 +22,12 @@ var config = {
                             createBullet(Phaser.Point.subtract(movedPoint, player.pos), movedPoint.clone());
                             startDegree -= 20;
                         }
-                        if (obj.getDefaultParameter('cooldown') + 3 * (spellPower - 1) > 30) {
+                       /* if (obj.getDefaultParameter('cooldown') + 3 * (spellPower - 1) > 30) {
                             obj.setParameter('cooldown', 30);
                         } else {
                             obj.setParameter('cooldown', obj.getDefaultParameter('cooldown') + 5 * (spellPower - 1));
-                        }
-
+                        }*/
+                        obj.setParameter('cooldown', obj.getDefaultParameter('cooldown'));
                         obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
 
                         function createBullet(direction, destination) {

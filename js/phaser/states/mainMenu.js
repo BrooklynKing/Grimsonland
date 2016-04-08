@@ -12,8 +12,8 @@ class MainMenu extends Phaser.State {
         var start = this.add.text(0, 3,'START', {
             fill: '#efefef'
         });
-        var info = this.add.text(0, -150, ' Moving: WASD\n Aim: Mouse\n Cast spell: Mouse or Space\n Select spell: 1,2,3 etc.', {
-            fontSize : '18px',
+        var info = this.add.text(-300, -300, ' MOVING: WASD\n AIM: MOUSE\n CAST SPELL: MOUSE CLICK OR SPACE\n SELECT SPELL: 1, 2, 3.', {
+            fontSize : '20px',
             fill: '#efefef'
         });
 

@@ -36,25 +36,22 @@ Sprite.prototype.updateConfig = function (config) {
 };
 
 Sprite.prototype.rotateToDirection = function (direction) {
-    var pos = this.defaultPosition,
-        config = {};
+    let pos = this.defaultPosition;
+    let config = {};
+    let angle = direction.angle(new Phaser.Point(0,0), true);
 
-    /*if (direction.dir == 1) {
-        ((direction.k < 1) && (direction.k >= -1)) && (config.pos = [pos.x, pos.y]);
-        (direction.k >= 1) && (config.pos = [pos.x, pos.y + 2 * this.size[1]]);
-        (direction.k < -1) && (config.pos =[pos.x, pos.y + this.size[1]]);
-        ( direction.k == 'vertical')  && (config.pos =[pos.x, pos.y + 3 * this.size[1]]);
-        ( direction.k == 'horizontal')  && (config.pos =[pos.x, pos.y]);
-    } else if (direction.dir == -1) {
-        (direction.k >= 1) && (config.pos =[pos.x, pos.y + this.size[1]]);
-        ((direction.k < 1) && (direction.k >= -1)) && (config.pos =[pos.x, pos.y + 3 * this.size[1]]);
-        (direction.k < -1) && (config.pos = [pos.x, pos.y + 2 * this.size[1]]);
-        ( direction.k == 'vertical')  && (config.pos =[pos.x, pos.y]);
-        ( direction.k == 'horizontal')  && (config.pos =[pos.x, pos.y + 3 * this.size[1]]);
-    }*/
+    if (angle > 135 || angle < -135) {
+        config.pos = [pos.x, pos.y + 2 * this.size[1]]
+    } else if (angle < 135 && angle > 45) {
+        config.pos =[pos.x, pos.y + 3 * this.size[1]]
+    } else if (angle < 45 && angle > -45 ) {
+        config.pos =[pos.x, pos.y + this.size[1]]
+    } else {
+        config.pos =[pos.x, pos.y]
+    }
 
-    //config.pos = new Phaser.Point(config.pos[0], config.pos[1]);
-    //this.updateConfig(config);
+    config.pos = new Phaser.Point(config.pos[0], config.pos[1]);
+    this.updateConfig(config);
 };
 
 Sprite.prototype.render = function (ctx) {

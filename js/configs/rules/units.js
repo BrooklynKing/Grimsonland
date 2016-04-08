@@ -266,7 +266,7 @@ var config = {
                     obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
                 }
             } else {
-                //obj.setPosition(directionToPlayer.getDestination(obj.pos, obj.getParameter('speed') * dt));
+                obj.setPosition(utils.moveWithSpeed(obj.pos, directionToPlayer, obj.getParameter('speed') * dt));
             }
         }
     },
