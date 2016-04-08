@@ -2,10 +2,10 @@ import utils from './utils';
 
 function Sprite(cache, url, pos, size, speed, frames, dir, once, degree) {
     this.cache = cache;
-    if (pos instanceof utils.Point) {
+    if (pos instanceof Phaser.Point) {
         this.pos = pos.clone();
     } else {
-        this.pos = new utils.Point(pos);
+        this.pos = new Phaser.Point(pos[0], pos[1]);
     }
     this.defaultPosition = this.pos.clone();
     this.size = size;
@@ -39,7 +39,7 @@ Sprite.prototype.rotateToDirection = function (direction) {
     var pos = this.defaultPosition,
         config = {};
 
-    if (direction.dir == 1) {
+    /*if (direction.dir == 1) {
         ((direction.k < 1) && (direction.k >= -1)) && (config.pos = [pos.x, pos.y]);
         (direction.k >= 1) && (config.pos = [pos.x, pos.y + 2 * this.size[1]]);
         (direction.k < -1) && (config.pos =[pos.x, pos.y + this.size[1]]);
@@ -51,10 +51,10 @@ Sprite.prototype.rotateToDirection = function (direction) {
         (direction.k < -1) && (config.pos = [pos.x, pos.y + 2 * this.size[1]]);
         ( direction.k == 'vertical')  && (config.pos =[pos.x, pos.y]);
         ( direction.k == 'horizontal')  && (config.pos =[pos.x, pos.y + 3 * this.size[1]]);
-    }
+    }*/
 
-    config.pos = new utils.Point(config.pos);
-    this.updateConfig(config);
+    //config.pos = new Phaser.Point(config.pos[0], config.pos[1]);
+    //this.updateConfig(config);
 };
 
 Sprite.prototype.render = function (ctx) {

@@ -4,10 +4,14 @@ import Sprite from './sprite';
 
 function GameObject(config) {
     this.layer = config.layer;
-    if (config.pos instanceof utils.Point) {
+    if (config.pos instanceof Phaser.Point) {
         this.pos = config.pos.clone();
     } else {
-        this.pos = new utils.Point(config.pos);
+        if (config.pos) {
+            this.pos = new Phaser.Point(config.pos[0], config.pos[1]);
+        } else {
+            this.pos = new Phaser.Point();
+        }
     }
     this.id = config.id;
 
@@ -193,7 +197,7 @@ export function GameLayer(config) {
     this.ctx = config.ctx;
     this.initList = config.initList;
     this.background = this.ctx.createPattern(this.game.cache.getImage(config.background), 'repeat');
-    this.pos = config.pos ? new utils.Point(config.pos) : new utils.Point(0, 0);
+    this.pos = config.pos ? new Phaser.Point(config.pos[0], config.pos[1]) : new Phaser.Point(0, 0);
     this.size = config.size || [config.ctx.canvas.width, config.ctx.canvas.height];
     this.defaultTranslate = config.translate || {
         x: 0,
@@ -290,13 +294,6 @@ GameLayer.prototype.update = function (dt) {
     }
 };
 
-GameLayer.prototype.removeRule = function (id) {
-    if (this.rules.hasOwnProperty(id)) {
-        this.rules[id].layer = null;
-        delete this.rules[id];
-    }
-};
-
 GameLayer.prototype.addRule = function (config) {
     if (this.rules.hasOwnProperty(config.id)) {
         console.error('Rule with such id already exist in this layer');
@@ -330,6 +327,7 @@ GameLayer.prototype.addObject = function (config) {
     }
     config.layer = this;
     config.id += (this.objectCount++) + Math.round((new Date()).getTime() + Math.random() * 1000001);
+
     var _obj = new GameObject(config);
     _obj.init();
 
@@ -339,6 +337,7 @@ GameLayer.prototype.addObject = function (config) {
     } else {
         this.sortedObjects['default'].push(_obj.id);
     }
+
     this.objects[_obj.id] = _obj;
 
     return this.objects[_obj.id];
@@ -357,11 +356,14 @@ GameLayer.prototype.clearLayer = function () {
     for (let i in this.objects) {
         this.objects.hasOwnProperty(i) && delete this.objects[i];
     }
+
     this.sortedObjects = {
-        'default': []
+        default: []
     };
+
     for (let i in this.rules) {
         this.rules.hasOwnProperty(i) && delete this.rules[i];
     }
+
     this.inited = false;
 };

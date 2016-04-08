@@ -61,7 +61,7 @@ class GameState extends Phaser.State {
                 x: -150,
                 y: -150
             },
-            state: state,
+            state: this,
             ctx: this.bitmap.ctx,
             rules: ['random_trees' ,'spawn_heart','spawn_powerup', 'goWithPlayer']
         };

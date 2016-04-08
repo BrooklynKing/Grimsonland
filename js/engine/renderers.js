@@ -88,7 +88,7 @@ function shadow(obj) {
         ctx.globalAlpha = 0.5;
 
         ctx.beginPath();
-        ellipse(ctx, 0, + obj.sprite.size[1] / 2 - 3, Math.min(obj.sprite.size[0], obj.size[0]) / 2 + 8, 5, utils.getRadians(0), utils.getRadians(0), utils.getRadians(360));
+        ellipse(ctx, 0, + obj.sprite.size[1] / 2 - 3, Math.min(obj.sprite.size[0], obj.size[0]) / 2 + 8, 5, 0, 0, 2 * Math.PI);
         ctx.fillStyle = 'black';
         ctx.fill();
 

@@ -16,11 +16,12 @@ var config = {
             var obj = this.context;
 
             function createSpawn() {
-                var topLeft = new Victor(50 - obj.layer.translate.x, 50 - obj.layer.translate.y);
+                var topLeft = new Victor(100 - obj.layer.translate.x, 100 - obj.layer.translate.y);
                 var bottomRight = new Victor(900 - obj.layer.translate.x, 650 - obj.layer.translate.y);
                 var summonGate = gameConfigs.getConfig('summonGate');
+                var coords = Victor(10, 20).randomize(topLeft, bottomRight).toArray();
 
-                summonGate.pos = new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray());
+                summonGate.pos = new Phaser.Point(coords[0], coords[1]);
                 summonGate.pos.x = Math.min(1100, Math.max(50, summonGate.pos.x));
                 summonGate.pos.y = Math.min(900, Math.max(50, summonGate.pos.y));
                 obj.layer.addObject(summonGate);

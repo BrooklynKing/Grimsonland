@@ -9,7 +9,7 @@ var config = {
             if (player.getParameter('currentSpell') == 'fireball') {
                 if (obj.layer.game.input.mousePointer.isDown || obj.layer.game.input.keyboard.isDown(32)) {
                     if (!fireCooldown) {
-                        var destination  = new utils.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y),
+                        var destination  = new Phaser.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y),
                             spellPower = player.getParameter('spellPower'),
                             startDegree = 10 * (spellPower - 1);
 
@@ -17,8 +17,9 @@ var config = {
                         destination.y -= obj.layer.translate.y;
 
                         for (var i = 0; i < spellPower; i++) {
-                            let direction = new utils.Line(player.pos, utils.getMovedPointByDegree(player.pos, destination, startDegree));
-                            createBullet(direction, utils.getMovedPointByDegree(player.pos, destination, startDegree));
+                            let movedPoint = destination.clone().rotate(player.pos.x, player.pos.y, startDegree, true);
+                            //let direction = new utils.Line(player.pos, movedPoint);
+                            createBullet(Phaser.Point.subtract(movedPoint, player.pos), movedPoint.clone());
                             startDegree -= 20;
                         }
                         if (obj.getDefaultParameter('cooldown') + 3 * (spellPower - 1) > 30) {
@@ -37,8 +38,7 @@ var config = {
                             var bull = obj.layer.addObject(bulletConfig);
                             bull.setParameter('direction', direction);
                             bull.setParameter('power', bull.getParameter('power') + 5 * (spellPower - 1));
-
-                            bull.sprite.setDegree(utils.getDegree(player.pos, destination)[0]);
+                            bull.sprite.setDegree(player.pos.angle(destination));
                         }
                     }
                 }
@@ -77,14 +77,14 @@ var config = {
             if (player.getParameter('currentSpell') == 'teleport') {
                 if (obj.layer.game.input.mousePointer.isDown || obj.layer.game.input.keyboard.isDown(32)) {
                     if (!fireCooldown) {
-                        var mouse  = new utils.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y);
+                        var mouse  = new Phaser.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y);
 
                         mouse.x -= obj.layer.translate.x;
                         mouse.y -= obj.layer.translate.y;
 
-                        var direction = new utils.Line(player.pos, utils.getMovedPointByDegree(player.pos, mouse, 0)),
+                        var direction = Phaser.Point.subtract(mouse, player.pos),
                             spellPower = player.getParameter('spellPower'),
-                            destination = direction.getDestination(player.pos, obj.getParameter('power')),
+                            destination = utils.moveWithSpeed(player.pos, direction, obj.getParameter('power')),
                             cooldown = obj.getDefaultParameter('cooldown', cooldown) - (30 * (spellPower - 1)),
                             teleportGate;
 
@@ -117,7 +117,7 @@ var config = {
                 if (obj.layer.game.input.mousePointer.isDown || obj.layer.game.input.keyboard.isDown(32)) {
                     if (!fireCooldown) {
                         var frostShard = gameConfigs.getConfig('frostShard'),
-                            mousePosition = new utils.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y),
+                            mousePosition = new Phaser.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y),
                             spellPower = player.getParameter('spellPower'),
                             destination = mousePosition.clone();
 

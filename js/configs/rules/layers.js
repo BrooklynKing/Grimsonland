@@ -14,15 +14,16 @@ var config = {
             for (let i = 0; i < this.parameters.trees; i++) {
                 let config = gameConfigs.getConfig('tree' + (Math.round(Math.random()) + 1));
 
-                config.pos = new utils.Point(getRandomPointInArea(this.parameters.area));
+                let point = getRandomPointInArea(this.parameters.area);
+                config.pos = new Phaser.Point(point[0], point[1]);
 
                 this.context.addObject(config);
             }
 
             for (let i = 0; i < this.parameters.stones; i++) {
                 let config = gameConfigs.getConfig('stones');
-
-                config.pos = new utils.Point(getRandomPointInArea(this.parameters.area));
+                let point = getRandomPointInArea(this.parameters.area);
+                config.pos = new Phaser.Point(point[0], point[1]);
 
                 /*var stone = */this.context.addObject(config);
                 //stone.sprite.setDegree(utils.getDegree(obj.pos, getRandomPointInArea(this.parameters.area))[0]);
@@ -41,8 +42,8 @@ var config = {
 
                 var topLeft = new Victor(50, 50);
                 var bottomRight = new Victor(1154, 918);
-
-                config.pos = new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray());
+                var coords = Victor(10, 20).randomize(topLeft, bottomRight).toArray();
+                config.pos = new Phaser.Point(coords[0], coords[1]);
 
                 this.context.addObject(config);
 
@@ -65,8 +66,8 @@ var config = {
 
                 var topLeft = new Victor(100, 100);
                 var bottomRight = new Victor(1100, 850);
-
-                config.pos = new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray());
+                var coords = Victor(10, 20).randomize(topLeft, bottomRight).toArray();
+                config.pos = new Phaser.Point(coords[0], coords[1]);
 
                 this.context.addObject(config);
 

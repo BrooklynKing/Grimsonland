@@ -103,32 +103,32 @@ var config = {
                 obj._removeInNextTick = true;
 
                 explosionConfig = gameConfigs.getConfig('monsterExplosion');
-                explosionConfig.pos = new utils.Point([pos.x - obj.size[0], pos.y - obj.size[1]]);
+                explosionConfig.pos = new Phaser.Point(pos.x - obj.size[0], pos.y - obj.size[1]);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
 
                 explosionConfig = gameConfigs.getConfig('monsterExplosion');
-                explosionConfig.pos = new utils.Point([pos.x + obj.size[0], pos.y - obj.size[1]]);
+                explosionConfig.pos = new Phaser.Point(pos.x + obj.size[0], pos.y - obj.size[1]);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
 
                 explosionConfig = gameConfigs.getConfig('monsterExplosion');
-                explosionConfig.pos = new utils.Point([pos.x - obj.size[0], pos.y + obj.size[1]]);
+                explosionConfig.pos = new Phaser.Point(pos.x - obj.size[0], pos.y + obj.size[1]);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
 
                 explosionConfig = gameConfigs.getConfig('monsterExplosion');
-                explosionConfig.pos = new utils.Point([pos.x + obj.size[0], pos.y + obj.size[1]]);
+                explosionConfig.pos = new Phaser.Point(pos.x + obj.size[0], pos.y + obj.size[1]);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
 
                 explosionConfig = gameConfigs.getConfig('monsterExplosion');
-                explosionConfig.pos = new utils.Point([pos.x - 3 / 2 * obj.size[0], pos.y]);
+                explosionConfig.pos = new Phaser.Point(pos.x - 3 / 2 * obj.size[0], pos.y);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
 
                 explosionConfig = gameConfigs.getConfig('monsterExplosion');
-                explosionConfig.pos = new utils.Point([pos.x + 3 / 2 * obj.size[0], pos.y]);
+                explosionConfig.pos = new Phaser.Point(pos.x + 3 / 2 * obj.size[0], pos.y);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
             }
@@ -172,8 +172,8 @@ var config = {
         update: function (dt, obj) {
             var direction = obj.getParameter('direction');
 
-            if (direction && direction.dir) {
-                obj.setPosition(direction.getDestination(obj.pos, obj.getParameter('speed') * dt));
+            if (direction) {
+                obj.setPosition(utils.moveWithSpeed(obj.pos, direction,  obj.getParameter('speed') * dt));
             }
         }
     },
@@ -236,12 +236,13 @@ var config = {
             var player = obj.layer.getObjectsByType('player')[0];
             if (!obj.getParameter('fireCooldown')) {
                 var	bulletConfig = gameConfigs.getConfig('mbullet'),
-                    direction = new utils.Line(obj.pos, player.pos);
+                    direction = Phaser.Point.subtract(player.pos, obj.pos);
 
                 bulletConfig.pos = obj.pos.clone();
                 var bull = obj.layer.addObject(bulletConfig);
                 bull.setParameter('direction', direction);
-                bull.sprite.setDegree(utils.getDegree(obj.pos, player.pos)[0]);
+
+                bull.sprite.setDegree(obj.pos.angle(player.pos));
 
                 obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
             }
@@ -252,7 +253,7 @@ var config = {
             var player = obj.layer.getObjectsByType('player')[0],
                 directionToPlayer = obj.getParameter('direction');
 
-            if (utils.getDistance(obj.pos, player.pos) < obj.getParameter('fireRange')) {
+            if (Phaser.Point.distance(obj.pos, player.pos) < obj.getParameter('fireRange')) {
                 if (!obj.getParameter('fireCooldown')) {
                     var	bulletConfig = gameConfigs.getConfig('mbullet2');
                     bulletConfig.pos = obj.pos.clone();
@@ -265,7 +266,7 @@ var config = {
                     obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
                 }
             } else {
-                obj.setPosition(directionToPlayer.getDestination(obj.pos, obj.getParameter('speed') * dt));
+                //obj.setPosition(directionToPlayer.getDestination(obj.pos, obj.getParameter('speed') * dt));
             }
         }
     },
@@ -299,7 +300,7 @@ var config = {
                     expl;
 
                 explosionConfig = gameConfigs.getConfig('monsterExplosion');
-                explosionConfig.pos = new utils.Point([pos.x, pos.y]);
+                explosionConfig.pos = new Phaser.Point(pos.x, pos.y);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
             }
@@ -327,9 +328,9 @@ var config = {
             }
 
             if (obj.pos.x == pos.x && obj.pos.y == pos.y) {
-                obj.getParameter('direction').dir = null;
+                obj.setParameter('direction', null);
             } else {
-                obj.setParameter('direction', new utils.Line(obj.pos, pos));
+                obj.setParameter('direction', Phaser.Point.subtract(pos, obj.pos));
             }
         }
     },
