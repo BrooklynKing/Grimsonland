@@ -47,6 +47,43 @@ var config = {
         }
 
     },
+    hellfire : {
+        update: function (dt, obj) {
+            var player = obj.layer.getObjectsByType('player')[0],
+                fireCooldown = obj.getParameter('fireCooldown');
+
+            if (player.getParameter('currentSpell') == 'hellfire') {
+                if (obj.layer.game.input.mousePointer.isDown || obj.layer.game.input.keyboard.isDown(32)) {
+                    if (!fireCooldown) {
+                        var destination  = new Phaser.Point(0, 1),
+                            point1 = utils.moveWithSpeed(player.pos, destination, 100),
+                            spellPower = player.getParameter('spellPower');
+
+                        for (var i = -10; i < 10; i++) {
+                            let movedPoint = point1.clone().rotate(player.pos.x, player.pos.y, 18 * i, true);
+                            //let direction = new utils.Line(player.pos, movedPoint);
+                            createTube(movedPoint);
+                        }
+
+
+                        obj.setParameter('cooldown', obj.getDefaultParameter('cooldown'));
+                        obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
+
+                        function createTube(pos) {
+
+                            var tubeConfig = gameConfigs.getConfig('hellfireTube');
+                            tubeConfig.pos = pos;
+
+                            var tube = obj.layer.addObject(tubeConfig);
+                            tube.setParameter('power', tube.getParameter('power') + 5 * (spellPower - 1));
+                        }
+                    }
+                }
+            }
+            fireCooldown && obj.setParameter('fireCooldown', fireCooldown - 1);
+        }
+
+    },
     slowEnemies : {
         update: function (dt, obj) {
             var objects = obj.getParameter('collisions');
@@ -158,6 +195,24 @@ var config = {
                     obj.layer.addObject(blood);
 
                     obj._removeInNextTick = true;
+
+                    break;
+                }
+            }
+        }
+    },
+    hellTubeMonsterCollision: {
+        update: function (dt, obj) {
+            var objects = obj.getParameter('collisions');
+            for (var i = 0, l = objects.length; i < l; i++) {
+                if (objects[i].type == 'monster') {
+                    objects[i].setParameter('health', objects[i].getParameter('health') - obj.getParameter('power'));
+
+                    var blood = gameConfigs.getConfig('bloodSpray');
+                    blood.pos = objects[i].pos.clone();
+                    blood.pos.x += 2;
+                    blood.pos.y += - 10;
+                    obj.layer.addObject(blood);
 
                     break;
                 }

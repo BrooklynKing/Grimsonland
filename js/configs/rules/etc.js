@@ -156,6 +156,18 @@ var config = {
             }
         }
     },
+    explosionAfterSpriteDone: {
+        update : function (dt, obj) {
+            if(obj.sprite.done) {
+                obj._removeInNextTick = true;
+
+                var explosionConfig = gameConfigs.getConfig('monsterExplosion');
+                explosionConfig.pos = new Phaser.Point(obj.pos.x, obj.pos.y);
+                var expl = obj.layer.addObject(explosionConfig);
+                expl.setParameter('power', obj.getParameter('power'));
+            }
+        }
+    },
     destroyAfterSpriteDone: {
         update : function (dt, obj) {
             if(obj.sprite.done) {

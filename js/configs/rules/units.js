@@ -337,8 +337,9 @@ var config = {
     selectSpellWithKeyboard: {
         update: function (dt, obj) {
             (obj.layer.game.input.keyboard.isDown(49)) && (obj.setParameter('currentSpell', 'fireball'));
-            (obj.layer.game.input.keyboard.isDown(50)) && (obj.setParameter('currentSpell', 'frostShard'));
-            (obj.layer.game.input.keyboard.isDown(51)) && (obj.setParameter('currentSpell', 'teleport'));
+            (obj.layer.game.input.keyboard.isDown(50)) && (obj.setParameter('currentSpell', 'hellfire'));
+            (obj.layer.game.input.keyboard.isDown(51)) && (obj.setParameter('currentSpell', 'frostShard'));
+            (obj.layer.game.input.keyboard.isDown(52)) && (obj.setParameter('currentSpell', 'teleport'));
         }
     },
     triggerOnPlayerCollisionPowerUp : {

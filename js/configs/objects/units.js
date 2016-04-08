@@ -22,9 +22,9 @@ var config = {
                 4 : 3000,
                 5 : 4500,
                 6 : 6500,
-                7 : 8000,
-                8 : 10000,
-                9 : 15000
+                7 : 9000,
+                8 : 13000,
+                9 : 20000
             }
         },
         type : 'player',
@@ -140,13 +140,11 @@ var config = {
     powerup : {
         zIndex : 2,
         size: [25, 25],
-        //render: 'object',
         collisions: true,
         sprite : ['powerUp', [0, 0], [72, 65], 15, [0, 1, 2, 1]],
         conditions: ['triggerOnPlayerCollisionPowerUp'],
         parameters : {
             exp: 250
-            //power : 1
         }
     }
 };
