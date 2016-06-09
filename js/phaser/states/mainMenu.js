@@ -7,7 +7,14 @@ class MainMenu extends Phaser.State {
         this.background.anchor.set(0.5, 1);
         this.background.alpha = 0.8;
     }
+    
     create() {
+        this.generateControls();
+
+        this.menuTheme.play();
+    }
+
+    generateControls() {
         var button  = this.add.button(512, 384, 'button', this.startGame, this, 2, 0 , 1, 2);
         var start = this.add.text(0, 3,'START', {
             fill: '#efefef'
@@ -23,12 +30,12 @@ class MainMenu extends Phaser.State {
 
         button.addChild(start);
         button.addChild(info);
-        this.menuTheme.play();
-        //this.sound.play('mainTheme',1, true);
     }
+
     startGame() {
         this.game.state.start('battle');
     }
+
     shutdown() {
         this.menuTheme.stop();
     }

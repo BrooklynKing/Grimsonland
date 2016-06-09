@@ -3,31 +3,38 @@ import format from 'string-template';
 
 var config = {
     countMonsterKilled : {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var template = obj.getParameter('template');
+
             obj.setParameter('text', format(template, {
                 kills: obj.layer.state.parameters.monstersKilled || 0
             }));
         }
     },
     timer : {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var template = obj.getParameter('template');
+
             obj.setParameter('text', format(template, {
                 time: ((obj.layer.state.parameters.gameTimer++) / 60).toFixed(2)
             }));
         }
     },
     health : {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var template = obj.getParameter('template');
+
             obj.setParameter('text', format(template, {
                 health: obj.layer.getObjectsByType('player')[0].parameters.health
             }));
         }
     },
     level : {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var template = obj.getParameter('template');
             var player = obj.layer.getObjectsByType('player')[0];
 
@@ -42,6 +49,7 @@ var config = {
         init: function () {
             var obj = this.context;
             var template = obj.getParameter('template');
+
             obj.setParameter('text', format(template, {
                 time: ((obj.layer.state.parameters.bestTime) / 60).toFixed(2)
             }));
@@ -51,6 +59,7 @@ var config = {
         init: function () {
             var obj = this.context;
             var template = obj.getParameter('template');
+
             obj.setParameter('text', format(template, {
                 score: obj.layer.state.parameters.bestScore
             }));

@@ -11,6 +11,7 @@ function moveWithSpeed(point, destination, speed) {
 
 function clone(obj) {
     (!obj) && (obj = {});
+    
     return JSON.parse(JSON.stringify(obj));
 }
 

@@ -1,5 +1,3 @@
-import utils from './../../engine/utils';
-import format from 'string-template';
 var Victor = require('victor');
 
 var config = {
@@ -36,7 +34,7 @@ var config = {
         }
     },
     spawn_heart: {
-        update: function (dt, obj) {
+        update: function () {
             if (!this.parameters.currentCooldown) {
                 var config = gameConfigs.getConfig('heart');
 
@@ -60,7 +58,7 @@ var config = {
         }
     },
     spawn_powerup: {
-        update: function (dt, obj) {
+        update: function () {
             if (!this.parameters.currentCooldown) {
                 var config = gameConfigs.getConfig('powerup');
 
@@ -100,10 +98,11 @@ var config = {
         }
     },
     goWithPlayer: {
-        update: function(dt,obj) {
-            var player = obj.getObjectsByType('player')[0],
-                px = (player.pos.x + obj.translate.x) / 1024 * 100,
-                py = (player.pos.y + obj.translate.y) / 768 * 100;
+        update: function(dt) {
+            var obj = this.context;
+            var player = obj.getObjectsByType('player')[0];
+            var px = (player.pos.x + obj.translate.x) / 1024 * 100;
+            var py = (player.pos.y + obj.translate.y) / 768 * 100;
 
             if (px < 30) {
                 if (obj.translate.x < 0) {

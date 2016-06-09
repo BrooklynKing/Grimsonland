@@ -1,7 +1,7 @@
 var config = {
     cursor : {
         zIndex : 3000,
-        render: 'cursor',
+        render: 'ui',
         pos: [400,350],
         sprite : ['cursor', [0, 0], [30, 30]],
         rules: ['bindPositionToMouse']

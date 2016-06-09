@@ -14,7 +14,6 @@ class Loading extends Phaser.State {
 
         this.game.load.image('mainmenu', './img/mainmenu.jpeg');
         this.game.load.image('deathmenu', './img/deathbackground.jpg');
-
         this.game.load.image('bigMonsters', './img/bigMonsters.png');
         this.game.load.image('boss', './img/boss.png');
         this.game.load.image('bossSpell', './img/bossSpell.png');
@@ -43,6 +42,7 @@ class Loading extends Phaser.State {
         this.game.load.audio('deathTheme', './music/death.mp3');
         this.game.load.audio('battleTheme', './music/battle.mp3');
     }
+
     create() {
         this.text.destroy();
         this.game.state.start('mainMenu');

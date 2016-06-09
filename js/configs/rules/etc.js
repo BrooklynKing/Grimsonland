@@ -1,10 +1,11 @@
 import utils from './../../engine/utils';
-import format from 'string-template';
 var Victor = require('victor');
 
 var config = {
     bindPositionToLayer: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
+
             if (obj.pos.x - obj.sprite.size[0] / 2 < obj.layer.pos.x) {
                 obj.pos.x = obj.sprite.size[0] / 2;
             }
@@ -21,7 +22,9 @@ var config = {
         }
     },
     destroyAfterLeavingLayer: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
+
             if (obj.pos.y < -100 || obj.pos.y - obj.sprite.size[1] - 100> obj.layer.pos.y + obj.layer.size[1] || obj.pos.x - obj.sprite.size[0] - 100> obj.layer.pos.x + obj.layer.size[0] || obj.pos.x < -100) {
                 obj._removeInNextTick = true;
                 return false;
@@ -29,17 +32,19 @@ var config = {
         }
     },
     setDirectionToPlayer: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var player = obj.layer.getObjectsByType('player')[0];
 
             obj.setParameter('direction', Phaser.Point.subtract(player.pos, obj.pos));
         }
     },
     setDirectionToPlayerAdvance: {
-        update: function (dt, obj) {
-            var player = obj.layer.getObjectsByType('player')[0],
-                playerDirection = player.getParameter('direction'),
-                oldDirection = obj.getParameter('direction');
+        update: function () {
+            var obj = this.context;
+            var player = obj.layer.getObjectsByType('player')[0];
+            var playerDirection = player.getParameter('direction');
+            var oldDirection = obj.getParameter('direction');
 
             if (!oldDirection) {
                 oldDirection = Phaser.Point.subtract(player.pos, obj.pos);
@@ -59,15 +64,17 @@ var config = {
         }
     },
     wandererAI : {
-        init: function (dt) {
+        init: function () {
             var topLeft = new Victor(100, 100);
             var bottomRight = new Victor(1100, 850);
             var coords = Victor(10, 20).randomize(topLeft, bottomRight).toArray();
+
             this.context.setParameter('direction', new Phaser.Point(coords[0], coords[1]));
         },
-        update: function (dt, obj) {
-            var player = obj.layer.getObjectsByType('player')[0],
-                distance = Phaser.Point.distance(obj.pos, player.pos);
+        update: function () {
+            var obj = this.context;
+            var player = obj.layer.getObjectsByType('player')[0];
+            var distance = Phaser.Point.distance(obj.pos, player.pos);
 
             if (distance <= obj.getParameter('scentRange')) {
                 obj.setParameter('scent', true);
@@ -90,8 +97,10 @@ var config = {
         }
     },
     dynamicZIndex: {
-        update: function(dt, obj) {
+        update: function() {
+            var obj = this.context;
             var newZIndex = 0;
+
             obj.pos && (newZIndex += obj.pos.y);
             obj.sprite && (newZIndex += obj.sprite.size[1] / 2);
 
@@ -100,19 +109,22 @@ var config = {
     },
     collisions: {
         init: function() {
-            var obj = this.context,
-                collisions = obj.setParameter('collisions', []);
+            var obj = this.context;
+            var collisions = obj.setParameter('collisions', []);
 
             collisions.cells = new Array();
             obj.layer.state.collisions.updateObject(obj);
         },
-        update: function(dt, obj) {
+        update: function() {
+            var obj = this.context;
+
             obj.getParameter('collisions').splice(0);
             obj.layer.state.collisions.updateObject(obj);
         }
     },
     rotateToMouse: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var destination  = new Phaser.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y);
 
             destination.x -= obj.layer.translate.x;
@@ -123,13 +135,16 @@ var config = {
         }
     },
     bindPositionToMouse: {
-        update : function(dt, obj) {
+        update : function() {
+            var obj = this.context;
             var mousePosition = new Phaser.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y);
+
             obj.setPosition(mousePosition.clone());
         }
     },
     removeOnCooldown: {
-        update : function(dt, obj) {
+        update : function() {
+            var obj = this.context;
             var cooldown = obj.getParameter('cooldown');
 
             if (cooldown == 0) {
@@ -140,7 +155,8 @@ var config = {
         }
     },
     explosionOnCooldown: {
-        update: function(dt, obj) {
+        update: function() {
+            var obj = this.context;
             var cooldown = obj.getParameter('cooldown');
 
             if (cooldown == 0) {
@@ -157,7 +173,9 @@ var config = {
         }
     },
     explosionAfterSpriteDone: {
-        update : function (dt, obj) {
+        update : function () {
+            var obj = this.context;
+
             if(obj.sprite.done) {
                 obj._removeInNextTick = true;
 
@@ -169,19 +187,24 @@ var config = {
         }
     },
     destroyAfterSpriteDone: {
-        update : function (dt, obj) {
+        update : function () {
+            var obj = this.context;
+
             if(obj.sprite.done) {
                 obj._removeInNextTick = true;
             }
         }
     },
     rotateByDirection: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
+
             obj.sprite.rotateToDirection(obj.getParameter('direction'));
         }
     },
     rotateByPlayer: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var player = obj.layer.getObjectsByType('player')[0];
 
             obj.sprite.rotateToDirection(Phaser.Point.subtract(player.pos, obj.pos));

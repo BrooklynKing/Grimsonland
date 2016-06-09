@@ -1,12 +1,10 @@
-import utils from './utils'
-
 function generate(config) {
-    var n = config.n || 6,
-        width = config.width || 800,
-        height = config.height || 600,
-        sizeX = (width) >> n,
-        sizeY = (height) >> n,
-        cellGrid = new Array(sizeX * sizeY);
+    var n = config.n || 6;
+    var width = config.width || 800;
+    var height = config.height || 600;
+    var sizeX = (width) >> n;
+    var sizeY = (height) >> n;
+    var cellGrid = new Array(sizeX * sizeY);
 
     generateMap();
 
@@ -27,12 +25,13 @@ function generate(config) {
             cellGrid[oldCells[i]] && cellGrid[oldCells[i]].splice(cellGrid[oldCells[i]].indexOf(object), 1);
         }
     }
+    
     function getPointsOfObject(object) {
-        var pos = object.pos,
-            size = object.size,
-            cells = [],
-            xIndex = size[0] >> n,
-            yIndex = size[1] >> n;
+        var pos = object.pos;
+        var size = object.size;
+        var cells = [];
+        var xIndex = size[0] >> n;
+        var yIndex = size[1] >> n;
 
         for (var i = 0; i < 2 + xIndex; i++) {
             for (var j = 0; j < 2 + yIndex; j++) {
@@ -45,9 +44,10 @@ function generate(config) {
 
         return cells;
     }
+    
     function updateObject(object) {
-        var cells = getPointsOfObject(object),
-            oldCells = object.getParameter('collisions').cells;
+        var cells = getPointsOfObject(object);
+        var oldCells = object.getParameter('collisions').cells;
 
         for (var i = 0; i < cells.length; i++) {
             if (oldCells[i] != cells[i]) {
@@ -64,8 +64,8 @@ function generate(config) {
         for (var i = 0; i <= sizeX; i++) {
             for (var j = 0; j <= sizeY; j++) {
                 if (cellGrid[getCell([i, j])]) {
-                    var objects = cellGrid[getCell([i, j])],
-                        length = objects.length;
+                    var objects = cellGrid[getCell([i, j])];
+                    var length = objects.length;
 
                     for (var k = 0; k < length; k++) {
                         for (var l = k + 1; l < length; l++) {
@@ -86,10 +86,12 @@ function generate(config) {
             b >= y2 || y < b2);
         }
 
-        return collides(pos.x + size[0] / 2, pos.y + size[1] / 2,
+        return collides(
+            pos.x + size[0] / 2, pos.y + size[1] / 2,
             pos.x  - size[0] / 2, pos.y  - size[1] / 2,
             pos2.x  + size2[0] / 2, pos2.y  + size2[1] / 2,
-            pos2.x  - size2[0] / 2, pos2.y  - size2[1] / 2);
+            pos2.x  - size2[0] / 2, pos2.y  - size2[1] / 2
+        );
     }
 
     return {

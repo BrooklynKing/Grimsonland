@@ -2,36 +2,33 @@ import utils from './../../engine/utils';
 
 var config = {
     fireball : {
-        update: function (dt, obj) {
-            var player = obj.layer.getObjectsByType('player')[0],
-                fireCooldown = obj.getParameter('fireCooldown');
+        update: function () {
+            var obj = this.context;
+            var player = obj.layer.getObjectsByType('player')[0];
+            var fireCooldown = obj.getParameter('fireCooldown');
 
             if (player.getParameter('currentSpell') == 'fireball') {
                 if (obj.layer.game.input.mousePointer.isDown || obj.layer.game.input.keyboard.isDown(32)) {
                     if (!fireCooldown) {
-                        var destination  = new Phaser.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y),
-                            spellPower = player.getParameter('spellPower'),
-                            startDegree = 10 * (spellPower - 1);
+                        var destination  = new Phaser.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y);
+                        var spellPower = player.getParameter('spellPower');
+                        var startDegree = 10 * (spellPower - 1);
 
                         destination.x -= obj.layer.translate.x;
                         destination.y -= obj.layer.translate.y;
 
                         for (var i = 0; i < spellPower; i++) {
                             let movedPoint = destination.clone().rotate(player.pos.x, player.pos.y, startDegree, true);
-                            //let direction = new utils.Line(player.pos, movedPoint);
+
                             createBullet(Phaser.Point.subtract(movedPoint, player.pos), movedPoint.clone());
+
                             startDegree -= 20;
                         }
-                       /* if (obj.getDefaultParameter('cooldown') + 3 * (spellPower - 1) > 30) {
-                            obj.setParameter('cooldown', 30);
-                        } else {
-                            obj.setParameter('cooldown', obj.getDefaultParameter('cooldown') + 5 * (spellPower - 1));
-                        }*/
+
                         obj.setParameter('cooldown', obj.getDefaultParameter('cooldown'));
                         obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
 
                         function createBullet(direction, destination) {
-
                             var bulletConfig = gameConfigs.getConfig('bullet');
                             bulletConfig.pos = player.pos.clone();
 
@@ -48,9 +45,10 @@ var config = {
 
     },
     hellfire : {
-        update: function (dt, obj) {
-            var player = obj.layer.getObjectsByType('player')[0],
-                fireCooldown = obj.getParameter('fireCooldown');
+        update: function () {
+            var obj = this.context;
+            var player = obj.layer.getObjectsByType('player')[0];
+            var fireCooldown = obj.getParameter('fireCooldown');
 
             if (player.getParameter('currentSpell') == 'hellfire') {
                 if (obj.layer.game.input.mousePointer.isDown || obj.layer.game.input.keyboard.isDown(32)) {
@@ -61,10 +59,9 @@ var config = {
 
                         for (var i = -10; i < 10; i++) {
                             let movedPoint = point1.clone().rotate(player.pos.x, player.pos.y, 18 * i, true);
-                            //let direction = new utils.Line(player.pos, movedPoint);
+
                             createTube(movedPoint);
                         }
-
 
                         obj.setParameter('cooldown', obj.getDefaultParameter('cooldown'));
                         obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
@@ -85,13 +82,15 @@ var config = {
 
     },
     slowEnemies : {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var objects = obj.getParameter('collisions');
+
             for (var i = 0; i < objects.length; i++) {
                 if (objects[i].type == 'monster') {
-                    var speed = objects[i].getParameter('speed'),
-                        power = obj.getParameter('power'),
-                        effects = objects[i].getParameter('effects') || [];
+                    var speed = objects[i].getParameter('speed');
+                    var power = obj.getParameter('power');
+                    var effects = objects[i].getParameter('effects') || [];
 
                     if (speed < power) {
                         objects[i].setParameter('speed', 0);
@@ -107,9 +106,10 @@ var config = {
         }
     },
     teleport : {
-        update: function (dt, obj) {
-            var player = obj.layer.getObjectsByType('player')[0],
-                fireCooldown = obj.getParameter('fireCooldown');
+        update: function () {
+            var obj = this.context;
+            var player = obj.layer.getObjectsByType('player')[0];
+            var fireCooldown = obj.getParameter('fireCooldown');
 
             if (player.getParameter('currentSpell') == 'teleport') {
                 if (obj.layer.game.input.mousePointer.isDown || obj.layer.game.input.keyboard.isDown(32)) {
@@ -119,11 +119,11 @@ var config = {
                         mouse.x -= obj.layer.translate.x;
                         mouse.y -= obj.layer.translate.y;
 
-                        var direction = Phaser.Point.subtract(mouse, player.pos),
-                            spellPower = player.getParameter('spellPower'),
-                            destination = utils.moveWithSpeed(player.pos, direction, obj.getParameter('power')),
-                            cooldown = obj.getDefaultParameter('cooldown', cooldown) - (30 * (spellPower - 1)),
-                            teleportGate;
+                        var direction = Phaser.Point.subtract(mouse, player.pos);
+                        var spellPower = player.getParameter('spellPower');
+                        var destination = utils.moveWithSpeed(player.pos, direction, obj.getParameter('power'));
+                        var cooldown = obj.getDefaultParameter('cooldown', cooldown) - (30 * (spellPower - 1));
+                        var teleportGate;
 
                         teleportGate = gameConfigs.getConfig('teleportGate');
                         teleportGate.pos = player.pos.clone();
@@ -146,17 +146,18 @@ var config = {
         }
     },
     frostShard : {
-        update: function (dt, obj) {
-            var player = obj.layer.getObjectsByType('player')[0],
-                fireCooldown = obj.getParameter('fireCooldown');
+        update: function () {
+            var obj = this.context;
+            var player = obj.layer.getObjectsByType('player')[0];
+            var fireCooldown = obj.getParameter('fireCooldown');
 
             if (player.getParameter('currentSpell') == 'frostShard') {
                 if (obj.layer.game.input.mousePointer.isDown || obj.layer.game.input.keyboard.isDown(32)) {
                     if (!fireCooldown) {
-                        var frostShard = gameConfigs.getConfig('frostShard'),
-                            mousePosition = new Phaser.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y),
-                            spellPower = player.getParameter('spellPower'),
-                            destination = mousePosition.clone();
+                        var frostShard = gameConfigs.getConfig('frostShard');
+                        var mousePosition = new Phaser.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y);
+                        var spellPower = player.getParameter('spellPower');
+                        var destination = mousePosition.clone();
 
                         destination.x -= obj.layer.translate.x;
                         destination.y -= obj.layer.translate.y;
@@ -182,13 +183,16 @@ var config = {
         }
     },
     bulletMonsterCollision: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var objects = obj.getParameter('collisions');
+
             for (var i = 0, l = objects.length; i < l; i++) {
                 if (objects[i].type == 'monster') {
                     objects[i].setParameter('health', objects[i].getParameter('health') - obj.getParameter('power'));
 
                     var blood = gameConfigs.getConfig('bloodSpray');
+
                     blood.pos = objects[i].pos.clone();
                     blood.pos.x += 2;
                     blood.pos.y += - 10;
@@ -202,16 +206,20 @@ var config = {
         }
     },
     hellTubeMonsterCollision: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var objects = obj.getParameter('collisions');
+
             for (var i = 0, l = objects.length; i < l; i++) {
                 if (objects[i].type == 'monster') {
                     objects[i].setParameter('health', objects[i].getParameter('health') - obj.getParameter('power'));
 
                     var blood = gameConfigs.getConfig('bloodSpray');
+
                     blood.pos = objects[i].pos.clone();
                     blood.pos.x += 2;
                     blood.pos.y += - 10;
+                    
                     obj.layer.addObject(blood);
 
                     break;

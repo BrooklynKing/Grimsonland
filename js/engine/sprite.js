@@ -36,9 +36,9 @@ Sprite.prototype.updateConfig = function (config) {
 };
 
 Sprite.prototype.rotateToDirection = function (direction) {
-    let pos = this.defaultPosition;
-    let config = {};
-    let angle = direction.angle(new Phaser.Point(0,0), true);
+    var pos = this.defaultPosition;
+    var config = {};
+    var angle = direction.angle(new Phaser.Point(0,0), true);
 
     if (angle > 135 || angle < -135) {
         config.pos = [pos.x, pos.y + 2 * this.size[1]]
@@ -51,30 +51,30 @@ Sprite.prototype.rotateToDirection = function (direction) {
     }
 
     config.pos = new Phaser.Point(config.pos[0], config.pos[1]);
+
     this.updateConfig(config);
 };
 
 Sprite.prototype.render = function (ctx) {
     var frame;
+    var x = this.pos.x;
+    var y = this.pos.y;
 
     if (this.speed > 0) {
         var max = this.frames.length;
         var idx = Math.floor(this._index);
+
         frame = this.frames[idx % max];
 
         if (this.once && idx >= max) {
             this.done = true;
             return;
         }
-    }
-    else {
+    } else {
         frame = 0;
     }
 
-    var x = this.pos.x;
-    var y = this.pos.y;
-
-    if (this.dir == 'vertical') {
+    if (this.dir === 'vertical') {
         y += frame * this.size[1];
     }
     else {
@@ -82,11 +82,13 @@ Sprite.prototype.render = function (ctx) {
     }
 
     ctx.rotate(this.degree);
-    ctx.drawImage(this.cache.getImage(this.url),
+    ctx.drawImage(
+        this.cache.getImage(this.url),
         x, y,
         this.size[0], this.size[1],
         Math.round(-this.size[0] / 2), Math.round(-this.size[1] / 2),
-        this.size[0], this.size[1]);
+        this.size[0], this.size[1]
+    );
 };
 
 Sprite.prototype.setDegree = function (degree) {

@@ -2,15 +2,19 @@ import utils from './../../engine/utils';
 
 var config = {
     playerDeath: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
+
             if (obj.getParameter('health') <= 0) {
-                obj.layer.state.showRestartMenu();
+                obj.layer.state.stopBattle();
             }
         }
     },
     damageOnPlayerCollision: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var objects = obj.getParameter('collisions');
+
             for (var i = 0; i < objects.length; i++) {
                 if (objects[i].type == 'player') {
                     objects[i].setParameter('health', objects[i].getParameter('health') - obj.getParameter('power'));
@@ -20,7 +24,8 @@ var config = {
         }
     },
     destroyOnPlayerCollision: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var objects = obj.getParameter('collisions');
 
             for (var i = 0; i < objects.length; i++) {
@@ -37,7 +42,8 @@ var config = {
         }
     },
     triggerOnPlayerCollision: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var objects = obj.getParameter('collisions');
 
             for (var i = 0; i < objects.length; i++) {
@@ -57,7 +63,9 @@ var config = {
         }
     },
     meleeAttack : {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
+
             if (!obj.getParameter('meleeCooldown')) {
                 var objects = obj.getParameter('collisions');
                 for (var i = 0; i < objects.length; i++) {
@@ -78,7 +86,9 @@ var config = {
         }
     },
     monsterExplosion: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
+
             if (!obj.getParameter('exploded')) {
                 var objects = obj.getParameter('collisions');
                 for (var i = 0, l = objects.length; i < l; i++) {
@@ -93,7 +103,9 @@ var config = {
         }
     },
     monsterExplosionCondition : {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
+
             function generateExplosions() {
                 var pos = obj.pos.clone(),
                     explosionConfig,
@@ -148,8 +160,10 @@ var config = {
         }
     },
     stopOnCollisionWithPlayer: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var objects = obj.getParameter('collisions');
+
             for (var i = 0, l = objects.length; i < l; i++) {
                 if (objects[i].type == 'player') {
                     obj.setParameter('speed', 0);
@@ -159,17 +173,22 @@ var config = {
         }
     },
     resetSpeed : {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
+
             obj.setParameter('speed', obj.getDefaultParameter('speed'));
         }
     },
     resetEffects : {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
+
             obj.getParameter('effects').splice(0);
         }
     },
     moveToDirection: {
-        update: function (dt, obj) {
+        update: function (dt) {
+            var obj = this.context;
             var direction = obj.getParameter('direction');
 
             if (direction) {
@@ -178,8 +197,10 @@ var config = {
         }
     },
     playerLevelUp: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var levelExp = obj.getParameter('levelTable')[obj.getParameter('level')];
+
             if (obj.getParameter('levelTable')[obj.getParameter('level')]) {
                 if (obj.getParameter('exp') > obj.getParameter('levelTable')[obj.getParameter('level')]) {
                     obj.setParameter('exp', obj.getParameter('exp') - levelExp);
@@ -192,7 +213,9 @@ var config = {
         }
     },
     monsterHealthStatus: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
+
             if (obj.getParameter('health') <= 0) {
                 obj._removeInNextTick = true;
 
@@ -219,24 +242,29 @@ var config = {
         }
     },
     resetRangeCooldown: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var fireCooldown = obj.getParameter('fireCooldown');
 
             fireCooldown && obj.setParameter('fireCooldown', fireCooldown -1);
         }
     },
     resetMeleeCooldown: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var meleeCooldown = obj.getParameter('meleeCooldown');
+
             meleeCooldown && obj.setParameter('meleeCooldown', meleeCooldown - 1);
         }
     },
     monsterBossLogic: {
-        update : function(dt, obj) {
+        update : function() {
+            var obj = this.context;
             var player = obj.layer.getObjectsByType('player')[0];
+
             if (!obj.getParameter('fireCooldown')) {
-                var	bulletConfig = gameConfigs.getConfig('mbullet'),
-                    direction = Phaser.Point.subtract(player.pos, obj.pos);
+                var	bulletConfig = gameConfigs.getConfig('mbullet');
+                var direction = Phaser.Point.subtract(player.pos, obj.pos);
 
                 bulletConfig.pos = obj.pos.clone();
                 var bull = obj.layer.addObject(bulletConfig);
@@ -249,9 +277,10 @@ var config = {
         }
     },
     monsterBoss2Logic : {
-        update : function(dt, obj) {
-            var player = obj.layer.getObjectsByType('player')[0],
-                directionToPlayer = obj.getParameter('direction');
+        update : function(dt) {
+            var obj = this.context;
+            var player = obj.layer.getObjectsByType('player')[0];
+            var directionToPlayer = obj.getParameter('direction');
 
             if (Phaser.Point.distance(obj.pos, player.pos) < obj.getParameter('fireRange')) {
                 if (!obj.getParameter('fireCooldown')) {
@@ -261,7 +290,6 @@ var config = {
                     var bull = obj.layer.addObject(bulletConfig);
 
                     bull.setParameter('direction', directionToPlayer);
-                    //bull.sprite.setDegree(utils.getDegree(obj.pos, player.pos)[0]);
 
                     obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
                 }
@@ -271,7 +299,8 @@ var config = {
         }
     },
     monsterBoss2Bullet : {
-        update: function(dt, obj) {
+        update: function() {
+            var obj = this.context;
             var cooldown = obj.getParameter('cooldown');
             var objects = obj.getParameter('collisions');
 
@@ -307,13 +336,16 @@ var config = {
         }
     },
     moveWithKeyboard: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var pos = obj.pos.clone();
             var direction = {};
+
             direction.left = obj.layer.game.input.keyboard.isDown(65);
             direction.up = obj.layer.game.input.keyboard.isDown(87);
             direction.down = obj.layer.game.input.keyboard.isDown(83);
             direction.right = obj.layer.game.input.keyboard.isDown(68);
+
             if (direction.right) {
                 pos.x = obj.pos.x + 1;
             }
@@ -335,7 +367,9 @@ var config = {
         }
     },
     selectSpellWithKeyboard: {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
+
             (obj.layer.game.input.keyboard.isDown(49)) && (obj.setParameter('currentSpell', 'fireball'));
             (obj.layer.game.input.keyboard.isDown(50)) && (obj.setParameter('currentSpell', 'hellfire'));
             (obj.layer.game.input.keyboard.isDown(51)) && (obj.setParameter('currentSpell', 'frostShard'));
@@ -343,7 +377,8 @@ var config = {
         }
     },
     triggerOnPlayerCollisionPowerUp : {
-        update: function (dt, obj) {
+        update: function () {
+            var obj = this.context;
             var objects = obj.getParameter('collisions');
 
             for (var i = 0; i < objects.length; i++) {
@@ -357,22 +392,26 @@ var config = {
         }
     },
     summonOnCooldown : {
-        update: function(dt, obj) {
+        update: function() {
+            var obj = this.context;
             var cooldown = obj.getParameter('cooldown');
+
             function getProperMonster() {
-                var random = Math.random() * 100,
-                    config;
+                var random = Math.random() * 100;
+                var config;
 
                 if (random <= obj.getParameter('chanceOfBoss')) {
                     config = gameConfigs.getConfig('monsterBoss');
                 } else {
                     random -= obj.getParameter('chanceOfBoss');
                 }
+
                 if (!config && random <= obj.getParameter('chanceOfBoss2')) {
                     config = gameConfigs.getConfig('monsterBoss2');
                 } else {
                     random -= obj.getParameter('chanceOfBoss2');
                 }
+
                 if (!config && random <= obj.getParameter('chanceOfBoomer')) {
                     config = gameConfigs.getConfig('monsterBoomer');
                 } else {
@@ -386,10 +425,8 @@ var config = {
                 return config;
             }
             if (cooldown == 0) {
-                obj._removeInNextTick = true;
-
-                let monsterConfig = getProperMonster(),
-                    player = obj.layer.getObjectsByType('player')[0];
+                let monsterConfig = getProperMonster();
+                let player = obj.layer.getObjectsByType('player')[0];
 
                 monsterConfig.pos = obj.pos.clone();
 
@@ -398,6 +435,8 @@ var config = {
                 if (player.getParameter('level') > 1) {
                     monster.setParameter('health', monster.getParameter('health') * 0.75 * player.getParameter('level'));
                 }
+
+                obj._removeInNextTick = true;
             } else {
                 obj.setParameter('cooldown', cooldown - 1);
             }

@@ -1,4 +1,3 @@
-import utils from './../../engine/utils';
 import format from 'string-template';
 var Victor = require('victor');
 
@@ -6,13 +5,14 @@ var config = {
     monsterController : {
         init: function() {
             var obj = this.context;
+
             obj.setParameter('currentWave', 1);
             obj.setParameter('monsterOnWave', this.parameters.monsterCount[ obj.getParameter('currentWave') - 1]);
             obj.setParameter('monsterKilled', 0);
             obj.setParameter('monsterSpawned', 0);
             this.leftOnWave = this.context.layer.addObject(gameConfigs.getConfig('leftOnWaveLabel'));
         },
-        update: function (dt, obj) {
+        update: function () {
             var obj = this.context;
 
             function createSpawn() {
