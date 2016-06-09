@@ -1,10 +1,10 @@
 {
-  "name": "CanvasGame",
+  "name": "Grimsonland",
   "version": "1.0.0",
   "description": "Homeboy iz rad killa",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/BrooklynKing/Grimsonland"
   },
   "author": "Oleksii Makodzeba",
   "license": "MIT",
