@@ -10,6 +10,7 @@ var config = {
             obj.setParameter('monsterOnWave', this.parameters.monsterCount[ obj.getParameter('currentWave') - 1]);
             obj.setParameter('monsterKilled', 0);
             obj.setParameter('monsterSpawned', 0);
+            
             this.leftOnWave = this.context.layer.addObject(gameConfigs.getConfig('leftOnWaveLabel'));
         },
         update: function () {
@@ -45,6 +46,7 @@ var config = {
                     obj.setParameter('monsterKilled', 0)
                 }
             }
+            
             this.leftOnWave.setParameter('text', format(this.leftOnWave.getParameter('template'), {
                 count: obj.getParameter('monsterKilled') + '/' + obj.getParameter('monsterOnWave')
             }));

@@ -29,7 +29,6 @@ class Loading extends Phaser.State {
         this.game.load.image('frostEffect', './img/frosteffect.png');
         this.game.load.image('pumpkin', './img/heart.png');
         this.game.load.image('hero', './img/mainhero.png');
-        this.game.load.image('demons2', './img/demons2.png');
         this.game.load.image('powerUp', './img/powerup2.png');
         this.game.load.image('arcaneGate', './img/spell.png');
         this.game.load.image('spellIcons', './img/spellicons.png');

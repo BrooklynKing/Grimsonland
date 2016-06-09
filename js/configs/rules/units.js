@@ -236,6 +236,7 @@ var config = {
                 monsterController.setParameter('monsterKilled', monsterController.getParameter('monsterKilled') + 1);
 
                 obj.layer.state.parameters.monstersKilled++;
+
                 var player = obj.layer.getObjectsByType('player')[0];
                 player.setParameter('exp', player.getParameter('exp') + obj.getParameter('exp'));
             }
@@ -323,10 +324,10 @@ var config = {
             }
 
             function createExplosion() {
-                var pos = obj.pos.clone(),
-                    explosionConfig,
-                    power = obj.getParameter('power'),
-                    expl;
+                var pos = obj.pos.clone();
+                var explosionConfig;
+                var power = obj.getParameter('power');
+                var expl;
 
                 explosionConfig = gameConfigs.getConfig('monsterExplosion');
                 explosionConfig.pos = new Phaser.Point(pos.x, pos.y);
