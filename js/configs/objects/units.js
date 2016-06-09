@@ -1,8 +1,8 @@
 var config = {
     player : {
-        zIndex : 2,
-        sprite: ['img/mainhero.png', [0, 0], [32, 32], 6, [0, 1, 2]],
-        pos : [612, 484],
+        zIndex : 20,
+        sprite: ['hero', [0, 0], [32, 32], 6, [0, 1, 2]],
+        pos : [662, 534],
         size : [25, 32],
         render : 'unit',
         collisions: true,
@@ -16,33 +16,34 @@ var config = {
             currentSpell: 'fireball',
             direction : {},
             levelTable: {
-                1 : 400,
-                2 : 900,
-                3 : 1400,
-                4 : 2100,
-                5 : 2800,
-                6 : 3600,
-                7 : 4500,
-                8 : 5400,
-                9 : 6500
+                1 : 600,
+                2 : 1200,
+                3 : 2000,
+                4 : 3000,
+                5 : 4500,
+                6 : 6500,
+                7 : 9000,
+                8 : 13000,
+                9 : 20000
             }
         },
         type : 'player',
-        rules : ['moveWithKeyboard', 'bindPositionToLayer', 'playerDeath', 'selectSpellWithKeyboard', 'moveToDirection', 'rotateToMouse', 'dynamicZIndex', 'resetSpeed', 'resetEffects', 'playerLevelUp']
+        conditions: ['selectSpellWithKeyboard'],
+        rules : ['moveWithKeyboard', 'rotateToMouse', 'bindPositionToLayer', 'playerDeath', 'moveToDirection','dynamicZIndex', 'resetSpeed', 'resetEffects', 'playerLevelUp']
     },
     summonGate: {
         zIndex : 0,
         render: 'object',
-        sprite: ['img/spell.png', [0, 0], [32, 32], 7, [0,1]],
+        sprite: ['arcaneGate', [0, 0], [32, 32], 7, [0,1]],
         pos : [466, 580],
         size : [25, 30],
         collisions: true,
         parameters : {
             cooldown: 80,
-            exp: 5,
-            chanceOfBoss : 10,
-            chanceOfBoss2 : 5,
-            chanceOfBoomer : 25,
+            exp: 3,
+            chanceOfBoss : 5,
+            chanceOfBoss2 : 8,
+            chanceOfBoomer : 20,
             health : 10
         },
         conditions : ['monsterHealthStatus'],
@@ -51,7 +52,7 @@ var config = {
     },
     monster : {
         zIndex : 1,
-        sprite: ['img/demons.png', [0, 128], [32, 32], 6, [0, 1, 2]],
+        sprite: ['demons', [0, 128], [32, 32], 6, [0, 1, 2]],
         size : [20,28],
         collisions: true,
         render : 'unit',
@@ -59,8 +60,8 @@ var config = {
             speed : 25,
             cooldown : 70 ,
             scentSpeed: 120,
-            scentRange: 400,
-            exp: 20,
+            scentRange: 600,
+            exp: 15,
             wanderCooldown: 500,
             effects : [],
             health : 20,
@@ -72,33 +73,33 @@ var config = {
     },
     monsterBoomer : {
         zIndex : 1,
-        sprite: ['img/demons.png', [96, 128], [32, 32], 6, [0, 1, 2]],
+        sprite: ['demons', [96, 128], [32, 32], 6, [0, 1, 2]],
         size : [20,28],
         collisions: true,
         render : 'unit',
         parameters : {
             speed : 100,
-            exp : 40,
+            exp : 30,
             effects : [],
             health : 10,
             power : 10
         },
-        conditions : ['monsterHealthStatus', 'setDirectionToPlayerAdvance', 'monsterExplosionCondition', 'moveToDirection'],
+        conditions : ['monsterHealthStatus', 'monsterExplosionCondition'],
         type : 'monster',
-        rules : ['rotateByPlayer', 'dynamicZIndex', 'resetSpeed', 'resetEffects']
+        rules : ['moveToDirection', 'rotateByPlayer', 'setDirectionToPlayerAdvance', 'dynamicZIndex', 'resetSpeed', 'resetEffects']
     },
     monsterBoss : {
         zIndex : 1,
         collisions: true,
-        sprite: ['img/monsters2.png', [0, 0], [32, 50], 6, [0, 1, 2]],
+        sprite: ['bigMonsters', [0, 0], [32, 50], 6, [0, 1, 2]],
         size : [25, 40],
         render : 'unit',
         parameters : {
             speed : 50,
-            exp : 100,
-            cooldown : 300 ,
+            exp : 60,
+            cooldown : 75,
             power : 10,
-            health : 30,
+            health : 50,
             effects : []
         },
         conditions : ['monsterHealthStatus' , 'stopOnCollisionWithPlayer'],
@@ -108,16 +109,16 @@ var config = {
     monsterBoss2 : {
         zIndex : 1,
         collisions: true,
-        sprite: ['img/monsters2.png', [192, 200], [32, 50], 6, [0, 1, 2]],
-        size : [25, 40],
+        sprite: ['boss', [0, 0], [96, 48], 6, [0, 1, 2]],
+        size : [40, 45],
         render : 'unit',
         parameters : {
             speed : 15,
             cooldown : 200 ,
-            exp: 200,
+            exp: 120,
             fireRange : 300,
             power : 10,
-            health : 50,
+            health : 30,
             effects : []
         },
         conditions : ['monsterHealthStatus' , 'stopOnCollisionWithPlayer'],
@@ -128,8 +129,10 @@ var config = {
         zIndex : 3,
         render: 'object',
         collisions: true,
-        sprite : ['img/heart.png', [0, 0], [32, 32], 5, [0,1]],
+        size: [25, 25],
+        sprite : ['pumpkin', [0, 0], [32, 32], 5, [0,1]],
         conditions: ['triggerOnPlayerCollision'],
+        rules: ['dynamicZIndex'],
         parameters : {
             power : 10
         }
@@ -137,13 +140,11 @@ var config = {
     powerup : {
         zIndex : 2,
         size: [25, 25],
-        //render: 'object',
         collisions: true,
-        sprite : ['img/powerup2.png', [0, 0], [72, 65], 15, [0, 1, 2, 1]],
+        sprite : ['powerUp', [0, 0], [72, 65], 15, [0, 1, 2, 1]],
         conditions: ['triggerOnPlayerCollisionPowerUp'],
         parameters : {
-            exp: 1000
-            //power : 1
+            exp: 250
         }
     }
 };

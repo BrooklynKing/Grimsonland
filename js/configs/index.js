@@ -1,11 +1,19 @@
 import objects from './objects/index';
 import rules from './rules/index';
-import resources from './resources';
-import layers from './layers';
 
-export default {
-    objects: objects,
-        rules: rules,
-        resources: resources,
-        layers: layers
+function getRuleConfig(id) {
+    return rules[id]
+}
+
+function getConfig(id) {
+    var config = JSON.parse(JSON.stringify(objects[id]));
+
+    (!config.id) && (config.id = id);
+
+    return config;
+}
+
+export {
+    getRuleConfig,
+    getConfig,
 };

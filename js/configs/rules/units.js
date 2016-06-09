@@ -4,7 +4,7 @@ var config = {
     playerDeath: {
         update: function (dt, obj) {
             if (obj.getParameter('health') <= 0) {
-                obj.layer.game.triggerGlobalEvent('player_dead');
+                obj.layer.state.showRestartMenu();
             }
         }
     },
@@ -25,7 +25,7 @@ var config = {
 
             for (var i = 0; i < objects.length; i++) {
                 if (objects[i].type == 'player') {
-                    var explosionConfig = obj.layer.game.getConfig('explosion');
+                    var explosionConfig = gameConfigs.getConfig('explosion');
                     explosionConfig.pos = obj.pos.clone();
 
                     obj.layer.addObject(explosionConfig);
@@ -64,7 +64,7 @@ var config = {
                     if (objects[i].type == 'player') {
                         objects[i].setParameter('health', objects[i].getParameter('health') - obj.getParameter('power'));
 
-                        var blood = obj.layer.game.getConfig('bloodSpray');
+                        var blood = gameConfigs.getConfig('bloodSpray');
                         blood.pos = objects[i].pos.clone();
                         blood.pos.x += 2;
                         blood.pos.y += - 10;
@@ -102,33 +102,33 @@ var config = {
 
                 obj._removeInNextTick = true;
 
-                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
-                explosionConfig.pos = new utils.Point([pos.x - obj.size[0], pos.y - obj.size[1]]);
+                explosionConfig = gameConfigs.getConfig('monsterExplosion');
+                explosionConfig.pos = new Phaser.Point(pos.x - obj.size[0], pos.y - obj.size[1]);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
 
-                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
-                explosionConfig.pos = new utils.Point([pos.x + obj.size[0], pos.y - obj.size[1]]);
+                explosionConfig = gameConfigs.getConfig('monsterExplosion');
+                explosionConfig.pos = new Phaser.Point(pos.x + obj.size[0], pos.y - obj.size[1]);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
 
-                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
-                explosionConfig.pos = new utils.Point([pos.x - obj.size[0], pos.y + obj.size[1]]);
+                explosionConfig = gameConfigs.getConfig('monsterExplosion');
+                explosionConfig.pos = new Phaser.Point(pos.x - obj.size[0], pos.y + obj.size[1]);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
 
-                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
-                explosionConfig.pos = new utils.Point([pos.x + obj.size[0], pos.y + obj.size[1]]);
+                explosionConfig = gameConfigs.getConfig('monsterExplosion');
+                explosionConfig.pos = new Phaser.Point(pos.x + obj.size[0], pos.y + obj.size[1]);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
 
-                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
-                explosionConfig.pos = new utils.Point([pos.x - 3 / 2 * obj.size[0], pos.y]);
+                explosionConfig = gameConfigs.getConfig('monsterExplosion');
+                explosionConfig.pos = new Phaser.Point(pos.x - 3 / 2 * obj.size[0], pos.y);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
 
-                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
-                explosionConfig.pos = new utils.Point([pos.x + 3 / 2 * obj.size[0], pos.y]);
+                explosionConfig = gameConfigs.getConfig('monsterExplosion');
+                explosionConfig.pos = new Phaser.Point(pos.x + 3 / 2 * obj.size[0], pos.y);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
             }
@@ -150,7 +150,6 @@ var config = {
     stopOnCollisionWithPlayer: {
         update: function (dt, obj) {
             var objects = obj.getParameter('collisions');
-
             for (var i = 0, l = objects.length; i < l; i++) {
                 if (objects[i].type == 'player') {
                     obj.setParameter('speed', 0);
@@ -173,8 +172,8 @@ var config = {
         update: function (dt, obj) {
             var direction = obj.getParameter('direction');
 
-            if (direction && direction.dir) {
-                obj.setPosition(direction.getDestination(obj.pos, obj.getParameter('speed') * dt));
+            if (direction) {
+                obj.setPosition(utils.moveWithSpeed(obj.pos, direction,  obj.getParameter('speed') * dt));
             }
         }
     },
@@ -197,20 +196,23 @@ var config = {
             if (obj.getParameter('health') <= 0) {
                 obj._removeInNextTick = true;
 
-                var explosionConfig = obj.layer.game.getConfig('explosion');
+                var explosionConfig = gameConfigs.getConfig('explosion');
                 explosionConfig.pos = obj.pos.clone();
 
                 obj.layer.addObject(explosionConfig);
 
-                var blood = obj.layer.game.getConfig('blood');
+                var blood = gameConfigs.getConfig('blood');
                 blood.pos = obj.pos.clone();
                 obj.layer.addObject(blood);
 
-                if (!obj.layer.game.parameters.monstersKilled) {
-                    obj.layer.game.parameters.monstersKilled = 0;
+                if (!obj.layer.state.parameters.monstersKilled) {
+                    obj.layer.state.parameters.monstersKilled = 0;
                 }
-                obj.layer.game.parameters.monstersKilled++;
 
+                var monsterController = obj.layer.getObjectsByType('monsterController')[0];
+                monsterController.setParameter('monsterKilled', monsterController.getParameter('monsterKilled') + 1);
+
+                obj.layer.state.parameters.monstersKilled++;
                 var player = obj.layer.getObjectsByType('player')[0];
                 player.setParameter('exp', player.getParameter('exp') + obj.getParameter('exp'));
             }
@@ -233,13 +235,14 @@ var config = {
         update : function(dt, obj) {
             var player = obj.layer.getObjectsByType('player')[0];
             if (!obj.getParameter('fireCooldown')) {
-                var	bulletConfig = obj.layer.game.getConfig('mbullet'),
-                    direction = new utils.Line(obj.pos, player.pos);
+                var	bulletConfig = gameConfigs.getConfig('mbullet'),
+                    direction = Phaser.Point.subtract(player.pos, obj.pos);
 
                 bulletConfig.pos = obj.pos.clone();
                 var bull = obj.layer.addObject(bulletConfig);
                 bull.setParameter('direction', direction);
-                bull.sprite.setDegree(utils.getDegree(obj.pos, player.pos)[0]);
+
+                bull.sprite.setDegree(obj.pos.angle(player.pos));
 
                 obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
             }
@@ -250,9 +253,9 @@ var config = {
             var player = obj.layer.getObjectsByType('player')[0],
                 directionToPlayer = obj.getParameter('direction');
 
-            if (utils.getDistance(obj.pos, player.pos) < obj.getParameter('fireRange')) {
+            if (Phaser.Point.distance(obj.pos, player.pos) < obj.getParameter('fireRange')) {
                 if (!obj.getParameter('fireCooldown')) {
-                    var	bulletConfig = obj.layer.game.getConfig('mbullet2');
+                    var	bulletConfig = gameConfigs.getConfig('mbullet2');
                     bulletConfig.pos = obj.pos.clone();
 
                     var bull = obj.layer.addObject(bulletConfig);
@@ -263,7 +266,7 @@ var config = {
                     obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
                 }
             } else {
-                obj.setPosition(directionToPlayer.getDestination(obj.pos, obj.getParameter('speed') * dt));
+                obj.setPosition(utils.moveWithSpeed(obj.pos, directionToPlayer, obj.getParameter('speed') * dt));
             }
         }
     },
@@ -296,8 +299,8 @@ var config = {
                     power = obj.getParameter('power'),
                     expl;
 
-                explosionConfig = obj.layer.game.getConfig('monsterExplosion');
-                explosionConfig.pos = new utils.Point([pos.x, pos.y]);
+                explosionConfig = gameConfigs.getConfig('monsterExplosion');
+                explosionConfig.pos = new Phaser.Point(pos.x, pos.y);
                 expl = obj.layer.addObject(explosionConfig);
                 expl.setParameter('power', power);
             }
@@ -307,10 +310,10 @@ var config = {
         update: function (dt, obj) {
             var pos = obj.pos.clone();
             var direction = {};
-            direction.left = obj.layer.game.input.isDown(65);
-            direction.up = obj.layer.game.input.isDown(87);
-            direction.down = obj.layer.game.input.isDown(83);
-            direction.right = obj.layer.game.input.isDown(68);
+            direction.left = obj.layer.game.input.keyboard.isDown(65);
+            direction.up = obj.layer.game.input.keyboard.isDown(87);
+            direction.down = obj.layer.game.input.keyboard.isDown(83);
+            direction.right = obj.layer.game.input.keyboard.isDown(68);
             if (direction.right) {
                 pos.x = obj.pos.x + 1;
             }
@@ -325,18 +328,18 @@ var config = {
             }
 
             if (obj.pos.x == pos.x && obj.pos.y == pos.y) {
-                obj.getParameter('direction').dir = null;
+                obj.setParameter('direction', null);
             } else {
-                //var direction = utils.getDirection(obj.pos, pos);
-                obj.setParameter('direction', new utils.Line(obj.pos, pos));
+                obj.setParameter('direction', Phaser.Point.subtract(pos, obj.pos));
             }
         }
     },
     selectSpellWithKeyboard: {
         update: function (dt, obj) {
-            (obj.layer.game.input.isDown(49)) && (obj.setParameter('currentSpell', 'fireball'));
-            (obj.layer.game.input.isDown(50)) && (obj.setParameter('currentSpell', 'frostShard'));
-            (obj.layer.game.input.isDown(51)) && (obj.setParameter('currentSpell', 'teleport'));
+            (obj.layer.game.input.keyboard.isDown(49)) && (obj.setParameter('currentSpell', 'fireball'));
+            (obj.layer.game.input.keyboard.isDown(50)) && (obj.setParameter('currentSpell', 'hellfire'));
+            (obj.layer.game.input.keyboard.isDown(51)) && (obj.setParameter('currentSpell', 'frostShard'));
+            (obj.layer.game.input.keyboard.isDown(52)) && (obj.setParameter('currentSpell', 'teleport'));
         }
     },
     triggerOnPlayerCollisionPowerUp : {
@@ -356,26 +359,45 @@ var config = {
     summonOnCooldown : {
         update: function(dt, obj) {
             var cooldown = obj.getParameter('cooldown');
+            function getProperMonster() {
+                var random = Math.random() * 100,
+                    config;
 
+                if (random <= obj.getParameter('chanceOfBoss')) {
+                    config = gameConfigs.getConfig('monsterBoss');
+                } else {
+                    random -= obj.getParameter('chanceOfBoss');
+                }
+                if (!config && random <= obj.getParameter('chanceOfBoss2')) {
+                    config = gameConfigs.getConfig('monsterBoss2');
+                } else {
+                    random -= obj.getParameter('chanceOfBoss2');
+                }
+                if (!config && random <= obj.getParameter('chanceOfBoomer')) {
+                    config = gameConfigs.getConfig('monsterBoomer');
+                } else {
+                    random -= obj.getParameter('monsterBoomer');
+                }
+
+                if (!config) {
+                    config = gameConfigs.getConfig('monster');
+                }
+
+                return config;
+            }
             if (cooldown == 0) {
                 obj._removeInNextTick = true;
 
-                var random = Math.random() * 100,
-                    monsterConfig;
-
-                if (random <= obj.getParameter('chanceOfBoss2')) {
-                    monsterConfig = obj.layer.game.getConfig('monsterBoss2');
-                } else if (random <= obj.getParameter('chanceOfBoss')) {
-                    monsterConfig = obj.layer.game.getConfig('monsterBoss');
-                } else if (random <= obj.getParameter('chanceOfBoomer')) {
-                    monsterConfig = obj.layer.game.getConfig('monsterBoomer');
-                } else {
-                    monsterConfig = obj.layer.game.getConfig('monster');
-                }
+                let monsterConfig = getProperMonster(),
+                    player = obj.layer.getObjectsByType('player')[0];
 
                 monsterConfig.pos = obj.pos.clone();
 
-                obj.layer.addObject(monsterConfig);
+                var monster = obj.layer.addObject(monsterConfig);
+
+                if (player.getParameter('level') > 1) {
+                    monster.setParameter('health', monster.getParameter('health') * 0.75 * player.getParameter('level'));
+                }
             } else {
                 obj.setParameter('cooldown', cooldown - 1);
             }

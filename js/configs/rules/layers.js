@@ -1,4 +1,5 @@
 import utils from './../../engine/utils';
+import format from 'string-template';
 var Victor = require('victor');
 
 var config = {
@@ -11,17 +12,18 @@ var config = {
             }
 
             for (let i = 0; i < this.parameters.trees; i++) {
-                let config = obj.game.getConfig('tree');
+                let config = gameConfigs.getConfig('tree' + (Math.round(Math.random()) + 1));
 
-                config.pos = new utils.Point(getRandomPointInArea(this.parameters.area));
+                let point = getRandomPointInArea(this.parameters.area);
+                config.pos = new Phaser.Point(point[0], point[1]);
 
                 this.context.addObject(config);
             }
 
             for (let i = 0; i < this.parameters.stones; i++) {
-                let config = obj.game.getConfig('stones');
-
-                config.pos = new utils.Point(getRandomPointInArea(this.parameters.area));
+                let config = gameConfigs.getConfig('stones');
+                let point = getRandomPointInArea(this.parameters.area);
+                config.pos = new Phaser.Point(point[0], point[1]);
 
                 /*var stone = */this.context.addObject(config);
                 //stone.sprite.setDegree(utils.getDegree(obj.pos, getRandomPointInArea(this.parameters.area))[0]);
@@ -29,47 +31,19 @@ var config = {
 
         },
         parameters: {
-            trees: 40,
-            stones: 40
-        }
-    },
-    spawn_monster: {
-        update: function (dt, obj) {
-            if (this.parameters.monsterSpawned < 10000) {
-
-                if ((!this.parameters.currentMonsterCooldown) && (this.context.getObjectsByType('monster').length < this.parameters.maxOnMap)) {
-                    var topLeft = new Victor(50, 50);
-                    var bottomRight = new Victor(1154, 918);
-
-                    var monsterConfig = obj.game.getConfig('summonGate');
-                    monsterConfig.pos = new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray());
-
-                    this.context.addObject(monsterConfig);
-
-                    this.parameters.monsterSpawned++;
-                    this.parameters.currentMonsterCooldown = this.parameters.monsterCooldown;
-
-                } else {
-                    this.parameters.currentMonsterCooldown && this.parameters.currentMonsterCooldown--;
-                }
-            }
-        },
-        parameters: {
-            area: [[50, 50], [1154 , 918]],
-            maxOnMap: 200,
-            monsterCooldown: 10,
-            monsterSpawned: 0
+            trees: 100,
+            stones: 100
         }
     },
     spawn_heart: {
         update: function (dt, obj) {
             if (!this.parameters.currentCooldown) {
-                var config = obj.game.getConfig('heart');
+                var config = gameConfigs.getConfig('heart');
 
                 var topLeft = new Victor(50, 50);
                 var bottomRight = new Victor(1154, 918);
-
-                config.pos = new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray());
+                var coords = Victor(10, 20).randomize(topLeft, bottomRight).toArray();
+                config.pos = new Phaser.Point(coords[0], coords[1]);
 
                 this.context.addObject(config);
 
@@ -88,12 +62,12 @@ var config = {
     spawn_powerup: {
         update: function (dt, obj) {
             if (!this.parameters.currentCooldown) {
-                var config = obj.game.getConfig('powerup');
+                var config = gameConfigs.getConfig('powerup');
 
                 var topLeft = new Victor(100, 100);
                 var bottomRight = new Victor(1100, 850);
-
-                config.pos = new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray());
+                var coords = Victor(10, 20).randomize(topLeft, bottomRight).toArray();
+                config.pos = new Phaser.Point(coords[0], coords[1]);
 
                 this.context.addObject(config);
 
@@ -112,12 +86,11 @@ var config = {
     },
     spawn_terrain: {
         init: function() {
-            var obj = this.context,
-                gateConfig = obj.game.getConfig('gate'),
+            var gateConfig = gameConfigs.getConfig('gate'),
                 wallConfig;
 
             for (var i = 0; i < 7; i++) {
-                wallConfig = obj.game.getConfig('wall');
+                wallConfig = gameConfigs.getConfig('wall');
                 wallConfig.pos = [wallConfig.size[0] * i + wallConfig.size[0] / 2, wallConfig.size[1]/2];
                 var wall = this.context.addObject(wallConfig);
                 //stone.sprite.setDegree(utils.getDegree(obj.pos, getRandomPointInArea(this.parameters.area))[0]);
@@ -138,7 +111,7 @@ var config = {
                 }
             }
             if (px > 70) {
-                if (obj.translate.x > - 200) {
+                if (obj.translate.x > - 300) {
                     obj.translate.x -= Math.round(player.getParameter('speed') * dt);
                 }
             }
@@ -149,7 +122,7 @@ var config = {
                 }
             }
             if (py > 75) {
-                if (obj.translate.y > - 200) {
+                if (obj.translate.y > - 300) {
                     obj.translate.y -= Math.round(player.getParameter('speed') * dt);
                 }
             }

@@ -7,9 +7,9 @@ var config = {
                 fireCooldown = obj.getParameter('fireCooldown');
 
             if (player.getParameter('currentSpell') == 'fireball') {
-                if (obj.layer.game.mouse.isMouseDown() || obj.layer.game.input.isDown(32)) {
+                if (obj.layer.game.input.mousePointer.isDown || obj.layer.game.input.keyboard.isDown(32)) {
                     if (!fireCooldown) {
-                        var destination  = obj.layer.game.mouse.getMousePosition().clone(),
+                        var destination  = new Phaser.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y),
                             spellPower = player.getParameter('spellPower'),
                             startDegree = 10 * (spellPower - 1);
 
@@ -17,27 +17,65 @@ var config = {
                         destination.y -= obj.layer.translate.y;
 
                         for (var i = 0; i < spellPower; i++) {
-                            let direction = new utils.Line(player.pos, utils.getMovedPointByDegree(player.pos, destination, startDegree));
-                            createBullet(direction, utils.getMovedPointByDegree(player.pos, destination, startDegree));
+                            let movedPoint = destination.clone().rotate(player.pos.x, player.pos.y, startDegree, true);
+                            //let direction = new utils.Line(player.pos, movedPoint);
+                            createBullet(Phaser.Point.subtract(movedPoint, player.pos), movedPoint.clone());
                             startDegree -= 20;
                         }
-                        if (obj.getDefaultParameter('cooldown') + 5 * (spellPower - 1) > 30) {
+                       /* if (obj.getDefaultParameter('cooldown') + 3 * (spellPower - 1) > 30) {
                             obj.setParameter('cooldown', 30);
                         } else {
                             obj.setParameter('cooldown', obj.getDefaultParameter('cooldown') + 5 * (spellPower - 1));
-                        }
-
+                        }*/
+                        obj.setParameter('cooldown', obj.getDefaultParameter('cooldown'));
                         obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
 
                         function createBullet(direction, destination) {
-                            var bulletConfig = obj.layer.game.getConfig('bullet');
+
+                            var bulletConfig = gameConfigs.getConfig('bullet');
                             bulletConfig.pos = player.pos.clone();
 
                             var bull = obj.layer.addObject(bulletConfig);
                             bull.setParameter('direction', direction);
                             bull.setParameter('power', bull.getParameter('power') + 5 * (spellPower - 1));
+                            bull.sprite.setDegree(player.pos.angle(destination));
+                        }
+                    }
+                }
+            }
+            fireCooldown && obj.setParameter('fireCooldown', fireCooldown - 1);
+        }
 
-                            bull.sprite.setDegree(utils.getDegree(player.pos, destination)[0]);
+    },
+    hellfire : {
+        update: function (dt, obj) {
+            var player = obj.layer.getObjectsByType('player')[0],
+                fireCooldown = obj.getParameter('fireCooldown');
+
+            if (player.getParameter('currentSpell') == 'hellfire') {
+                if (obj.layer.game.input.mousePointer.isDown || obj.layer.game.input.keyboard.isDown(32)) {
+                    if (!fireCooldown) {
+                        var destination  = new Phaser.Point(0, 1),
+                            point1 = utils.moveWithSpeed(player.pos, destination, 100),
+                            spellPower = player.getParameter('spellPower');
+
+                        for (var i = -10; i < 10; i++) {
+                            let movedPoint = point1.clone().rotate(player.pos.x, player.pos.y, 18 * i, true);
+                            //let direction = new utils.Line(player.pos, movedPoint);
+                            createTube(movedPoint);
+                        }
+
+
+                        obj.setParameter('cooldown', obj.getDefaultParameter('cooldown'));
+                        obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
+
+                        function createTube(pos) {
+
+                            var tubeConfig = gameConfigs.getConfig('hellfireTube');
+                            tubeConfig.pos = pos;
+
+                            var tube = obj.layer.addObject(tubeConfig);
+                            tube.setParameter('power', tube.getParameter('power') + 5 * (spellPower - 1));
                         }
                     }
                 }
@@ -49,7 +87,6 @@ var config = {
     slowEnemies : {
         update: function (dt, obj) {
             var objects = obj.getParameter('collisions');
-
             for (var i = 0; i < objects.length; i++) {
                 if (objects[i].type == 'monster') {
                     var speed = objects[i].getParameter('speed'),
@@ -75,25 +112,25 @@ var config = {
                 fireCooldown = obj.getParameter('fireCooldown');
 
             if (player.getParameter('currentSpell') == 'teleport') {
-                if (obj.layer.game.mouse.isMouseDown() || obj.layer.game.input.isDown(32)) {
+                if (obj.layer.game.input.mousePointer.isDown || obj.layer.game.input.keyboard.isDown(32)) {
                     if (!fireCooldown) {
-                        var mouse  = obj.layer.game.mouse.getMousePosition().clone();
+                        var mouse  = new Phaser.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y);
 
                         mouse.x -= obj.layer.translate.x;
                         mouse.y -= obj.layer.translate.y;
 
-                        var direction = new utils.Line(player.pos, utils.getMovedPointByDegree(player.pos, mouse, 0)),
+                        var direction = Phaser.Point.subtract(mouse, player.pos),
                             spellPower = player.getParameter('spellPower'),
-                            destination = direction.getDestination(player.pos, obj.getParameter('power')),
+                            destination = utils.moveWithSpeed(player.pos, direction, obj.getParameter('power')),
                             cooldown = obj.getDefaultParameter('cooldown', cooldown) - (30 * (spellPower - 1)),
                             teleportGate;
 
-                        teleportGate = obj.layer.game.getConfig('teleportGate');
+                        teleportGate = gameConfigs.getConfig('teleportGate');
                         teleportGate.pos = player.pos.clone();
 
                         obj.layer.addObject(teleportGate);
 
-                        teleportGate = obj.layer.game.getConfig('teleportGate');
+                        teleportGate = gameConfigs.getConfig('teleportGate');
                         teleportGate.pos = destination.clone();
 
                         obj.layer.addObject(teleportGate);
@@ -114,10 +151,10 @@ var config = {
                 fireCooldown = obj.getParameter('fireCooldown');
 
             if (player.getParameter('currentSpell') == 'frostShard') {
-                if (obj.layer.game.mouse.isMouseDown() || obj.layer.game.input.isDown(32)) {
+                if (obj.layer.game.input.mousePointer.isDown || obj.layer.game.input.keyboard.isDown(32)) {
                     if (!fireCooldown) {
-                        var frostShard = obj.layer.game.getConfig('frostShard'),
-                            mousePosition = obj.layer.game.mouse.getMousePosition(),
+                        var frostShard = gameConfigs.getConfig('frostShard'),
+                            mousePosition = new Phaser.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y),
                             spellPower = player.getParameter('spellPower'),
                             destination = mousePosition.clone();
 
@@ -137,6 +174,7 @@ var config = {
                         fs.setParameter('cooldown', fs.getParameter('cooldown') + spellPowerBoost);
 
                         obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
+
                     }
                 }
             }
@@ -150,13 +188,31 @@ var config = {
                 if (objects[i].type == 'monster') {
                     objects[i].setParameter('health', objects[i].getParameter('health') - obj.getParameter('power'));
 
-                    var blood = obj.layer.game.getConfig('bloodSpray');
+                    var blood = gameConfigs.getConfig('bloodSpray');
                     blood.pos = objects[i].pos.clone();
                     blood.pos.x += 2;
                     blood.pos.y += - 10;
                     obj.layer.addObject(blood);
 
                     obj._removeInNextTick = true;
+
+                    break;
+                }
+            }
+        }
+    },
+    hellTubeMonsterCollision: {
+        update: function (dt, obj) {
+            var objects = obj.getParameter('collisions');
+            for (var i = 0, l = objects.length; i < l; i++) {
+                if (objects[i].type == 'monster') {
+                    objects[i].setParameter('health', objects[i].getParameter('health') - obj.getParameter('power'));
+
+                    var blood = gameConfigs.getConfig('bloodSpray');
+                    blood.pos = objects[i].pos.clone();
+                    blood.pos.x += 2;
+                    blood.pos.y += - 10;
+                    obj.layer.addObject(blood);
 
                     break;
                 }

@@ -5,7 +5,6 @@ var Victor = require('victor');
 var config = {
     bindPositionToLayer: {
         update: function (dt, obj) {
-
             if (obj.pos.x - obj.sprite.size[0] / 2 < obj.layer.pos.x) {
                 obj.pos.x = obj.sprite.size[0] / 2;
             }
@@ -33,7 +32,7 @@ var config = {
         update: function (dt, obj) {
             var player = obj.layer.getObjectsByType('player')[0];
 
-            obj.setParameter('direction', new utils.Line(obj.pos, player.pos));
+            obj.setParameter('direction', Phaser.Point.subtract(player.pos, obj.pos));
         }
     },
     setDirectionToPlayerAdvance: {
@@ -43,22 +42,19 @@ var config = {
                 oldDirection = obj.getParameter('direction');
 
             if (!oldDirection) {
-                oldDirection = new utils.Line(obj.pos, player.pos);
+                oldDirection = Phaser.Point.subtract(player.pos, obj.pos);
             }
 
-            if (playerDirection.dir == null) {
-                obj.setParameter('direction', new utils.Line(obj.pos, player.pos));
-
+            if (playerDirection == null) {
+                obj.setParameter('direction', Phaser.Point.subtract(player.pos, obj.pos));
             } else {
-                var speed = Math.abs(Math.min(player.getParameter('speed'), utils.getDistance(obj.pos, player.pos)) - 10),
-                    playerNextPlace = playerDirection.getDestination(player.pos, speed),
-                    directionToPlayerNextPlace = new utils.Line(obj.pos, playerNextPlace),
-                    directionToPlayerNextPlaceVector = directionToPlayerNextPlace.vector.clone().normalize(),
-                    oldDirectionVector = oldDirection.vector.clone().normalize(),
-                    newDirectionVector = directionToPlayerNextPlaceVector.add(oldDirectionVector).normalize(),
-                    newDirection = new utils.Line(obj.pos, newDirectionVector);
+                let speed = Math.abs(Math.min(player.getParameter('speed'), Phaser.Point.distance(obj.pos, player.pos)) - 10);
+                let playerNextPlace = utils.moveWithSpeed(player.pos, playerDirection, speed);
+                let _dv = Phaser.Point.subtract(playerNextPlace, obj.pos).normalize();
+                let _odv = oldDirection.clone().normalize();
+                let _ndv = Phaser.Point.add(_odv, _dv).normalize();
 
-                obj.setParameter('direction', newDirection);
+                obj.setParameter('direction', _ndv);
             }
         }
     },
@@ -66,25 +62,26 @@ var config = {
         init: function (dt) {
             var topLeft = new Victor(100, 100);
             var bottomRight = new Victor(1100, 850);
-
-            this.context.setParameter('direction', new utils.Line(this.context.pos, new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray())));
+            var coords = Victor(10, 20).randomize(topLeft, bottomRight).toArray();
+            this.context.setParameter('direction', new Phaser.Point(coords[0], coords[1]));
         },
         update: function (dt, obj) {
             var player = obj.layer.getObjectsByType('player')[0],
-                distance = utils.getDistance(obj.pos, player.pos);
+                distance = Phaser.Point.distance(obj.pos, player.pos);
 
             if (distance <= obj.getParameter('scentRange')) {
                 obj.setParameter('scent', true);
                 obj.setParameter('speed', obj.getDefaultParameter('scentSpeed'));
                 obj.setParameter('wanderCooldown', 0);
-                obj.setParameter('direction', new utils.Line(obj.pos, player.pos));
+                obj.setParameter('direction', Phaser.Point.subtract(player.pos, obj.pos));
             } else {
                 obj.setParameter('speed', obj.getDefaultParameter('speed'));
                 if (!obj.getParameter('wanderCooldown')) {
                     var topLeft = new Victor(100, 100);
                     var bottomRight = new Victor(1100, 850);
+                    var coords = Victor(10, 20).randomize(topLeft, bottomRight).toArray();
 
-                    obj.setParameter('direction', new utils.Line(obj.pos, new utils.Point(Victor(10, 20).randomize(topLeft, bottomRight).toArray())));
+                    obj.setParameter('direction', Phaser.Point.subtract(new Phaser.Point(coords[0], coords[1]), obj.pos));
                     obj.setParameter('wanderCooldown', Math.round(Math.random() * (obj.getDefaultParameter('wanderCooldown') - 100) + 100));
                 } else {
                     obj.getParameter('wanderCooldown') && obj.setParameter('wanderCooldown', obj.getParameter('wanderCooldown') - 1);
@@ -106,29 +103,28 @@ var config = {
             var obj = this.context,
                 collisions = obj.setParameter('collisions', []);
 
-            collisions.cells = new Array(4);
-            obj.layer.game.collisions.updateObject(obj);
+            collisions.cells = new Array();
+            obj.layer.state.collisions.updateObject(obj);
         },
         update: function(dt, obj) {
             obj.getParameter('collisions').splice(0);
-            obj.layer.game.collisions.updateObject(obj);
+            obj.layer.state.collisions.updateObject(obj);
         }
     },
     rotateToMouse: {
         update: function (dt, obj) {
-            var destination  = obj.layer.game.mouse.getMousePosition().clone();
+            var destination  = new Phaser.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y);
 
             destination.x -= obj.layer.translate.x;
             destination.y -= obj.layer.translate.y;
 
-            var directionToMouse = new utils.Line(obj.pos, destination);
-
+            var directionToMouse = Phaser.Point.subtract(destination, obj.pos);
             obj.sprite.rotateToDirection(directionToMouse);
         }
     },
     bindPositionToMouse: {
         update : function(dt, obj) {
-            var mousePosition = obj.layer.game.mouse.getMousePosition();
+            var mousePosition = new Phaser.Point(obj.layer.game.input.mousePointer.x, obj.layer.game.input.mousePointer.y);
             obj.setPosition(mousePosition.clone());
         }
     },
@@ -140,6 +136,35 @@ var config = {
                 obj._removeInNextTick = true;
             } else {
                 obj.setParameter('cooldown', cooldown - 1);
+            }
+        }
+    },
+    explosionOnCooldown: {
+        update: function(dt, obj) {
+            var cooldown = obj.getParameter('cooldown');
+
+            if (cooldown == 0) {
+                obj._removeInNextTick = true;
+
+                var explosionConfig = gameConfigs.getConfig('monsterExplosion');
+                explosionConfig.pos = new Phaser.Point(obj.pos.x, obj.pos.y);
+                var expl = obj.layer.addObject(explosionConfig);
+                expl.setParameter('power', obj.getParameter('power'));
+
+            } else {
+                obj.setParameter('cooldown', cooldown - 1);
+            }
+        }
+    },
+    explosionAfterSpriteDone: {
+        update : function (dt, obj) {
+            if(obj.sprite.done) {
+                obj._removeInNextTick = true;
+
+                var explosionConfig = gameConfigs.getConfig('monsterExplosion');
+                explosionConfig.pos = new Phaser.Point(obj.pos.x, obj.pos.y);
+                var expl = obj.layer.addObject(explosionConfig);
+                expl.setParameter('power', obj.getParameter('power'));
             }
         }
     },
@@ -159,7 +184,7 @@ var config = {
         update: function (dt, obj) {
             var player = obj.layer.getObjectsByType('player')[0];
 
-            obj.sprite.rotateToDirection(new utils.Line(obj.pos, player.pos));
+            obj.sprite.rotateToDirection(Phaser.Point.subtract(player.pos, obj.pos));
         }
     }
 };

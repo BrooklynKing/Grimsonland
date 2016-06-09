@@ -1,11 +1,11 @@
-import resources from './resources';
 import utils from './utils';
 
-function Sprite(url, pos, size, speed, frames, dir, once, degree) {
-    if (pos instanceof utils.Point) {
+function Sprite(cache, url, pos, size, speed, frames, dir, once, degree) {
+    this.cache = cache;
+    if (pos instanceof Phaser.Point) {
         this.pos = pos.clone();
     } else {
-        this.pos = new utils.Point(pos);
+        this.pos = new Phaser.Point(pos[0], pos[1]);
     }
     this.defaultPosition = this.pos.clone();
     this.size = size;
@@ -18,10 +18,10 @@ function Sprite(url, pos, size, speed, frames, dir, once, degree) {
     this.degree = degree || 0;
 }
 
-
 Sprite.prototype.update = function (dt) {
     this._index += this.speed * dt;
 };
+
 Sprite.prototype.updateConfig = function (config) {
     if (config) {
         config.pos && (this.pos = config.pos);
@@ -34,27 +34,26 @@ Sprite.prototype.updateConfig = function (config) {
         config.degree && (this.degree = config.degree);
     }
 };
-Sprite.prototype.rotateToDirection = function (direction) {
-    var pos = this.defaultPosition,
-        config = {};
 
-    if (direction.dir == 1) {
-        ((direction.k < 1) && (direction.k >= -1)) && (config.pos = [pos.x, pos.y]);
-        (direction.k >= 1) && (config.pos = [pos.x, pos.y + 2 * this.size[1]]);
-        (direction.k < -1) && (config.pos =[pos.x, pos.y + this.size[1]]);
-        ( direction.k == 'vertical')  && (config.pos =[pos.x, pos.y + 3 * this.size[1]]);
-        ( direction.k == 'horizontal')  && (config.pos =[pos.x, pos.y]);
-    } else if (direction.dir == -1) {
-        (direction.k >= 1) && (config.pos =[pos.x, pos.y + this.size[1]]);
-        ((direction.k < 1) && (direction.k >= -1)) && (config.pos =[pos.x, pos.y + 3 * this.size[1]]);
-        (direction.k < -1) && (config.pos = [pos.x, pos.y + 2 * this.size[1]]);
-        ( direction.k == 'vertical')  && (config.pos =[pos.x, pos.y]);
-        ( direction.k == 'horizontal')  && (config.pos =[pos.x, pos.y + 3 * this.size[1]]);
+Sprite.prototype.rotateToDirection = function (direction) {
+    let pos = this.defaultPosition;
+    let config = {};
+    let angle = direction.angle(new Phaser.Point(0,0), true);
+
+    if (angle > 135 || angle < -135) {
+        config.pos = [pos.x, pos.y + 2 * this.size[1]]
+    } else if (angle < 135 && angle > 45) {
+        config.pos =[pos.x, pos.y + 3 * this.size[1]]
+    } else if (angle < 45 && angle > -45 ) {
+        config.pos =[pos.x, pos.y + this.size[1]]
+    } else {
+        config.pos =[pos.x, pos.y]
     }
 
-    config.pos = new utils.Point(config.pos);
+    config.pos = new Phaser.Point(config.pos[0], config.pos[1]);
     this.updateConfig(config);
 };
+
 Sprite.prototype.render = function (ctx) {
     var frame;
 
@@ -83,12 +82,13 @@ Sprite.prototype.render = function (ctx) {
     }
 
     ctx.rotate(this.degree);
-    ctx.drawImage(resources.get(this.url),
+    ctx.drawImage(this.cache.getImage(this.url),
         x, y,
         this.size[0], this.size[1],
         Math.round(-this.size[0] / 2), Math.round(-this.size[1] / 2),
         this.size[0], this.size[1]);
 };
+
 Sprite.prototype.setDegree = function (degree) {
     this.degree = degree;
 };

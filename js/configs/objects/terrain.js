@@ -1,24 +1,19 @@
 var config = {
-
-    tree : {
-        sprite : ['img/tree.png', [0, 0], [76, 76]],
-        size : [70,70],
+    tree1 : {
+        sprite : ['tree1', [0, 0], [62, 87]],
+        size : [62, 88],
         rules: ['dynamicZIndex']
     },
-    wall : {
-        sprite : ['img/wall2.png', [0, 0], [48, 64]],
-        size : [48,64]
-    },
-    gate : {
-        sprite : ['img/gates2.png', [0, 0], [96, 65]],
-        size : [96,65]
+    tree2 : {
+        sprite : ['tree2', [0, 0], [59, 87]],
+        size : [60, 88],
+        rules: ['dynamicZIndex']
     },
     stones : {
         render: 'object',
-        sprite : ['img/stones.png', [0, 0], [25, 22]],
-        size : [25,22],
+        sprite : ['stone', [0, 0], [25, 22]],
+        size : [15, 22],
         rules : ['dynamicZIndex']
-        //zIndex : 0
     }
 };
 

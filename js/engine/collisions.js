@@ -8,15 +8,14 @@ function generate(config) {
         sizeY = (height) >> n,
         cellGrid = new Array(sizeX * sizeY);
 
-    for (var i = 0; i < cellGrid.length; i++) {
-        cellGrid[i] = [];
-    }
+    generateMap();
 
     function generateMap() {
         for (var i = 0; i < cellGrid.length; i++) {
             cellGrid[i] = [];
         }
     }
+
     function getCell(point) {
         return (point[0]) + point[1] * sizeY;
     }
@@ -28,19 +27,29 @@ function generate(config) {
             cellGrid[oldCells[i]] && cellGrid[oldCells[i]].splice(cellGrid[oldCells[i]].indexOf(object), 1);
         }
     }
-
-    function updateObject(object) {
+    function getPointsOfObject(object) {
         var pos = object.pos,
             size = object.size,
-            point1 = [(pos.x + size[0] / 2) >> n, (pos.y + size[1] / 2) >> n],
-            point2 = [(pos.x - size[0] / 2) >> n, (pos.y - size[1] / 2) >> n],
-            point3 = [(pos.x + size[0] / 2) >> n, (pos.y - size[1] / 2) >> n],
-            point4 = [(pos.x - size[0] / 2) >> n, (pos.y + size[1] / 2) >> n],
-            point5 = [pos.x >> n, pos.y >> n],
-            cells = [getCell(point1), getCell(point2), getCell(point3), getCell(point4), getCell(point5)],
+            cells = [],
+            xIndex = size[0] >> n,
+            yIndex = size[1] >> n;
+
+        for (var i = 0; i < 2 + xIndex; i++) {
+            for (var j = 0; j < 2 + yIndex; j++) {
+                cells.push(getCell([
+                    (pos.x - size[0] / 2 + i * (size[0] / (1 + xIndex))) >> n,
+                    (pos.y - size[1] / 2 + j * (size[1] / (1 + yIndex))) >> n
+                ]));
+            }
+        }
+
+        return cells;
+    }
+    function updateObject(object) {
+        var cells = getPointsOfObject(object),
             oldCells = object.getParameter('collisions').cells;
 
-        for (var i = 0; i < oldCells.length; i++) {
+        for (var i = 0; i < cells.length; i++) {
             if (oldCells[i] != cells[i]) {
                 cellGrid[oldCells[i]] && cellGrid[oldCells[i]].splice(cellGrid[oldCells[i]].indexOf(object), 1);
                 cellGrid[cells[i]] && (cellGrid[cells[i]].indexOf(object) == -1) && cellGrid[cells[i]].push(object);
@@ -60,7 +69,7 @@ function generate(config) {
 
                     for (var k = 0; k < length; k++) {
                         for (var l = k + 1; l < length; l++) {
-                            if (utils.boxCollides(objects[k].pos, objects[k].size, objects[l].pos, objects[l].size)) {
+                            if (boxCollides(objects[k].pos, objects[k].size, objects[l].pos, objects[l].size)) {
                                 (objects[k].getParameter('collisions').indexOf(objects[l]) == -1 ) && objects[k].getParameter('collisions').push(objects[l]);
                                 (objects[l].getParameter('collisions').indexOf(objects[k]) == -1 ) && objects[l].getParameter('collisions').push(objects[k]);
                             }
@@ -69,6 +78,18 @@ function generate(config) {
                 }
             }
         }
+    }
+
+    function boxCollides(pos, size, pos2, size2) {
+        function collides(x, y, r, b, x2, y2, r2, b2) {
+            return !(r >= x2 || x < r2 ||
+            b >= y2 || y < b2);
+        }
+
+        return collides(pos.x + size[0] / 2, pos.y + size[1] / 2,
+            pos.x  - size[0] / 2, pos.y  - size[1] / 2,
+            pos2.x  + size2[0] / 2, pos2.y  + size2[1] / 2,
+            pos2.x  - size2[0] / 2, pos2.y  - size2[1] / 2);
     }
 
     return {

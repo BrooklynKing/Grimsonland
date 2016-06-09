@@ -1,7 +1,23 @@
-import resources from './resources';
 import utils from './utils';
 
-function healthBar(obj, dt) {
+function fog(obj) {
+    var ctx = obj.layer.ctx;
+    var x = obj.layer.getObjectsByType('player')[0].pos.x;
+    var y = obj.layer.getObjectsByType('player')[0].pos.y;
+    var grad = obj.layer.ctx.createRadialGradient(x, y, 0, x, y, 700);
+    grad.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    grad.addColorStop(1, 'rgba(0, 0, 0, 0.97)');
+
+    ctx.fillStyle = grad;
+
+    ctx.beginPath();
+    ctx.arc(x, y, 2000, 0, Math.PI * 2, false);
+    ctx.closePath();
+
+    ctx.fill();
+}
+
+function healthBar(obj) {
     var ctx = obj.layer.ctx,
         x = Math.round(- obj.sprite.size[0] / 2 ),
         y = Math.round(- obj.sprite.size[1] / 2 - 7),
@@ -19,6 +35,7 @@ function healthBar(obj, dt) {
 
     ctx.globalAlpha = 1;
 }
+
 function expBar(obj) {
     var x = -22,
         y = 17,
@@ -28,40 +45,58 @@ function expBar(obj) {
 
     ctx.translate(-obj.layer.translate.x, -obj.layer.translate.y);
     ctx.globalAlpha = 0.3;
-    ctx.fillStyle = "rgb(0, 0, 0)";
+    ctx.fillStyle = "rgb(220, 220, 220)";
     ctx.fillRect(x, y, width, height);
     ctx.globalAlpha = 1;
     ctx.fillStyle = "#DAA520";
 
     var player = obj.layer.getObjectsByType('player')[0];
+
     if ( player.getParameter('levelTable')[player.getParameter('level')] ) {
         ctx.fillRect(x, y, Math.min(width, Math.round(width * (player.getParameter('exp') / player.getParameter('levelTable')[player.getParameter('level')]))), height);
     } else {
         ctx.fillRect(x, y, width, height);
     }
+
     ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
     textRender(obj);
 }
+
 function sprite(obj, dt) {
     var ctx = obj.layer.ctx;
 
     ctx.globalAlpha = 1;
-    dt && obj.sprite.update(dt);
+    obj.sprite.update(dt);
     obj.sprite.render(ctx);
 }
-function shadow(obj, dt) {
-    var ctx = obj.layer.ctx;
 
-    ctx.globalAlpha = 0.5;
+function ellipse(context, cx, cy, rx, ry, rot, aStart, aEnd){
+    context.save();
+    context.translate(cx, cy);
+    context.rotate(rot);
+    context.translate(-rx, -ry);
 
-    ctx.beginPath();
-    utils.ellipse(ctx, 0 , + obj.sprite.size[1] / 2 - 3, obj.sprite.size[0] / 2, 5, utils.getRadians(0), utils.getRadians(0), utils.getRadians(360));
-    ctx.fillStyle = 'black';
-    ctx.fill();
-
-    ctx.globalAlpha = 1;
+    context.scale(rx, ry);
+    context.arc(1, 1, 1, aStart, aEnd, false);
+    context.restore();
 }
-function effects(obj, dt) {
+
+function shadow(obj) {
+    if (obj.size) {
+        var ctx = obj.layer.ctx;
+
+        ctx.globalAlpha = 0.5;
+
+        ctx.beginPath();
+        ellipse(ctx, 0, + obj.sprite.size[1] / 2 - 3, Math.min(obj.sprite.size[0], obj.size[0]) / 2 + 8, 5, 0, 0, 2 * Math.PI);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+
+        ctx.globalAlpha = 1;
+    }
+}
+
+function effects(obj) {
     var ctx = obj.layer.ctx,
         effects = obj.getParameter('effects');
 
@@ -69,22 +104,24 @@ function effects(obj, dt) {
         var effect = effects[i];
         if (effect == 'frozen') {
             ctx.globalAlpha = 0.8;
-            ctx.drawImage(resources.get('img/frosteffect.png'), - obj.sprite.size[0] / 2, -8, 32, 32);
+            ctx.drawImage(obj.layer.game.cache.getImage('frostEffect'), -16, + (obj.sprite.size[1] / 2) - 32, 32, 32);
             ctx.globalAlpha = 1;
         }
     }
 }
 
 function objectRenderer(obj, dt) {
-    shadow(obj, dt);
+    shadow(obj);
     sprite(obj, dt);
 }
+
 function unitRenderer(obj, dt) {
-    shadow(obj, dt);
-    healthBar(obj, dt);
+    shadow(obj);
+    healthBar(obj);
     sprite(obj, dt);
-    effects(obj, dt);
+    effects(obj);
 }
+
 function spellRenderer(obj, dt) {
     var ctx = obj.layer.ctx,
         x = Math.round(- obj.sprite.size[0] / 2 - 4),
@@ -120,6 +157,15 @@ function spellRenderer(obj, dt) {
 
     ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }
+
+function ui(obj, dt) {
+    var ctx = obj.layer.ctx;
+
+    ctx.translate(-obj.layer.translate.x, -obj.layer.translate.y);
+    sprite(obj, dt);
+    ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
+}
+
 function textRender(obj) {
     var ctx = obj.layer.ctx,
         fontConfig = '';
@@ -141,6 +187,7 @@ function textRender(obj) {
 
     ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }
+
 function cursor(obj, dt) {
     var ctx = obj.layer.ctx;
 
@@ -148,13 +195,16 @@ function cursor(obj, dt) {
     sprite(obj, dt);
     ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }
+
 var renders = {
-    shadow: shadow,
-    expBar: expBar,
-    healthBar: healthBar,
-    cursor: cursor,
-    sprite: sprite,
-    effects: effects,
+    shadow,
+    fog,
+    expBar,
+    healthBar,
+    cursor,
+    sprite,
+    effects,
+    ui,
     object : objectRenderer,
     text: textRender,
     spell : spellRenderer,

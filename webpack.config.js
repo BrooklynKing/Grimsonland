@@ -4,9 +4,8 @@ module.exports = {
     context: require('path').join(__dirname, '/js'),
 
     entry: {
-        app: "./app",
-        configs: "./configs/index",
-        engine: "./engine/index"
+        phaser: "./phaser/index",
+        gameConfigs: "./configs/index"
     },
 
     output: {
@@ -34,14 +33,25 @@ module.exports = {
     ],
 
     module: {
-        loaders: [{
-            test: /\.js$/,
-            loader: 'babel',
-            query: {
-                presets: ['es2015']
+        loaders: [
+            {
+                loader: 'script',
+                test: /(pixi|phaser).js/
             },
-            exclude: /node_modules/
-        }]
+            {
+                test: /\.js$/,
+                loader: 'babel',
+                query: {
+                    presets: ['es2015']
+                },
+                exclude: /node_modules/
+            }
+        ]
+    },
+
+    devServer: {
+        host: 'localhost',
+        port: '8080'
     }
 };
 
