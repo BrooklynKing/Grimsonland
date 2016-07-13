@@ -36,7 +36,7 @@ var config = {
             var obj = this.context;
             var player = obj.layer.getObjectsByType('player')[0];
 
-            obj.setParameter('direction', Phaser.Point.subtract(player.pos, obj.pos));
+            obj.parameters.direction = Phaser.Point.subtract(player.pos, obj.pos);
         }
     },
     setDirectionToPlayerAdvance: {
@@ -51,7 +51,7 @@ var config = {
             }
 
             if (playerDirection == null) {
-                obj.setParameter('direction', Phaser.Point.subtract(player.pos, obj.pos));
+                obj.parameters.direction = Phaser.Point.subtract(player.pos, obj.pos);
             } else {
                 let speed = Math.abs(Math.min(player.getParameter('speed'), Phaser.Point.distance(obj.pos, player.pos)) - 10);
                 let playerNextPlace = utils.moveWithSpeed(player.pos, playerDirection, speed);
@@ -59,7 +59,7 @@ var config = {
                 let _odv = oldDirection.clone().normalize();
                 let _ndv = Phaser.Point.add(_odv, _dv).normalize();
 
-                obj.setParameter('direction', _ndv);
+                obj.parameters.direction =  _ndv;
             }
         }
     },
@@ -69,7 +69,7 @@ var config = {
             var bottomRight = new Victor(1100, 850);
             var coords = Victor(10, 20).randomize(topLeft, bottomRight).toArray();
 
-            this.context.setParameter('direction', new Phaser.Point(coords[0], coords[1]));
+            obj.parameters.direction = new Phaser.Point(coords[0], coords[1]);
         },
         update: function () {
             var obj = this.context;
@@ -77,21 +77,21 @@ var config = {
             var distance = Phaser.Point.distance(obj.pos, player.pos);
 
             if (distance <= obj.getParameter('scentRange')) {
-                obj.setParameter('scent', true);
-                obj.setParameter('speed', obj.getDefaultParameter('scentSpeed'));
-                obj.setParameter('wanderCooldown', 0);
-                obj.setParameter('direction', Phaser.Point.subtract(player.pos, obj.pos));
+                obj.parameters.scent = true;
+                obj.parameters.speed = obj.getDefaultParameter('scentSpeed');
+                obj.parameters.wanderCooldown = 0;
+                obj.parameters.direction = Phaser.Point.subtract(player.pos, obj.pos);
             } else {
-                obj.setParameter('speed', obj.getDefaultParameter('speed'));
+                obj.parameters.speed = obj.getDefaultParameter('speed');
                 if (!obj.getParameter('wanderCooldown')) {
                     var topLeft = new Victor(100, 100);
                     var bottomRight = new Victor(1100, 850);
                     var coords = Victor(10, 20).randomize(topLeft, bottomRight).toArray();
 
-                    obj.setParameter('direction', Phaser.Point.subtract(new Phaser.Point(coords[0], coords[1]), obj.pos));
-                    obj.setParameter('wanderCooldown', Math.round(Math.random() * (obj.getDefaultParameter('wanderCooldown') - 100) + 100));
+                    obj.parameters.direction = Phaser.Point.subtract(new Phaser.Point(coords[0], coords[1]), obj.pos);
+                    obj.parameters.wanderCooldown = Math.round(Math.random() * (obj.getDefaultParameter('wanderCooldown') - 100) + 100);
                 } else {
-                    obj.getParameter('wanderCooldown') && obj.setParameter('wanderCooldown', obj.getParameter('wanderCooldown') - 1);
+                    obj.getParameter('wanderCooldown') && (obj.parameters.wanderCooldown = obj.getParameter('wanderCooldown') - 1);
                 }
             }
         }
@@ -150,7 +150,7 @@ var config = {
             if (cooldown == 0) {
                 obj._removeInNextTick = true;
             } else {
-                obj.setParameter('cooldown', cooldown - 1);
+                obj.parameters.cooldown = cooldown - 1;
             }
         }
     },
@@ -165,10 +165,10 @@ var config = {
                 var explosionConfig = gameConfigs.getConfig('monsterExplosion');
                 explosionConfig.pos = new Phaser.Point(obj.pos.x, obj.pos.y);
                 var expl = obj.layer.addObject(explosionConfig);
-                expl.setParameter('power', obj.getParameter('power'));
+                expl.parameters.power = obj.getParameter('power');
 
             } else {
-                obj.setParameter('cooldown', cooldown - 1);
+                obj.parameters.cooldown = cooldown - 1;
             }
         }
     },
@@ -182,7 +182,7 @@ var config = {
                 var explosionConfig = gameConfigs.getConfig('monsterExplosion');
                 explosionConfig.pos = new Phaser.Point(obj.pos.x, obj.pos.y);
                 var expl = obj.layer.addObject(explosionConfig);
-                expl.setParameter('power', obj.getParameter('power'));
+                expl.parameters.power = obj.getParameter('power');
             }
         }
     },

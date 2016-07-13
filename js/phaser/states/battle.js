@@ -1,6 +1,6 @@
 import 'phaser-shim';
 import collisions from '../../engine/collisions';
-import {GameLayer} from '../../engine/objects';
+import GameLayer from '../../engine/objects';
 
 class GameState extends Phaser.State {
     init() {

@@ -12,7 +12,9 @@
     "url": ""
   },
   "homepage": "",
-  "devDependencies": {
+  "dependencies": {
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.12.1",
     "howler": "*",
     "string-template": "^0.2.1",
     "script-loader": "*",
@@ -20,11 +22,8 @@
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.1.18",
     "node-libs-browser": "^0.5.3",
-    "victor": "*"
-  },
-  "dependencies": {
-    "webpack": "^1.12.2",
-    "webpack-dev-server": "^1.12.1",
+    "http-server": "^0.9.0",
+    "victor": "*",
     "phaser-shim": "^2.4.4"
   }
 }
