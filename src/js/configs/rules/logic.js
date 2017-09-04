@@ -1,4 +1,5 @@
 import format from 'string-template';
+import gameConfigs from '../../configs/index';
 var Victor = require('victor');
 
 var config = {

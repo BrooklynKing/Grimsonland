@@ -1,4 +1,6 @@
 import utils from './../../engine/utils';
+import gameConfigs from '../../configs/index';
+
 var Victor = require('victor');
 
 var config = {

@@ -3,7 +3,7 @@ function moveWithSpeed(point, destination, speed) {
         return null;
     }
 
-    var _destination = destination.clone().normalize().multiply(speed, speed);
+    const _destination = destination.clone().normalize().multiply(speed, speed);
 
     return Phaser.Point.add(point, _destination);
 }

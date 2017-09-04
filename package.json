@@ -11,20 +11,42 @@
   "bugs": {
     "url": ""
   },
+  "scripts": {
+    "start": "yoshi start --entry-point=./server/start-fake-server.js",
+    "lint": "yoshi lint",
+    "test": "",
+    "build": "yoshi build",
+    "deploy": "yoshi build && gh-pages -d dist/statics",
+    "release": "yoshi release"
+  },
   "homepage": "",
   "devDependencies": {
-    "howler": "*",
-    "string-template": "^0.2.1",
-    "script-loader": "*",
-    "babel-core": "^6.2.1",
-    "babel-loader": "^6.2.0",
-    "babel-preset-es2015": "^6.1.18",
-    "node-libs-browser": "^0.5.3",
-    "victor": "*"
+    "babel-preset-es2015": "~6.9.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "gh-pages": "^1.0.0",
+    "victor": "*",
+    "yoshi": "^1.1.238"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-0"
+    ]
   },
   "dependencies": {
-    "webpack": "^1.12.2",
-    "webpack-dev-server": "^1.12.1",
-    "phaser-shim": "^2.4.4"
+    "victor": "*",
+    "howler": "*",
+    "string-template": "^0.2.1"
+  },
+  "yoshi": {
+    "separateCss": true,
+    "optimizeMoment": true,
+    "exports": "Game",
+    "entry": {
+      "game": "./index.js"
+    },
+    "externalUnprocessedModules": [
+      "pixi, phaser"
+    ]
   }
 }

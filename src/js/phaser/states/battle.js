@@ -1,6 +1,5 @@
-import 'phaser-shim';
 import collisions from '../../engine/collisions';
-import {GameLayer} from '../../engine/objects';
+import GameLayer from '../../engine/core/layer';
 
 class GameState extends Phaser.State {
     init() {
@@ -49,7 +48,7 @@ class GameState extends Phaser.State {
 
         this.image = this.add.image(0, 0, this.bitmap);
 
-        var layerConfig = {
+      const layerConfig = {
             id: 'mainLayer',
             size : [1324,1068],
             background: 'terrain',

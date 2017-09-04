@@ -1,4 +1,5 @@
 import utils from './../../engine/utils';
+import gameConfigs from '../../configs/index';
 
 var config = {
     fireball : {

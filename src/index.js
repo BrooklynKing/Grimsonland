@@ -1,5 +1,4 @@
-import 'phaser-shim';
-import states from './states/index'
+import states from './js/phaser/states/index';
 
 var game = new Phaser.Game(1024, 768, Phaser.CANVAS , 'main', null, false, false);
 

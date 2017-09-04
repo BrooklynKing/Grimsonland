@@ -13,7 +13,7 @@ function getConfig(id) {
     return config;
 }
 
-export {
+export default {
     getRuleConfig,
     getConfig,
 };

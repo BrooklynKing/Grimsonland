@@ -1,4 +1,5 @@
 var Victor = require('victor');
+import gameConfigs from '../../configs/index';
 
 var config = {
     random_trees: {

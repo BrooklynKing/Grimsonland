@@ -1,5 +1,3 @@
-import 'phaser-shim';
-
 class MainMenu extends Phaser.State {
     init() {
         this.menuTheme = this.sound.add('menuTheme', 0.3, true);
@@ -15,11 +13,11 @@ class MainMenu extends Phaser.State {
     }
 
     generateControls() {
-        var button  = this.add.button(512, 384, 'button', this.startGame, this, 2, 0 , 1, 2);
-        var start = this.add.text(0, 3,'START', {
+        const button  = this.add.button(512, 384, 'button', this.startGame, this, 2, 0 , 1, 2);
+      const start = this.add.text(0, 3,'START', {
             fill: '#efefef'
         });
-        var info = this.add.text(-300, -300, ' MOVING: WASD\n AIM: MOUSE\n CAST SPELL: MOUSE CLICK OR SPACE\n SELECT SPELL: 1, 2, 3.', {
+      const info = this.add.text(-300, -300, ' MOVING: WASD\n AIM: MOUSE\n CAST SPELL: MOUSE CLICK OR SPACE\n SELECT SPELL: 1, 2, 3.', {
             fontSize : '20px',
             fill: '#efefef'
         });
