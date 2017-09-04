@@ -54,3 +54,4 @@ maven
 .idea
 .DS_Store
 yarn-error.log
+yarn-lock.error
