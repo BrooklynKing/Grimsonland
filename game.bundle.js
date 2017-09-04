@@ -126,11 +126,11 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _index = __webpack_require__(/*! ./objects/index */ 14);
+var _index = __webpack_require__(/*! ./objects/index */ 13);
 
 var _index2 = _interopRequireDefault(_index);
 
-var _index3 = __webpack_require__(/*! ./rules/index */ 21);
+var _index3 = __webpack_require__(/*! ./rules/index */ 20);
 
 var _index4 = _interopRequireDefault(_index3);
 
@@ -1646,11 +1646,11 @@ var _loading = __webpack_require__(/*! ./loading */ 8);
 
 var _loading2 = _interopRequireDefault(_loading);
 
-var _mainMenu = __webpack_require__(/*! ./mainMenu */ 10);
+var _mainMenu = __webpack_require__(/*! ./mainMenu */ 9);
 
 var _mainMenu2 = _interopRequireDefault(_mainMenu);
 
-var _battle = __webpack_require__(/*! ./battle */ 11);
+var _battle = __webpack_require__(/*! ./battle */ 10);
 
 var _battle2 = _interopRequireDefault(_battle);
 
@@ -1738,8 +1738,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-console.log(__webpack_require__(/*! ../../../assets/img/mainhero.png */ 9));
-
 var Loading = function (_Phaser$State) {
     _inherits(Loading, _Phaser$State);
 
@@ -1806,17 +1804,6 @@ exports.default = Loading;
 
 /***/ }),
 /* 9 */
-/*!*********************************!*\
-  !*** ./assets/img/mainhero.png ***!
-  \*********************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-module.exports = "data:image/png;base64,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"
-
-/***/ }),
-/* 10 */
 /*!**************************************!*\
   !*** ./js/phaser/states/mainMenu.js ***!
   \**************************************/
@@ -1900,7 +1887,7 @@ var MainMenu = function (_Phaser$State) {
 exports.default = MainMenu;
 
 /***/ }),
-/* 11 */
+/* 10 */
 /*!************************************!*\
   !*** ./js/phaser/states/battle.js ***!
   \************************************/
@@ -1917,11 +1904,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _collisions = __webpack_require__(/*! ../../engine/collisions */ 12);
+var _collisions = __webpack_require__(/*! ../../engine/collisions */ 11);
 
 var _collisions2 = _interopRequireDefault(_collisions);
 
-var _layer = __webpack_require__(/*! ../../engine/core/layer */ 13);
+var _layer = __webpack_require__(/*! ../../engine/core/layer */ 12);
 
 var _layer2 = _interopRequireDefault(_layer);
 
@@ -2077,7 +2064,7 @@ var GameState = function (_Phaser$State) {
 exports.default = GameState;
 
 /***/ }),
-/* 12 */
+/* 11 */
 /*!*********************************!*\
   !*** ./js/engine/collisions.js ***!
   \*********************************/
@@ -2190,7 +2177,7 @@ function generate(config) {
 exports.default = generate;
 
 /***/ }),
-/* 13 */
+/* 12 */
 /*!*********************************!*\
   !*** ./js/engine/core/layer.js ***!
   \*********************************/
@@ -2215,7 +2202,7 @@ var _configs = __webpack_require__(/*! ../../configs */ 1);
 
 var _configs2 = _interopRequireDefault(_configs);
 
-var _object = __webpack_require__(/*! ./object */ 28);
+var _object = __webpack_require__(/*! ./object */ 27);
 
 var _object2 = _interopRequireDefault(_object);
 
@@ -2421,7 +2408,7 @@ var GameLayer = function () {
 exports.default = GameLayer;
 
 /***/ }),
-/* 14 */
+/* 13 */
 /*!*************************************!*\
   !*** ./js/configs/objects/index.js ***!
   \*************************************/
@@ -2436,27 +2423,27 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _spells = __webpack_require__(/*! ./spells */ 15);
+var _spells = __webpack_require__(/*! ./spells */ 14);
 
 var _spells2 = _interopRequireDefault(_spells);
 
-var _logic = __webpack_require__(/*! ./logic */ 16);
+var _logic = __webpack_require__(/*! ./logic */ 15);
 
 var _logic2 = _interopRequireDefault(_logic);
 
-var _units = __webpack_require__(/*! ./units */ 17);
+var _units = __webpack_require__(/*! ./units */ 16);
 
 var _units2 = _interopRequireDefault(_units);
 
-var _effects = __webpack_require__(/*! ./effects */ 18);
+var _effects = __webpack_require__(/*! ./effects */ 17);
 
 var _effects2 = _interopRequireDefault(_effects);
 
-var _terrain = __webpack_require__(/*! ./terrain */ 19);
+var _terrain = __webpack_require__(/*! ./terrain */ 18);
 
 var _terrain2 = _interopRequireDefault(_terrain);
 
-var _ui = __webpack_require__(/*! ./ui */ 20);
+var _ui = __webpack_require__(/*! ./ui */ 19);
 
 var _ui2 = _interopRequireDefault(_ui);
 
@@ -2474,7 +2461,7 @@ Object.assign(objects, _terrain2.default);
 exports.default = objects;
 
 /***/ }),
-/* 15 */
+/* 14 */
 /*!**************************************!*\
   !*** ./js/configs/objects/spells.js ***!
   \**************************************/
@@ -2606,7 +2593,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 16 */
+/* 15 */
 /*!*************************************!*\
   !*** ./js/configs/objects/logic.js ***!
   \*************************************/
@@ -2636,7 +2623,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 17 */
+/* 16 */
 /*!*************************************!*\
   !*** ./js/configs/objects/units.js ***!
   \*************************************/
@@ -2804,7 +2791,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 18 */
+/* 17 */
 /*!***************************************!*\
   !*** ./js/configs/objects/effects.js ***!
   \***************************************/
@@ -2886,7 +2873,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 19 */
+/* 18 */
 /*!***************************************!*\
   !*** ./js/configs/objects/terrain.js ***!
   \***************************************/
@@ -2922,7 +2909,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 20 */
+/* 19 */
 /*!**********************************!*\
   !*** ./js/configs/objects/ui.js ***!
   \**********************************/
@@ -3020,7 +3007,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 21 */
+/* 20 */
 /*!***********************************!*\
   !*** ./js/configs/rules/index.js ***!
   \***********************************/
@@ -3035,27 +3022,27 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _spells = __webpack_require__(/*! ./spells */ 22);
+var _spells = __webpack_require__(/*! ./spells */ 21);
 
 var _spells2 = _interopRequireDefault(_spells);
 
-var _logic = __webpack_require__(/*! ./logic */ 23);
+var _logic = __webpack_require__(/*! ./logic */ 22);
 
 var _logic2 = _interopRequireDefault(_logic);
 
-var _units = __webpack_require__(/*! ./units */ 24);
+var _units = __webpack_require__(/*! ./units */ 23);
 
 var _units2 = _interopRequireDefault(_units);
 
-var _layers = __webpack_require__(/*! ./layers */ 25);
+var _layers = __webpack_require__(/*! ./layers */ 24);
 
 var _layers2 = _interopRequireDefault(_layers);
 
-var _ui = __webpack_require__(/*! ./ui */ 26);
+var _ui = __webpack_require__(/*! ./ui */ 25);
 
 var _ui2 = _interopRequireDefault(_ui);
 
-var _etc = __webpack_require__(/*! ./etc */ 27);
+var _etc = __webpack_require__(/*! ./etc */ 26);
 
 var _etc2 = _interopRequireDefault(_etc);
 
@@ -3073,7 +3060,7 @@ Object.assign(rules, _etc2.default);
 exports.default = rules;
 
 /***/ }),
-/* 22 */
+/* 21 */
 /*!************************************!*\
   !*** ./js/configs/rules/spells.js ***!
   \************************************/
@@ -3329,7 +3316,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 23 */
+/* 22 */
 /*!***********************************!*\
   !*** ./js/configs/rules/logic.js ***!
   \***********************************/
@@ -3415,7 +3402,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 24 */
+/* 23 */
 /*!***********************************!*\
   !*** ./js/configs/rules/units.js ***!
   \***********************************/
@@ -3888,7 +3875,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 25 */
+/* 24 */
 /*!************************************!*\
   !*** ./js/configs/rules/layers.js ***!
   \************************************/
@@ -4039,7 +4026,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 26 */
+/* 25 */
 /*!********************************!*\
   !*** ./js/configs/rules/ui.js ***!
   \********************************/
@@ -4133,7 +4120,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 27 */
+/* 26 */
 /*!*********************************!*\
   !*** ./js/configs/rules/etc.js ***!
   \*********************************/
@@ -4371,7 +4358,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 28 */
+/* 27 */
 /*!**********************************!*\
   !*** ./js/engine/core/object.js ***!
   \**********************************/
@@ -4392,11 +4379,11 @@ var _utils = __webpack_require__(/*! ../utils */ 0);
 
 var _utils2 = _interopRequireDefault(_utils);
 
-var _renderers = __webpack_require__(/*! ../renderers */ 29);
+var _renderers = __webpack_require__(/*! ../renderers */ 28);
 
 var _renderers2 = _interopRequireDefault(_renderers);
 
-var _sprite = __webpack_require__(/*! ../sprite */ 30);
+var _sprite = __webpack_require__(/*! ../sprite */ 29);
 
 var _sprite2 = _interopRequireDefault(_sprite);
 
@@ -4578,7 +4565,7 @@ var GameObject = function () {
 exports.default = GameObject;
 
 /***/ }),
-/* 29 */
+/* 28 */
 /*!********************************!*\
   !*** ./js/engine/renderers.js ***!
   \********************************/
@@ -4802,7 +4789,7 @@ var renders = {
 exports.default = renders;
 
 /***/ }),
-/* 30 */
+/* 29 */
 /*!*****************************!*\
   !*** ./js/engine/sprite.js ***!
   \*****************************/
