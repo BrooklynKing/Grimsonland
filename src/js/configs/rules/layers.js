@@ -1,4 +1,3 @@
-var Victor = require('victor');
 import gameConfigs from '../../configs/index';
 
 var config = {
@@ -38,11 +37,8 @@ var config = {
         update: function () {
             if (!this.parameters.currentCooldown) {
                 var config = gameConfigs.getConfig('heart');
-
-                var topLeft = new Victor(50, 50);
-                var bottomRight = new Victor(1154, 918);
-                var coords = Victor(10, 20).randomize(topLeft, bottomRight).toArray();
-                config.pos = new Phaser.Point(coords[0], coords[1]);
+                const rect = new Phaser.Rectangle(50, 50, 1104, 868);
+                config.pos = new Phaser.Point(rect.randomX, rect.randomY);
 
                 this.context.addObject(config);
 
@@ -63,10 +59,8 @@ var config = {
             if (!this.parameters.currentCooldown) {
                 var config = gameConfigs.getConfig('powerup');
 
-                var topLeft = new Victor(100, 100);
-                var bottomRight = new Victor(1100, 850);
-                var coords = Victor(10, 20).randomize(topLeft, bottomRight).toArray();
-                config.pos = new Phaser.Point(coords[0], coords[1]);
+                const rect = new Phaser.Rectangle(100, 100, 1000, 750);
+                config.pos = new Phaser.Point(rect.randomX, rect.randomY);
 
                 this.context.addObject(config);
 

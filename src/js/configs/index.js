@@ -6,7 +6,7 @@ function getRuleConfig(id) {
 }
 
 function getConfig(id) {
-    var config = JSON.parse(JSON.stringify(objects[id]));
+    const config = JSON.parse(JSON.stringify(objects[id]));
 
     (!config.id) && (config.id = id);
 

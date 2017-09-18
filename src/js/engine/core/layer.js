@@ -125,7 +125,7 @@ export default class GameLayer {
     if (this.objects.hasOwnProperty(id)) {
       this.objects[id].layer = null;
 
-      if (this.objects[id].type && this.objects[id].type != 'default') {
+      if (this.objects[id].type && this.objects[id].type !== 'default') {
         this.sortedObjects[this.objects[id].type].splice(this.sortedObjects[this.objects[id].type].indexOf(id), 1);
       } else {
         this.sortedObjects['default'].splice(this.sortedObjects['default'].indexOf(id), 1);
@@ -147,7 +147,7 @@ export default class GameLayer {
     const _obj = new GameObject(config);
     _obj.init();
 
-    if (config.type && config.type != 'default') {
+    if (config.type && config.type !== 'default') {
       (!this.sortedObjects[config.type]) && (this.sortedObjects[config.type] = []);
       this.sortedObjects[config.type].push(_obj.id);
     } else {

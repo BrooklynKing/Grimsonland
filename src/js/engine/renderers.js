@@ -1,8 +1,8 @@
 function fog(obj) {
-    var ctx = obj.layer.ctx;
-    var x = obj.layer.getObjectsByType('player')[0].pos.x;
-    var y = obj.layer.getObjectsByType('player')[0].pos.y;
-    var grad = obj.layer.ctx.createRadialGradient(x, y, 0, x, y, 700);
+    const ctx = obj.layer.ctx;
+    const x = obj.layer.getObjectsByType('player')[0].pos.x;
+    const y = obj.layer.getObjectsByType('player')[0].pos.y;
+    const grad = obj.layer.ctx.createRadialGradient(x, y, 0, x, y, 700);
 
     grad.addColorStop(0, 'rgba(0, 0, 0, 0)');
     grad.addColorStop(1, 'rgba(0, 0, 0, 0.97)');
@@ -16,11 +16,11 @@ function fog(obj) {
 }
 
 function healthBar(obj) {
-    var ctx = obj.layer.ctx;
-    var x = Math.round(- obj.sprite.size[0] / 2 );
-    var y = Math.round(- obj.sprite.size[1] / 2 - 7);
-    var width = obj.sprite.size[0];
-    var height = 3;
+    const ctx = obj.layer.ctx;
+    const x = Math.round(- obj.sprite.size[0] / 2 );
+    const y = Math.round(- obj.sprite.size[1] / 2 - 7);
+    const width = obj.sprite.size[0];
+    const height = 3;
 
     ctx.globalAlpha = 0.5;
 
@@ -36,12 +36,12 @@ function healthBar(obj) {
 }
 
 function expBar(obj) {
-    var x = -22;
-    var y = 17;
-    var width = 200;
-    var height = 40;
-    var ctx = obj.layer.ctx;
-    var player = obj.layer.getObjectsByType('player')[0];
+    const x = -22;
+    const y = 17;
+    const width = 200;
+    const height = 40;
+    const ctx = obj.layer.ctx;
+    const player = obj.layer.getObjectsByType('player')[0];
 
     ctx.translate(-obj.layer.translate.x, -obj.layer.translate.y);
 
@@ -63,7 +63,7 @@ function expBar(obj) {
 }
 
 function sprite(obj, dt) {
-    var ctx = obj.layer.ctx;
+    const ctx = obj.layer.ctx;
 
     ctx.globalAlpha = 1;
     obj.sprite.update(dt);
@@ -85,7 +85,7 @@ function ellipse(context, cx, cy, rx, ry, rot, aStart, aEnd){
 
 function shadow(obj) {
     if (obj.size) {
-        var ctx = obj.layer.ctx;
+        const ctx = obj.layer.ctx;
 
         ctx.globalAlpha = 0.5;
 
@@ -99,12 +99,12 @@ function shadow(obj) {
 }
 
 function effects(obj) {
-    var ctx = obj.layer.ctx,
-        effects = obj.getParameter('effects');
+    const ctx = obj.layer.ctx;
+    const effects = obj.getParameter('effects');
 
-    for (var i = 0; i < effects.length; i++) {
-        var effect = effects[i];
-        if (effect == 'frozen') {
+    for (let i = 0; i < effects.length; i++) {
+        const effect = effects[i];
+        if (effect === 'frozen') {
             ctx.globalAlpha = 0.8;
             ctx.drawImage(obj.layer.game.cache.getImage('frostEffect'), -16, + (obj.sprite.size[1] / 2) - 32, 32, 32);
             ctx.globalAlpha = 1;
@@ -125,15 +125,15 @@ function unitRenderer(obj, dt) {
 }
 
 function spellRenderer(obj, dt) {
-    var ctx = obj.layer.ctx,
-        x = Math.round(- obj.sprite.size[0] / 2 - 4),
-        y = Math.round(- obj.sprite.size[1] / 2 - 4),
-        width = obj.sprite.size[0] + 8,
-        height = obj.sprite.size[1] + 8;
+    const ctx = obj.layer.ctx;
+    const x = Math.round(- obj.sprite.size[0] / 2 - 4);
+    const y = Math.round(- obj.sprite.size[1] / 2 - 4);
+    const width = obj.sprite.size[0] + 8;
+    const height = obj.sprite.size[1] + 8;
 
     ctx.translate(-obj.layer.translate.x, -obj.layer.translate.y);
 
-    if (obj.id.indexOf(obj.layer.getObjectsByType('player')[0].getParameter('currentSpell')) != -1) {
+    if (obj.id.indexOf(obj.layer.getObjectsByType('player')[0].getParameter('currentSpell')) !== -1) {
         ctx.fillStyle = "rgb(0, 250, 0)";
         ctx.fillRect(x - 2, y - 2, width + 4, height + 4);
     }
@@ -161,7 +161,7 @@ function spellRenderer(obj, dt) {
 }
 
 function ui(obj, dt) {
-    var ctx = obj.layer.ctx;
+    const ctx = obj.layer.ctx;
 
     ctx.translate(-obj.layer.translate.x, -obj.layer.translate.y);
     sprite(obj, dt);
@@ -169,8 +169,8 @@ function ui(obj, dt) {
 }
 
 function textRender(obj) {
-    var ctx = obj.layer.ctx,
-        fontConfig = '';
+    const ctx = obj.layer.ctx;
+    let fontConfig = '';
 
     ctx.translate(-obj.layer.translate.x, -obj.layer.translate.y);
 
@@ -191,7 +191,7 @@ function textRender(obj) {
     ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }
 
-var renders = {
+const renders = {
     shadow,
     fog,
     expBar,

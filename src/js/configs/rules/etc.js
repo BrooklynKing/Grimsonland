@@ -1,8 +1,6 @@
 import utils from './../../engine/utils';
 import gameConfigs from '../../configs/index';
 
-var Victor = require('victor');
-
 var config = {
     bindPositionToLayer: {
         update: function () {
@@ -67,11 +65,8 @@ var config = {
     },
     wandererAI : {
         init: function () {
-            var topLeft = new Victor(100, 100);
-            var bottomRight = new Victor(1100, 850);
-            var coords = Victor(10, 20).randomize(topLeft, bottomRight).toArray();
-
-            this.context.setParameter('direction', new Phaser.Point(coords[0], coords[1]));
+            const rect = new Phaser.Rectangle(100, 100, 1000, 750);
+            this.context.setParameter('direction', new Phaser.Point(rect.randomX, rect.randomY));
         },
         update: function () {
             var obj = this.context;
@@ -86,11 +81,8 @@ var config = {
             } else {
                 obj.setParameter('speed', obj.getDefaultParameter('speed'));
                 if (!obj.getParameter('wanderCooldown')) {
-                    var topLeft = new Victor(100, 100);
-                    var bottomRight = new Victor(1100, 850);
-                    var coords = Victor(10, 20).randomize(topLeft, bottomRight).toArray();
-
-                    obj.setParameter('direction', Phaser.Point.subtract(new Phaser.Point(coords[0], coords[1]), obj.pos));
+                    const rect = new Phaser.Rectangle(100, 100, 1000, 750);
+                    obj.setParameter('direction', Phaser.Point.subtract(new Phaser.Point(rect.randomX, rect.randomY), obj.pos));
                     obj.setParameter('wanderCooldown', Math.round(Math.random() * (obj.getDefaultParameter('wanderCooldown') - 100) + 100));
                 } else {
                     obj.getParameter('wanderCooldown') && obj.setParameter('wanderCooldown', obj.getParameter('wanderCooldown') - 1);

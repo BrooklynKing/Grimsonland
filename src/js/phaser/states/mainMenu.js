@@ -13,7 +13,7 @@ class MainMenu extends Phaser.State {
     }
 
     generateControls() {
-        const button  = this.add.button(512, 384, 'button', this.startGame, this, 2, 0 , 1, 2);
+      const button  = this.add.button(512, 384, 'button', this.startGame, this, 2, 0 , 1, 2);
       const start = this.add.text(0, 3,'START', {
             fill: '#efefef'
         });

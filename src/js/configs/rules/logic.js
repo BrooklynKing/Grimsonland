@@ -1,6 +1,5 @@
 import format from 'string-template';
 import gameConfigs from '../../configs/index';
-var Victor = require('victor');
 
 var config = {
     monsterController : {
@@ -18,12 +17,10 @@ var config = {
             var obj = this.context;
 
             function createSpawn() {
-                var topLeft = new Victor(100 - obj.layer.translate.x, 100 - obj.layer.translate.y);
-                var bottomRight = new Victor(900 - obj.layer.translate.x, 650 - obj.layer.translate.y);
+                const rect = new Phaser.Rectangle(100 - obj.layer.translate.x,  100 - obj.layer.translate.y, 800 - obj.layer.translate.x, 550 - obj.layer.translate.y);
                 var summonGate = gameConfigs.getConfig('summonGate');
-                var coords = Victor(10, 20).randomize(topLeft, bottomRight).toArray();
 
-                summonGate.pos = new Phaser.Point(coords[0], coords[1]);
+                summonGate.pos = new Phaser.Point(rect.randomX,rect.randomY);
                 summonGate.pos.x = Math.min(1100, Math.max(50, summonGate.pos.x));
                 summonGate.pos.y = Math.min(900, Math.max(50, summonGate.pos.y));
                 obj.layer.addObject(summonGate);
