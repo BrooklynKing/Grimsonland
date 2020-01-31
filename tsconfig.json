@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "outDir": "./dist/",
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "noUnusedParameters": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es6",
+    "jsx": "react",
+    "lib": ["dom", "es2016"]
+  },
+  "include": ["./test/**/*.*", "./src/**/*.*"],
+  "files": ["./src/index.ts"]
+}
