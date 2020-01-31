@@ -22,12 +22,6 @@
     "yoshi": "^4.29.0",
     "typescript": "^3.7.5"
   },
-  "babel": {
-    "presets": [
-      "es2015",
-      "stage-0"
-    ]
-  },
   "dependencies": {
     "string-template": "^0.2.1"
   },
