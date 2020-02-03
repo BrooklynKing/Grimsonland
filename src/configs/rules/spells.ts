@@ -241,7 +241,7 @@ const config: any = {
           blood.pos.y += -10;
           obj.layer.addObject(blood);
 
-          obj._removeInNextTick = true;
+          obj.layer.removeObjectOnNextTick(obj.id);
 
           break;
         }

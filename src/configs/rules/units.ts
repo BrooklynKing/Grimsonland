@@ -39,7 +39,7 @@ const config: any = {
 
           obj.layer.addObject(explosionConfig);
 
-          obj._removeInNextTick = true;
+          obj.layer.removeObjectOnNextTick(obj.id);
           break;
         }
       }
@@ -72,7 +72,7 @@ const config: any = {
             }
           }
 
-          obj._removeInNextTick = true;
+          obj.layer.removeObjectOnNextTick(obj.id);
           break;
         }
       }
@@ -134,7 +134,7 @@ const config: any = {
         const power = obj.getParameter('power');
         let expl;
 
-        obj._removeInNextTick = true;
+        obj.layer.removeObjectOnNextTick(obj.id);
 
         explosionConfig = gameConfigs.getConfig('monsterExplosion');
         explosionConfig.pos = new Phaser.Point(
@@ -268,7 +268,7 @@ const config: any = {
       const obj = this.context;
 
       if (obj.getParameter('health') <= 0) {
-        obj._removeInNextTick = true;
+        obj.layer.removeObjectOnNextTick(obj.id);
 
         const explosionConfig = gameConfigs.getConfig('explosion');
         explosionConfig.pos = obj.pos.clone();
@@ -374,7 +374,7 @@ const config: any = {
       const objects = obj.getParameter('collisions');
 
       if (cooldown == 0) {
-        obj._removeInNextTick = true;
+        obj.layer.removeObjectOnNextTick(obj.id);
 
         createExplosion();
         return;
@@ -384,7 +384,7 @@ const config: any = {
 
       for (let i = 0; i < objects.length; i++) {
         if (objects[i].type == 'player') {
-          obj._removeInNextTick = true;
+          obj.layer.removeObjectOnNextTick(obj.id);
 
           createExplosion();
           break;
@@ -461,7 +461,7 @@ const config: any = {
             'exp',
             objects[i].getParameter('exp') + obj.getParameter('exp'),
           );
-          obj._removeInNextTick = true;
+          obj.layer.removeObjectOnNextTick(obj.id);
           break;
         }
       }
@@ -517,7 +517,7 @@ const config: any = {
           );
         }
 
-        obj._removeInNextTick = true;
+        obj.layer.removeObjectOnNextTick(obj.id);
       } else {
         obj.setParameter('cooldown', cooldown - 1);
       }

@@ -1,72 +1,82 @@
 import utils from '../utils';
 import gameConfigs from '../../configs';
 
-import GameObject from './object';
-import GameRule from './rule';
+import GameObject, { IGameObjectConfig } from './object';
+import GameRule, { IGameRuleConfig } from './rule';
+
+export interface IGameLayerConfig {
+  id: string;
+  background: string;
+  state: Phaser.State;
+  ctx: CanvasRenderingContext2D;
+  initList: string[];
+  translate: ITranslate;
+  rules: string[];
+  size: number[];
+  init: () => void;
+}
+
+interface ITranslate {
+  x: number;
+  y: number;
+}
 
 export default class GameLayer {
   id: string;
   ctx: CanvasRenderingContext2D;
-  game: any;
-  state: any;
-  initList: any[];
+  game: Phaser.Game;
+  state: Phaser.State;
+  initList: string[];
   background: CanvasPattern;
-  pos: Phaser.Point;
   size: number[];
-  defaultTranslate: { x: number; y: number };
   translate: { x: number; y: number };
-  sortedObjects: { [key: string]: string[] };
-  private _rules: string[];
-  private rules: GameRule[];
-  private _init: () => void;
-  private objects: any;
-  inited: boolean;
 
-  constructor(config: any) {
+  private inited: boolean;
+
+  private config: IGameLayerConfig;
+
+  private objects: { [key: string]: GameObject };
+  private sortedObjects: { [key: string]: string[] };
+  private rules: GameRule[];
+  private objectsToBeRemoved: string[] = [];
+
+  constructor(config: IGameLayerConfig) {
+    this.config = config;
     this.id = config.id;
     this.state = config.state;
     this.game = this.state.game;
     this.ctx = config.ctx;
     this.initList = config.initList;
+
     this.background = this.ctx.createPattern(
       this.game.cache.getImage(config.background),
       'repeat',
     );
-    this.pos = config.pos
-      ? new Phaser.Point(config.pos[0], config.pos[1])
-      : new Phaser.Point(0, 0);
-    this.size = config.size || [
-      config.ctx.canvas.width,
-      config.ctx.canvas.height,
-    ];
-    this.defaultTranslate = config.translate || {
-      x: 0,
-      y: 0,
-    };
+
+    this.size = config.size || [this.ctx.canvas.width, this.ctx.canvas.height];
+
     this.sortedObjects = {
       default: [],
     };
     this.objects = {};
-    this._rules = config.rules || [];
-    this._init = config.init;
     this.inited = false;
   }
 
   init() {
     if (!this.inited) {
-      this.translate = utils.clone(this.defaultTranslate);
-      for (let i = 0; i < this.initList.length; i++) {
-        this.addObject(gameConfigs.getConfig(this.initList[i]));
-      }
+      this.translate = this.config.translate
+        ? utils.clone(this.config.translate)
+        : { x: 0, y: 0 };
+      this.config.initList.forEach(objectID =>
+        this.addObject(gameConfigs.getConfig(objectID)),
+      );
 
-      this._init && this._init();
+      this.config.init && this.config.init();
 
-      const rules = this._rules;
       this.rules = [];
-
-      for (let i = 0, l = rules.length; i < l; i++) {
-        this.addRule(gameConfigs.getRuleConfig(rules[i]));
-      }
+      this.config.rules.forEach(ruleID =>
+        this.addRule(gameConfigs.getRuleConfig(ruleID)),
+      );
 
       this.inited = true;
     }
@@ -75,12 +85,12 @@ export default class GameLayer {
   render(dt: number) {
     if (!this.inited) return;
 
-    const arr: any = {};
+    const arr: { [key: number]: GameObject[] } = {};
     const ctx = this.ctx;
 
     ctx.save();
     ctx.beginPath();
-    ctx.rect(this.pos.x, this.pos.y, this.size[0], this.size[1]);
+    ctx.rect(0, 0, this.size[0], this.size[1]);
     ctx.clip();
     ctx.translate(this.translate.x, this.translate.y);
     ctx.fillStyle = this.background;
@@ -132,16 +142,21 @@ export default class GameLayer {
       this.objects[i].updateConditions(dt);
     }
 
-    for (let i in this.objects) {
-      if (this.objects[i]._removeInNextTick) {
-        this.objects[i].collisions &&
-          this.state.collisions.removeObject(this.objects[i]);
-        this.removeObject(this.objects[i].id);
+    while (this.objectsToBeRemoved.length) {
+      const id = this.objectsToBeRemoved.pop();
+      const obj = this.objects[id];
+      if (obj) {
+        obj.shouldCheckCollisions && this.state.collisions.removeObject(obj);
+        this.removeObject(obj.id);
       }
     }
   }
 
-  addRule(config: any) {
+  removeObjectOnNextTick(id: string) {
+    this.objectsToBeRemoved.push(id);
+  }
+
+  addRule(config: IGameRuleConfig) {
     const rule = new GameRule(config);
     rule.setContext(this);
     rule.init();
@@ -152,24 +167,18 @@ export default class GameLayer {
     if (this.objects.hasOwnProperty(id)) {
       this.objects[id].layer = null;
 
-      if (this.objects[id].type && this.objects[id].type !== 'default') {
-        this.sortedObjects[this.objects[id].type].splice(
-          this.sortedObjects[this.objects[id].type].indexOf(id),
-          1,
-        );
-      } else {
-        this.sortedObjects['default'].splice(
-          this.sortedObjects['default'].indexOf(id),
-          1,
-        );
-      }
+      this.sortedObjects[this.objects[id].type].splice(
+        this.sortedObjects[this.objects[id].type].indexOf(id),
+        1,
+      );
+
       this.objects[id] = null;
 
       delete this.objects[id];
     }
   }
 
-  addObject(config: any) {
+  addObject(config: IGameObjectConfig) {
     if (this.objects.hasOwnProperty(config.id)) {
       console.error(
         'Object with such id already exist in this layer: ',
@@ -180,20 +189,20 @@ export default class GameLayer {
     config.layer = this;
     config.id += Math.round(new Date().getTime() + Math.random() * 1000001);
 
-    const _obj = new GameObject(config);
-    _obj.init();
+    const obj = new GameObject(config);
+    obj.init();
 
     if (config.type && config.type !== 'default') {
       !this.sortedObjects[config.type] &&
         (this.sortedObjects[config.type] = []);
-      this.sortedObjects[config.type].push(_obj.id);
+      this.sortedObjects[config.type].push(obj.id);
     } else {
-      this.sortedObjects['default'].push(_obj.id);
+      this.sortedObjects['default'].push(obj.id);
     }
 
-    this.objects[_obj.id] = _obj;
+    this.objects[obj.id] = obj;
 
-    return this.objects[_obj.id];
+    return this.objects[obj.id];
   }
 
   getObjectsByType(type: string) {
@@ -207,7 +216,7 @@ export default class GameLayer {
   }
 
   clearLayer() {
-    this.objects = [];
+    this.objects = {};
 
     this.sortedObjects = {
       default: [],

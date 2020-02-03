@@ -3,16 +3,21 @@ declare namespace Phaser {
     game: any;
     add: any;
     sound: any;
+    collisions: any;
   }
   class Game {
     constructor(...any: any);
     state: State;
+    cache: Cache;
   }
   const CANVAS: CanvasRenderingContext2D;
   class Rectangle {
     constructor(...any: any);
     randomX: number;
     randomY: number;
+  }
+  class Cache {
+    getImage(id: string): CanvasImageSource;
   }
   class Point {
     constructor(...any: any);

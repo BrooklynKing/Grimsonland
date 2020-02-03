@@ -3,20 +3,23 @@ import GameLayer from './layer';
 
 import utils from '../utils';
 
+export interface IGameRuleConfig {
+  id: string;
+  update(dt: number): void;
+  parameters: { [key: string]: any };
+  init(): void;
+}
+
 export default class GameRule {
   private id: string;
-  private _update: (dt: number) => void;
-  private _init: () => void;
-  private parameters: any;
+  private parameters: { [key: string]: any };
   private inited: boolean;
   private context: GameObject | GameLayer;
 
-  constructor(config: {
-    id: string;
-    update(dt: number): void;
-    parameters: any;
-    init(): void;
-  }) {
+  private _update: (dt: number) => void;
+  private _init: () => void;
+
+  constructor(config: IGameRuleConfig) {
     this.id = config.id;
     this._update = config.update;
     this.parameters =

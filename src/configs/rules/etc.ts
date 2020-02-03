@@ -1,45 +1,36 @@
 import utils from './../../engine/utils';
 import gameConfigs from '../index';
+import GameObject from '../../engine/core/object';
 
 const config: any = {
   bindPositionToLayer: {
     update: function() {
       const obj = this.context;
 
-      if (obj.pos.x - obj.sprite.size[0] / 2 < obj.layer.pos.x) {
+      if (obj.pos.x - obj.sprite.size[0] / 2 < 0) {
         obj.pos.x = obj.sprite.size[0] / 2;
-      } else if (
-        obj.pos.x + obj.sprite.size[0] / 2 >
-        obj.layer.pos.x + obj.layer.size[0]
-      ) {
-        obj.pos.x =
-          obj.layer.pos.x + obj.layer.size[0] - obj.sprite.size[0] / 2;
+      } else if (obj.pos.x + obj.sprite.size[0] / 2 > obj.layer.size[0]) {
+        obj.pos.x = obj.layer.size[0] - obj.sprite.size[0] / 2;
       }
 
-      if (obj.pos.y - obj.sprite.size[1] / 2 < obj.layer.pos.y) {
+      if (obj.pos.y - obj.sprite.size[1] / 2 < 0) {
         obj.pos.y = obj.sprite.size[1] / 2;
-      } else if (
-        obj.pos.y + obj.sprite.size[1] / 2 >
-        obj.layer.pos.y + obj.layer.size[1]
-      ) {
-        obj.pos.y =
-          obj.layer.pos.y + obj.layer.size[1] - obj.sprite.size[1] / 2;
+      } else if (obj.pos.y + obj.sprite.size[1] / 2 > obj.layer.size[1]) {
+        obj.pos.y = obj.layer.size[1] - obj.sprite.size[1] / 2;
       }
     },
   },
   destroyAfterLeavingLayer: {
     update: function() {
-      const obj = this.context;
+      const obj = this.context as GameObject;
 
       if (
         obj.pos.y < -100 ||
-        obj.pos.y - obj.sprite.size[1] - 100 >
-          obj.layer.pos.y + obj.layer.size[1] ||
-        obj.pos.x - obj.sprite.size[0] - 100 >
-          obj.layer.pos.x + obj.layer.size[0] ||
+        obj.pos.y - obj.sprite.size[1] - 100 > obj.layer.size[1] ||
+        obj.pos.x - obj.sprite.size[0] - 100 > obj.layer.size[0] ||
         obj.pos.x < -100
       ) {
-        obj._removeInNextTick = true;
+        obj.layer.removeObjectOnNextTick(obj.id);
         return false;
       }
     },
@@ -196,7 +187,7 @@ const config: any = {
       const cooldown = obj.getParameter('cooldown');
 
       if (cooldown == 0) {
-        obj._removeInNextTick = true;
+        obj.layer.removeObjectOnNextTick(obj.id);
       } else {
         obj.setParameter('cooldown', cooldown - 1);
       }
@@ -208,7 +199,7 @@ const config: any = {
       const cooldown = obj.getParameter('cooldown');
 
       if (cooldown == 0) {
-        obj._removeInNextTick = true;
+        obj.layer.removeObjectOnNextTick(obj.id);
 
         const explosionConfig = gameConfigs.getConfig('monsterExplosion');
         explosionConfig.pos = new Phaser.Point(obj.pos.x, obj.pos.y);
@@ -221,14 +212,14 @@ const config: any = {
   },
   explosionAfterSpriteDone: {
     update: function() {
-      const obj = this.context;
+      const obj = this.context as GameObject;
 
       if (obj.sprite.done) {
-        obj._removeInNextTick = true;
+        obj.layer.removeObjectOnNextTick(obj.id);
 
         const explosionConfig = gameConfigs.getConfig('monsterExplosion');
         explosionConfig.pos = new Phaser.Point(obj.pos.x, obj.pos.y);
-        const expl = obj.layer.addObject(explosionConfig);
+        const expl = obj.layer.addObject(explosionConfig) as GameObject;
         expl.setParameter('power', obj.getParameter('power'));
       }
     },
@@ -238,7 +229,7 @@ const config: any = {
       const obj = this.context;
 
       if (obj.sprite.done) {
-        obj._removeInNextTick = true;
+        obj.layer.removeObjectOnNextTick(obj.id);
       }
     },
   },

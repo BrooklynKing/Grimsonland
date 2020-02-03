@@ -1,5 +1,5 @@
 import collisions from '../engine/collisions';
-import GameLayer from '../engine/core/layer';
+import GameLayer, { IGameLayerConfig } from '../engine/core/layer';
 
 class GameState extends Phaser.State {
   private battleTheme: any;
@@ -9,7 +9,7 @@ class GameState extends Phaser.State {
 
   private bitmap: any;
   private gameLayer: GameLayer;
-  private collisions: any;
+  collisions: any;
 
   private parameters: {
     bestTime: number;
@@ -87,7 +87,7 @@ class GameState extends Phaser.State {
 
     this.add.image(0, 0, this.bitmap);
 
-    const layerConfig = {
+    const layerConfig: IGameLayerConfig = {
       id: 'mainLayer',
       size: [1324, 1068],
       background: 'terrain',

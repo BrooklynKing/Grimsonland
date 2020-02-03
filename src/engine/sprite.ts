@@ -1,30 +1,41 @@
-import utils from './utils';
-
-class Sprite {
-  private cache: any;
-  private url: string;
+export interface ISpriteConfig {
+  cache: Phaser.Cache;
+  url: string;
   pos: Phaser.Point;
   size: [number, number];
   speed: number;
-  private frames: number[];
-  private _index: number;
-  private dir: string;
-  private once: boolean;
+  frames: number[];
+  dir: string;
+  once: boolean;
   degree: number;
-  private defaultPosition: Phaser.Point;
+}
+
+class Sprite {
+  pos: Phaser.Point;
+  size: [number, number];
   done: boolean;
 
-  constructor(
-    cache: any,
-    url: string,
-    pos: Phaser.Point,
-    size: [number, number],
-    speed: number,
-    frames: number[],
-    dir: string,
-    once: boolean,
-    degree: number,
-  ) {
+  private speed: number;
+  private degree: number;
+  private cache: Phaser.Cache;
+  private url: string;
+  private frames: number[];
+  private frameIndex: number;
+  private dir: string;
+  private once: boolean;
+  private defaultPosition: Phaser.Point;
+
+  constructor({
+    cache,
+    pos,
+    size,
+    speed,
+    frames,
+    url,
+    dir,
+    once,
+    degree,
+  }: ISpriteConfig) {
     this.cache = cache;
     if (pos instanceof Phaser.Point) {
       this.pos = pos.clone();
@@ -35,7 +46,7 @@ class Sprite {
     this.size = size;
     this.speed = typeof speed === 'number' ? speed : 0;
     this.frames = frames;
-    this._index = 0;
+    this.frameIndex = 0;
     this.url = url;
     this.dir = dir || 'horizontal';
     this.once = once;
@@ -43,25 +54,15 @@ class Sprite {
   }
 
   update(dt: number) {
-    this._index += this.speed * dt;
+    this.frameIndex += this.speed * dt;
   }
 
   setDegree(degree: number) {
     this.degree = degree;
   }
 
-  updateConfig(config: any) {
-    if (config) {
-      config.pos && (this.pos = config.pos);
-      config.size && (this.size = config.size);
-      config.speed &&
-        (this.speed = typeof config.speed === 'number' ? config.speed : 0);
-      config.frames && (this.frames = config.frames);
-      config.url && (this.url = config.url);
-      config.dir && (this.dir = config.dir);
-      config.once && (this.once = config.once);
-      config.degree && (this.degree = config.degree);
-    }
+  setPosition(pos: Phaser.Point) {
+    this.pos = pos;
   }
 
   rotateToDirection(direction: Phaser.Point) {
@@ -79,9 +80,7 @@ class Sprite {
       newPosition = [pos.x, pos.y];
     }
 
-    this.updateConfig({
-      pos: new Phaser.Point(newPosition[0], newPosition[1]),
-    });
+    this.setPosition(new Phaser.Point(newPosition[0], newPosition[1]));
   }
 
   render(ctx: CanvasRenderingContext2D) {
@@ -91,7 +90,7 @@ class Sprite {
 
     if (this.speed > 0) {
       const max = this.frames.length;
-      const idx = Math.floor(this._index);
+      const idx = Math.floor(this.frameIndex);
 
       frame = this.frames[idx % max];
 

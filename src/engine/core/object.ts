@@ -8,20 +8,35 @@ import renders from '../renderers';
 
 import utils from '../utils';
 
+export interface IGameObjectConfig {
+  id: string;
+  layer: GameLayer;
+  pos: Phaser.Point;
+  sprite: any[];
+  size: number[];
+  type: string;
+  collisions: boolean;
+  zIndex: number;
+  parameters: any;
+  rules: string[];
+  conditions: string[];
+  render: string | false;
+  update: any;
+  init: any;
+}
+
 export default class GameObject {
   id: string;
   layer: GameLayer;
   pos: Phaser.Point;
   sprite: Sprite;
   size: number[];
-  type: any;
-  private shouldCheckCollisions: boolean;
+  type: string;
+  shouldCheckCollisions: boolean;
   private collisions: GameRule;
   zIndex: number;
   private rules: any[];
   private conditions: any[];
-  private _init: any;
-  private _update: any;
   private noRender: boolean;
   private customRender: any;
   private inited: boolean;
@@ -29,22 +44,7 @@ export default class GameObject {
   private parameters: any;
   private defaultParameters: any;
 
-  constructor(config: {
-    id: string;
-    layer: GameLayer;
-    pos: Phaser.Point;
-    sprite: any[];
-    size: number[];
-    type: any;
-    collisions: boolean;
-    zIndex: number;
-    parameters: any;
-    rules: any[];
-    conditions: any[];
-    render: string | false;
-    update: any;
-    init: any;
-  }) {
+  constructor(config: IGameObjectConfig) {
     this.layer = config.layer;
     if (config.pos instanceof Phaser.Point) {
       this.pos = config.pos.clone();
@@ -58,20 +58,20 @@ export default class GameObject {
     this.id = config.id;
 
     if (config.sprite) {
-      this.sprite = new Sprite(
-        this.layer.game.cache,
-        config.sprite[0],
-        config.sprite[1],
-        config.sprite[2],
-        config.sprite[3],
-        config.sprite[4],
-        config.sprite[5],
-        config.sprite[6],
-        config.sprite[7],
-      );
+      this.sprite = new Sprite({
+        cache: this.layer.game.cache,
+        url: config.sprite[0],
+        pos: config.sprite[1],
+        size: config.sprite[2],
+        speed: config.sprite[3],
+        frames: config.sprite[4],
+        dir: config.sprite[5],
+        once: config.sprite[6],
+        degree: config.sprite[7],
+      });
     }
 
-    this.type = config.type;
+    this.type = config.type || 'default';
 
     if (config.size || this.sprite) {
       this.size = config.size || this.sprite.size;
@@ -86,7 +86,6 @@ export default class GameObject {
 
     this.rules = config.rules || [];
     this.conditions = config.conditions || [];
-    this._update = config.update;
 
     if (config.render) {
       if (renders[config.render]) {
@@ -99,8 +98,6 @@ export default class GameObject {
         this.noRender = true;
       }
     }
-
-    this._init = config.init;
 
     this.inited = false;
   }
@@ -140,8 +137,6 @@ export default class GameObject {
       this.rules = [];
       this.conditions = [];
 
-      this._init && this._init();
-
       if (this.shouldCheckCollisions) {
         this.collisions = new GameRule(gameConfigs.getRuleConfig('collisions'));
         this.collisions.setContext(this);
@@ -161,12 +156,15 @@ export default class GameObject {
   }
 
   update(dt: number) {
-    this._update && this._update();
     this.rules.forEach(rule => rule.update(dt));
   }
 
   updateConditions(dt: number) {
     this.conditions.forEach(condition => condition.update(dt));
+  }
+
+  updateCollisions(dt: number) {
+    this.collisions && this.collisions.update(dt);
   }
 
   setPosition(point: Phaser.Point) {
@@ -188,9 +186,5 @@ export default class GameObject {
     condition.init();
 
     this.conditions.push(condition);
-  }
-
-  updateCollisions(dt: number) {
-    this.collisions && this.collisions.update(dt);
   }
 }
