@@ -27,8 +27,8 @@ function healthBar(obj: GameObject) {
   ctx.globalAlpha = 0.5;
 
   if (
-    obj.getParameter('health') > 0 &&
-    obj.getDefaultParameter('health') > obj.getParameter('health')
+    obj.parameters.health > 0 &&
+    obj.defaultParameters.health > obj.getParameter('health')
   ) {
     ctx.fillStyle = 'rgb(250, 0, 0)';
     ctx.fillRect(x, y, width, height);
@@ -38,8 +38,7 @@ function healthBar(obj: GameObject) {
       x,
       y,
       Math.round(
-        width *
-          (obj.getParameter('health') / obj.getDefaultParameter('health')),
+        width * (obj.parameters.health / obj.defaultParameters.health),
       ),
       height,
     );

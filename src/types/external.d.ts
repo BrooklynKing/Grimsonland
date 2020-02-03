@@ -28,6 +28,7 @@ declare namespace Phaser {
     y: number;
     clone(): Point;
     rotate: any;
+    setTo(x: number, y: number): void;
     angle(point: Point, flag: boolean): number;
   }
 }

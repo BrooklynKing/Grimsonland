@@ -49,8 +49,7 @@ const config: any = {
 
               startDegree -= 20;
             }
-
-            obj.setParameter('cooldown', obj.getDefaultParameter('cooldown'));
+            obj.parameters.cooldown = obj.defaultParameters.cooldown;
             obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
           }
         }
@@ -93,7 +92,7 @@ const config: any = {
               createTube(movedPoint);
             }
 
-            obj.setParameter('cooldown', obj.getDefaultParameter('cooldown'));
+            obj.parameters.cooldown = obj.defaultParameters.cooldown;
             obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
           }
         }
@@ -153,7 +152,7 @@ const config: any = {
               obj.getParameter('power'),
             );
             const cooldown: any =
-              obj.getDefaultParameter('cooldown') - 30 * (spellPower - 1);
+              obj.defaultParameters.cooldown - 30 * (spellPower - 1);
 
             let teleportGate;
 

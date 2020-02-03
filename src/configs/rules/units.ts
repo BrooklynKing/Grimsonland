@@ -54,11 +54,11 @@ const config: any = {
         if (objects[i].type == 'player') {
           if (
             objects[i].getParameter('health') <
-            objects[i].getDefaultParameter('health')
+            objects[i].defaultParameters.health
           ) {
             if (
               objects[i].getParameter('health') + obj.getParameter('power') <=
-              objects[i].getDefaultParameter('health')
+              objects[i].defaultParameters.health
             ) {
               objects[i].setParameter(
                 'health',
@@ -67,7 +67,7 @@ const config: any = {
             } else {
               objects[i].setParameter(
                 'health',
-                objects[i].getDefaultParameter('health'),
+                objects[i].defaultParameters.health,
               );
             }
           }
@@ -215,8 +215,7 @@ const config: any = {
   resetSpeed: {
     update: function() {
       const obj = this.context;
-
-      obj.setParameter('speed', obj.getDefaultParameter('speed'));
+      obj.parameters.speed = obj.defaultParameters.speed;
     },
   },
   resetEffects: {

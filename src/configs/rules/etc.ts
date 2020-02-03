@@ -94,14 +94,14 @@ const config: any = {
 
       if (distance <= obj.getParameter('scentRange')) {
         obj.setParameter('scent', true);
-        obj.setParameter('speed', obj.getDefaultParameter('scentSpeed'));
+        obj.parameters.speed = obj.defaultParameters.scentSpeed;
         obj.setParameter('wanderCooldown', 0);
         obj.setParameter(
           'direction',
           Phaser.Point.subtract(player.pos, obj.pos),
         );
       } else {
-        obj.setParameter('speed', obj.getDefaultParameter('speed'));
+        obj.parameters.speed = obj.defaultParameters.speed;
         if (!obj.getParameter('wanderCooldown')) {
           const rect = new Phaser.Rectangle(100, 100, 1000, 750);
           obj.setParameter(
@@ -111,13 +111,8 @@ const config: any = {
               obj.pos,
             ),
           );
-          obj.setParameter(
-            'wanderCooldown',
-            Math.round(
-              Math.random() *
-                (obj.getDefaultParameter('wanderCooldown') - 100) +
-                100,
-            ),
+          obj.parameters.wanderCooldown = Math.round(
+            Math.random() * (obj.defaultParameters.wanderCooldown - 100) + 100,
           );
         } else {
           obj.getParameter('wanderCooldown') &&

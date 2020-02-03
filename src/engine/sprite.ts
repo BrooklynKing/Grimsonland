@@ -11,10 +11,10 @@ export interface ISpriteConfig {
 }
 
 class Sprite {
-  pos: Phaser.Point;
   size: [number, number];
   done: boolean;
 
+  private pos: Phaser.Point;
   private speed: number;
   private degree: number;
   private cache: Phaser.Cache;
@@ -61,26 +61,19 @@ class Sprite {
     this.degree = degree;
   }
 
-  setPosition(pos: Phaser.Point) {
-    this.pos = pos;
-  }
-
   rotateToDirection(direction: Phaser.Point) {
-    const pos = this.defaultPosition;
-    let newPosition;
     const angle = direction.angle(new Phaser.Point(0, 0), true);
+    const { x: defaultX, y: defaultY } = this.defaultPosition;
 
     if (angle > 135 || angle < -135) {
-      newPosition = [pos.x, pos.y + 2 * this.size[1]];
+      this.pos.setTo(defaultX, defaultY + 2 * this.size[1]);
     } else if (angle < 135 && angle > 45) {
-      newPosition = [pos.x, pos.y + 3 * this.size[1]];
+      this.pos.setTo(defaultX, defaultY + 3 * this.size[1]);
     } else if (angle < 45 && angle > -45) {
-      newPosition = [pos.x, pos.y + this.size[1]];
+      this.pos.setTo(defaultX, defaultY + this.size[1]);
     } else {
-      newPosition = [pos.x, pos.y];
+      this.pos.setTo(defaultX, defaultY);
     }
-
-    this.setPosition(new Phaser.Point(newPosition[0], newPosition[1]));
   }
 
   render(ctx: CanvasRenderingContext2D) {

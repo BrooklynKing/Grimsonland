@@ -33,16 +33,17 @@ export default class GameObject {
   size: number[];
   type: string;
   shouldCheckCollisions: boolean;
-  private collisions: GameRule;
   zIndex: number;
+
+  private collisions: GameRule;
   private rules: any[];
   private conditions: any[];
   private noRender: boolean;
   private customRender: any;
   private inited: boolean;
 
-  private parameters: any;
-  private defaultParameters: any;
+  parameters: { [key: string]: any };
+  defaultParameters: { [key: string]: any };
 
   constructor(config: IGameObjectConfig) {
     this.layer = config.layer;
@@ -109,10 +110,6 @@ export default class GameObject {
   setParameter(id: string, value: any) {
     this.parameters[id] = value;
     return this.parameters[id];
-  }
-
-  getDefaultParameter(id: string) {
-    return this.defaultParameters[id];
   }
 
   render(dt: number) {
