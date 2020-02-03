@@ -103,15 +103,6 @@ export default class GameObject {
     this.inited = false;
   }
 
-  getParameter(id: string) {
-    return this.parameters[id];
-  }
-
-  setParameter(id: string, value: any) {
-    this.parameters[id] = value;
-    return this.parameters[id];
-  }
-
   render(dt: number) {
     if (!this.noRender) {
       if (this.customRender) {

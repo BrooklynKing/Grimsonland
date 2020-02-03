@@ -40,7 +40,7 @@ const config: any = {
       const obj = this.context;
       const player = obj.layer.getObjectsByType('player')[0];
 
-      obj.setParameter('direction', Phaser.Point.subtract(player.pos, obj.pos));
+      obj.parameters.direction = Phaser.Point.subtract(player.pos, obj.pos);
     },
   },
   setDirectionToPlayerAdvance: {
@@ -55,10 +55,7 @@ const config: any = {
       }
 
       if (playerDirection == null) {
-        obj.setParameter(
-          'direction',
-          Phaser.Point.subtract(player.pos, obj.pos),
-        );
+        obj.parameters.direction = Phaser.Point.subtract(player.pos, obj.pos);
       } else {
         let speed = Math.abs(
           Math.min(
@@ -75,16 +72,16 @@ const config: any = {
         let _odv = oldDirection.clone().normalize();
         let _ndv = Phaser.Point.add(_odv, _dv).normalize();
 
-        obj.setParameter('direction', _ndv);
+        obj.parameters.direction = _ndv;
       }
     },
   },
   wandererAI: {
     init: function() {
       const rect = new Phaser.Rectangle(100, 100, 1000, 750);
-      this.context.setParameter(
-        'direction',
-        new Phaser.Point(rect.randomX, rect.randomY),
+      this.context.parameters.direction = new Phaser.Point(
+        rect.randomX,
+        rect.randomY,
       );
     },
     update: function() {
@@ -93,33 +90,24 @@ const config: any = {
       const distance = Phaser.Point.distance(obj.pos, player.pos);
 
       if (distance <= obj.parameters.scentRange) {
-        obj.setParameter('scent', true);
+        obj.parameters.scent = true;
         obj.parameters.speed = obj.defaultParameters.scentSpeed;
-        obj.setParameter('wanderCooldown', 0);
-        obj.setParameter(
-          'direction',
-          Phaser.Point.subtract(player.pos, obj.pos),
-        );
+        obj.parameters.wanderCooldown = 0;
+        obj.parameters.direction = Phaser.Point.subtract(player.pos, obj.pos);
       } else {
         obj.parameters.speed = obj.defaultParameters.speed;
         if (!obj.parameters.wanderCooldown) {
           const rect = new Phaser.Rectangle(100, 100, 1000, 750);
-          obj.setParameter(
-            'direction',
-            Phaser.Point.subtract(
-              new Phaser.Point(rect.randomX, rect.randomY),
-              obj.pos,
-            ),
+          obj.parameters.direction = Phaser.Point.subtract(
+            new Phaser.Point(rect.randomX, rect.randomY),
+            obj.pos,
           );
           obj.parameters.wanderCooldown = Math.round(
             Math.random() * (obj.defaultParameters.wanderCooldown - 100) + 100,
           );
         } else {
           obj.parameters.wanderCooldown &&
-            obj.setParameter(
-              'wanderCooldown',
-              obj.parameters.wanderCooldown - 1,
-            );
+            (obj.parameters.wanderCooldown = obj.parameters.wanderCooldown - 1);
         }
       }
     },
@@ -138,7 +126,9 @@ const config: any = {
   collisions: {
     init: function() {
       const obj = this.context;
-      const collisions = obj.setParameter('collisions', []);
+
+      const collisions: any = [];
+      obj.parameters.collisions = collisions;
 
       collisions.cells = new Array();
       obj.layer.state.collisions.updateObject(obj);
@@ -184,7 +174,7 @@ const config: any = {
       if (cooldown == 0) {
         obj.layer.removeObjectOnNextTick(obj.id);
       } else {
-        obj.setParameter('cooldown', cooldown - 1);
+        obj.parameters.cooldown = cooldown - 1;
       }
     },
   },
@@ -199,9 +189,9 @@ const config: any = {
         const explosionConfig = gameConfigs.getConfig('monsterExplosion');
         explosionConfig.pos = new Phaser.Point(obj.pos.x, obj.pos.y);
         const expl = obj.layer.addObject(explosionConfig);
-        expl.setParameter('power', obj.parameters.power);
+        expl.parameters.power = obj.parameters.power;
       } else {
-        obj.setParameter('cooldown', cooldown - 1);
+        obj.parameters.cooldown = cooldown - 1;
       }
     },
   },
@@ -215,7 +205,7 @@ const config: any = {
         const explosionConfig = gameConfigs.getConfig('monsterExplosion');
         explosionConfig.pos = new Phaser.Point(obj.pos.x, obj.pos.y);
         const expl = obj.layer.addObject(explosionConfig) as GameObject;
-        expl.setParameter('power', obj.parameters.power);
+        expl.parameters.power = obj.parameters.power;
       }
     },
   },

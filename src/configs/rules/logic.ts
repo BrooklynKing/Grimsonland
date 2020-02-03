@@ -7,13 +7,12 @@ const config: any = {
     init: function() {
       const obj = this.context;
 
-      obj.setParameter('currentWave', 1);
-      obj.setParameter(
-        'monsterOnWave',
-        this.parameters.monsterCount[obj.parameters.currentWave - 1],
-      );
-      obj.setParameter('monsterKilled', 0);
-      obj.setParameter('monsterSpawned', 0);
+      obj.parameters.currentWave = 1;
+      obj.parameters.monsterOnWave = this.parameters.monsterCount[
+        obj.parameters.currentWave - 1
+      ];
+      obj.parameters.monsterKilled = 0;
+      obj.parameters.monsterSpawned = 0;
 
       this.leftOnWave = this.context.layer.addObject(
         gameConfigs.getConfig('leftOnWaveLabel'),
@@ -41,7 +40,7 @@ const config: any = {
         if (!this.parameters.currentMonsterCooldown) {
           createSpawn();
 
-          obj.setParameter('monsterSpawned', obj.parameters.monsterSpawned + 1);
+          obj.parameters.monsterSpawned = obj.parameters.monsterSpawned + 1;
           this.parameters.currentMonsterCooldown = this.parameters.monsterCooldown;
         } else {
           this.parameters.currentMonsterCooldown &&
@@ -49,22 +48,21 @@ const config: any = {
         }
       } else {
         if (obj.parameters.monsterKilled >= obj.parameters.monsterOnWave) {
-          obj.setParameter('currentWave', obj.parameters.currentWave + 1);
-          obj.setParameter('monsterSpawned', 0);
-          obj.setParameter(
-            'monsterOnWave',
-            this.parameters.monsterCount[obj.parameters.currentWave - 1],
-          );
-          obj.setParameter('monsterKilled', 0);
+          obj.parameters.currentWave = obj.parameters.currentWave + 1;
+          obj.parameters.monsterSpawned = 0;
+          obj.parameters.monsterOnWave = this.parameters.monsterCount[
+            obj.parameters.currentWave - 1
+          ];
+          obj.parameters.monsterKilled = 0;
         }
       }
 
-      this.leftOnWave.setParameter(
-        'text',
-        format(this.leftOnWave.parameters.template, {
+      this.leftOnWave.parameters.text = format(
+        this.leftOnWave.parameters.template,
+        {
           count:
             obj.parameters.monsterKilled + '/' + obj.parameters.monsterOnWave,
-        }),
+        },
       );
     },
     parameters: {
