@@ -5,7 +5,7 @@ const config: any = {
   countMonsterKilled: {
     update: function() {
       const obj = this.context;
-      const template = obj.getParameter('template');
+      const template = obj.parameters.template;
 
       obj.setParameter(
         'text',
@@ -18,7 +18,7 @@ const config: any = {
   timer: {
     update: function() {
       const obj = this.context;
-      const template = obj.getParameter('template');
+      const template = obj.parameters.template;
 
       obj.setParameter(
         'text',
@@ -31,7 +31,7 @@ const config: any = {
   health: {
     update: function() {
       const obj = this.context;
-      const template = obj.getParameter('template');
+      const template = obj.parameters.template;
 
       obj.setParameter(
         'text',
@@ -44,17 +44,15 @@ const config: any = {
   level: {
     update: function() {
       const obj = this.context;
-      const template = obj.getParameter('template');
+      const template = obj.parameters.template;
       const player = obj.layer.getObjectsByType('player')[0];
 
       obj.setParameter(
         'text',
         format(template, {
-          level: player.getParameter('level'),
-          exp: player.getParameter('exp'),
-          levelExp: player.getParameter('levelTable')[
-            player.getParameter('level')
-          ],
+          level: player.parameters.level,
+          exp: player.parameters.exp,
+          levelExp: player.parameters.levelTable[player.parameters.level],
         }),
       );
     },
@@ -62,7 +60,7 @@ const config: any = {
   bestTime: {
     init: function() {
       const obj = this.context;
-      const template = obj.getParameter('template');
+      const template = obj.parameters.template;
 
       obj.setParameter(
         'text',
@@ -75,7 +73,7 @@ const config: any = {
   bestScore: {
     init: function() {
       const obj = this.context;
-      const template = obj.getParameter('template');
+      const template = obj.parameters.template;
 
       obj.setParameter(
         'text',

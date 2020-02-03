@@ -10,7 +10,7 @@ const config: any = {
       obj.setParameter('currentWave', 1);
       obj.setParameter(
         'monsterOnWave',
-        this.parameters.monsterCount[obj.getParameter('currentWave') - 1],
+        this.parameters.monsterCount[obj.parameters.currentWave - 1],
       );
       obj.setParameter('monsterKilled', 0);
       obj.setParameter('monsterSpawned', 0);
@@ -37,30 +37,23 @@ const config: any = {
         obj.layer.addObject(summonGate);
       }
 
-      if (
-        obj.getParameter('monsterSpawned') < obj.getParameter('monsterOnWave')
-      ) {
+      if (obj.parameters.monsterSpawned < obj.parameters.monsterOnWave) {
         if (!this.parameters.currentMonsterCooldown) {
           createSpawn();
 
-          obj.setParameter(
-            'monsterSpawned',
-            obj.getParameter('monsterSpawned') + 1,
-          );
+          obj.setParameter('monsterSpawned', obj.parameters.monsterSpawned + 1);
           this.parameters.currentMonsterCooldown = this.parameters.monsterCooldown;
         } else {
           this.parameters.currentMonsterCooldown &&
             this.parameters.currentMonsterCooldown--;
         }
       } else {
-        if (
-          obj.getParameter('monsterKilled') >= obj.getParameter('monsterOnWave')
-        ) {
-          obj.setParameter('currentWave', obj.getParameter('currentWave') + 1);
+        if (obj.parameters.monsterKilled >= obj.parameters.monsterOnWave) {
+          obj.setParameter('currentWave', obj.parameters.currentWave + 1);
           obj.setParameter('monsterSpawned', 0);
           obj.setParameter(
             'monsterOnWave',
-            this.parameters.monsterCount[obj.getParameter('currentWave') - 1],
+            this.parameters.monsterCount[obj.parameters.currentWave - 1],
           );
           obj.setParameter('monsterKilled', 0);
         }
@@ -68,11 +61,9 @@ const config: any = {
 
       this.leftOnWave.setParameter(
         'text',
-        format(this.leftOnWave.getParameter('template'), {
+        format(this.leftOnWave.parameters.template, {
           count:
-            obj.getParameter('monsterKilled') +
-            '/' +
-            obj.getParameter('monsterOnWave'),
+            obj.parameters.monsterKilled + '/' + obj.parameters.monsterOnWave,
         }),
       );
     },

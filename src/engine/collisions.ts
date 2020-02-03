@@ -21,7 +21,7 @@ function generate(config: { n: number; width: number; height: number }) {
   }
 
   function removeObject(object: GameObject) {
-    const oldCells = object.getParameter('collisions').cells;
+    const oldCells = object.parameters.collisions.cells;
 
     for (let i = 0; i < oldCells.length; i++) {
       cellGrid[oldCells[i]] &&
@@ -52,7 +52,7 @@ function generate(config: { n: number; width: number; height: number }) {
 
   function updateObject(object: GameObject) {
     const cells = getPointsOfObject(object);
-    const oldCells = object.getParameter('collisions').cells;
+    const oldCells = object.parameters.collisions.cells;
 
     for (let i = 0; i < cells.length; i++) {
       if (oldCells[i] !== cells[i]) {
@@ -90,10 +90,10 @@ function generate(config: { n: number; width: number; height: number }) {
                   objects[l].size,
                 )
               ) {
-                objects[k].getParameter('collisions').indexOf(objects[l]) ===
-                  -1 && objects[k].getParameter('collisions').push(objects[l]);
-                objects[l].getParameter('collisions').indexOf(objects[k]) ===
-                  -1 && objects[l].getParameter('collisions').push(objects[k]);
+                objects[k].parameters.collisions.indexOf(objects[l]) === -1 &&
+                  objects[k].parameters.collisions.push(objects[l]);
+                objects[l].parameters.collisions.indexOf(objects[k]) === -1 &&
+                  objects[l].parameters.collisions.push(objects[k]);
               }
             }
           }

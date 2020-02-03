@@ -47,8 +47,8 @@ const config: any = {
     update: function() {
       const obj = this.context;
       const player = obj.layer.getObjectsByType('player')[0];
-      const playerDirection = player.getParameter('direction');
-      let oldDirection = obj.getParameter('direction');
+      const playerDirection = player.parameters.direction;
+      let oldDirection = obj.parameters.direction;
 
       if (!oldDirection) {
         oldDirection = Phaser.Point.subtract(player.pos, obj.pos);
@@ -62,7 +62,7 @@ const config: any = {
       } else {
         let speed = Math.abs(
           Math.min(
-            player.getParameter('speed'),
+            player.parameters.speed,
             Phaser.Point.distance(obj.pos, player.pos),
           ) - 10,
         );
@@ -92,7 +92,7 @@ const config: any = {
       const player = obj.layer.getObjectsByType('player')[0];
       const distance = Phaser.Point.distance(obj.pos, player.pos);
 
-      if (distance <= obj.getParameter('scentRange')) {
+      if (distance <= obj.parameters.scentRange) {
         obj.setParameter('scent', true);
         obj.parameters.speed = obj.defaultParameters.scentSpeed;
         obj.setParameter('wanderCooldown', 0);
@@ -102,7 +102,7 @@ const config: any = {
         );
       } else {
         obj.parameters.speed = obj.defaultParameters.speed;
-        if (!obj.getParameter('wanderCooldown')) {
+        if (!obj.parameters.wanderCooldown) {
           const rect = new Phaser.Rectangle(100, 100, 1000, 750);
           obj.setParameter(
             'direction',
@@ -115,10 +115,10 @@ const config: any = {
             Math.random() * (obj.defaultParameters.wanderCooldown - 100) + 100,
           );
         } else {
-          obj.getParameter('wanderCooldown') &&
+          obj.parameters.wanderCooldown &&
             obj.setParameter(
               'wanderCooldown',
-              obj.getParameter('wanderCooldown') - 1,
+              obj.parameters.wanderCooldown - 1,
             );
         }
       }
@@ -146,7 +146,7 @@ const config: any = {
     update: function() {
       const obj = this.context;
 
-      obj.getParameter('collisions').splice(0);
+      obj.parameters.collisions.splice(0);
       obj.layer.state.collisions.updateObject(obj);
     },
   },
@@ -179,7 +179,7 @@ const config: any = {
   removeOnCooldown: {
     update: function() {
       const obj = this.context;
-      const cooldown = obj.getParameter('cooldown');
+      const cooldown = obj.parameters.cooldown;
 
       if (cooldown == 0) {
         obj.layer.removeObjectOnNextTick(obj.id);
@@ -191,7 +191,7 @@ const config: any = {
   explosionOnCooldown: {
     update: function() {
       const obj = this.context;
-      const cooldown = obj.getParameter('cooldown');
+      const cooldown = obj.parameters.cooldown;
 
       if (cooldown == 0) {
         obj.layer.removeObjectOnNextTick(obj.id);
@@ -199,7 +199,7 @@ const config: any = {
         const explosionConfig = gameConfigs.getConfig('monsterExplosion');
         explosionConfig.pos = new Phaser.Point(obj.pos.x, obj.pos.y);
         const expl = obj.layer.addObject(explosionConfig);
-        expl.setParameter('power', obj.getParameter('power'));
+        expl.setParameter('power', obj.parameters.power);
       } else {
         obj.setParameter('cooldown', cooldown - 1);
       }
@@ -215,7 +215,7 @@ const config: any = {
         const explosionConfig = gameConfigs.getConfig('monsterExplosion');
         explosionConfig.pos = new Phaser.Point(obj.pos.x, obj.pos.y);
         const expl = obj.layer.addObject(explosionConfig) as GameObject;
-        expl.setParameter('power', obj.getParameter('power'));
+        expl.setParameter('power', obj.parameters.power);
       }
     },
   },
@@ -232,7 +232,7 @@ const config: any = {
     update: function() {
       const obj = this.context;
 
-      obj.sprite.rotateToDirection(obj.getParameter('direction'));
+      obj.sprite.rotateToDirection(obj.parameters.direction);
     },
   },
   rotateByPlayer: {

@@ -28,7 +28,7 @@ function healthBar(obj: GameObject) {
 
   if (
     obj.parameters.health > 0 &&
-    obj.defaultParameters.health > obj.getParameter('health')
+    obj.defaultParameters.health > obj.parameters.health')
   ) {
     ctx.fillStyle = 'rgb(250, 0, 0)';
     ctx.fillRect(x, y, width, height);
@@ -63,7 +63,7 @@ function expBar(obj: GameObject) {
 
   ctx.globalAlpha = 1;
   ctx.fillStyle = '#DAA520';
-  if (player.getParameter('levelTable')[player.getParameter('level')]) {
+  if (player.parameters.levelTable')[player.parameters.level')]) {
     ctx.fillRect(
       x,
       y,
@@ -71,8 +71,8 @@ function expBar(obj: GameObject) {
         width,
         Math.round(
           width *
-            (player.getParameter('exp') /
-              player.getParameter('levelTable')[player.getParameter('level')]),
+            (player.parameters.exp') /
+              player.parameters.levelTable')[player.parameters.level')]),
         ),
       ),
       height,
@@ -142,7 +142,7 @@ function shadow(obj: GameObject) {
 
 function effects(obj: GameObject) {
   const ctx = obj.layer.ctx;
-  const effects = obj.getParameter('effects');
+  const effects = obj.parameters.effects');
 
   for (let i = 0; i < effects.length; i++) {
     const effect = effects[i];
@@ -183,7 +183,7 @@ function spellRenderer(obj: GameObject, dt: number) {
 
   if (
     obj.id.indexOf(
-      obj.layer.getObjectsByType('player')[0].getParameter('currentSpell'),
+      obj.layer.getObjectsByType('player')[0].parameters.currentSpell'),
     ) !== -1
   ) {
     ctx.fillStyle = 'rgb(0, 250, 0)';
@@ -202,7 +202,7 @@ function spellRenderer(obj: GameObject, dt: number) {
 
   sprite(obj, dt);
 
-  if (obj.getParameter('fireCooldown') > 0) {
+  if (obj.parameters.fireCooldown') > 0) {
     ctx.globalAlpha = 0.8;
     ctx.fillStyle = 'rgb(20, 20, 20)';
     ctx.fillRect(
@@ -211,7 +211,7 @@ function spellRenderer(obj: GameObject, dt: number) {
         y +
           height -
           height *
-            (obj.getParameter('fireCooldown') / obj.getParameter('cooldown')),
+            (obj.parameters.fireCooldown') / obj.parameters.cooldown')),
       ),
       width,
       height,
@@ -236,20 +236,20 @@ function textRender(obj: GameObject) {
 
   ctx.translate(-obj.layer.translate.x, -obj.layer.translate.y);
 
-  obj.getParameter('style') && (fontConfig += obj.getParameter('style') + ' ');
-  obj.getParameter('weight') &&
-    (fontConfig += obj.getParameter('weight') + ' ');
+  obj.parameters.style') && (fontConfig += obj.parameters.style') + ' ');
+  obj.parameters.weight') &&
+    (fontConfig += obj.parameters.weight') + ' ');
 
-  fontConfig += (obj.getParameter('size') || 30) + 'pt ';
-  fontConfig += obj.getParameter('font') || 'Arial';
+  fontConfig += (obj.parameters.size') || 30) + 'pt ';
+  fontConfig += obj.parameters.font') || 'Arial';
 
-  if (obj.getParameter('align')) {
-    ctx.textAlign = obj.getParameter('align');
+  if (obj.parameters.align')) {
+    ctx.textAlign = obj.parameters.align');
   }
 
   ctx.font = fontConfig;
-  ctx.fillStyle = obj.getParameter('color') || '#FFF';
-  ctx.fillText(obj.getParameter('text'), obj.pos.x, obj.pos.y);
+  ctx.fillStyle = obj.parameters.color') || '#FFF';
+  ctx.fillText(obj.parameters.text'), obj.pos.x, obj.pos.y);
 
   ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }

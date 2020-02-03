@@ -6,7 +6,7 @@ const config: any = {
     update: function() {
       const obj = this.context;
 
-      if (obj.getParameter('health') <= 0) {
+      if (obj.parameters.health') <= 0) {
         obj.layer.state.stopBattle();
       }
     },
@@ -14,13 +14,13 @@ const config: any = {
   damageOnPlayerCollision: {
     update: function() {
       const obj = this.context;
-      const objects = obj.getParameter('collisions');
+      const objects = obj.parameters.collisions');
 
       for (let i = 0; i < objects.length; i++) {
         if (objects[i].type == 'player') {
           objects[i].setParameter(
             'health',
-            objects[i].getParameter('health') - obj.getParameter('power'),
+            objects[i].parameters.health') - obj.parameters.power'),
           );
           break;
         }
@@ -30,7 +30,7 @@ const config: any = {
   destroyOnPlayerCollision: {
     update: function() {
       const obj = this.context;
-      const objects = obj.getParameter('collisions');
+      const objects = obj.parameters.collisions');
 
       for (let i = 0; i < objects.length; i++) {
         if (objects[i].type == 'player') {
@@ -48,21 +48,21 @@ const config: any = {
   triggerOnPlayerCollision: {
     update: function() {
       const obj = this.context;
-      const objects = obj.getParameter('collisions');
+      const objects = obj.parameters.collisions');
 
       for (let i = 0; i < objects.length; i++) {
         if (objects[i].type == 'player') {
           if (
-            objects[i].getParameter('health') <
+            objects[i].parameters.health') <
             objects[i].defaultParameters.health
           ) {
             if (
-              objects[i].getParameter('health') + obj.getParameter('power') <=
+              objects[i].parameters.health') + obj.parameters.power') <=
               objects[i].defaultParameters.health
             ) {
               objects[i].setParameter(
                 'health',
-                objects[i].getParameter('health') + obj.getParameter('power'),
+                objects[i].parameters.health') + obj.parameters.power'),
               );
             } else {
               objects[i].setParameter(
@@ -82,13 +82,13 @@ const config: any = {
     update: function() {
       const obj = this.context;
 
-      if (!obj.getParameter('meleeCooldown')) {
-        const objects = obj.getParameter('collisions');
+      if (!obj.parameters.meleeCooldown')) {
+        const objects = obj.parameters.collisions');
         for (let i = 0; i < objects.length; i++) {
           if (objects[i].type == 'player') {
             objects[i].setParameter(
               'health',
-              objects[i].getParameter('health') - obj.getParameter('power'),
+              objects[i].parameters.health') - obj.parameters.power'),
             );
 
             const blood = gameConfigs.getConfig('bloodSpray');
@@ -97,7 +97,7 @@ const config: any = {
             blood.pos.y += -10;
             obj.layer.addObject(blood);
 
-            obj.setParameter('meleeCooldown', obj.getParameter('cooldown'));
+            obj.setParameter('meleeCooldown', obj.parameters.cooldown'));
             break;
           }
         }
@@ -108,13 +108,13 @@ const config: any = {
     update: function() {
       const obj = this.context;
 
-      if (!obj.getParameter('exploded')) {
-        const objects = obj.getParameter('collisions');
+      if (!obj.parameters.exploded')) {
+        const objects = obj.parameters.collisions');
         for (let i = 0, l = objects.length; i < l; i++) {
-          if (objects[i].getParameter('health')) {
+          if (objects[i].parameters.health')) {
             objects[i].setParameter(
               'health',
-              objects[i].getParameter('health') - obj.getParameter('power'),
+              objects[i].parameters.health') - obj.parameters.power'),
             );
             break;
           }
@@ -131,7 +131,7 @@ const config: any = {
       function generateExplosions() {
         const pos = obj.pos.clone();
         let explosionConfig;
-        const power = obj.getParameter('power');
+        const power = obj.parameters.power');
         let expl;
 
         obj.layer.removeObjectOnNextTick(obj.id);
@@ -185,10 +185,10 @@ const config: any = {
         expl.setParameter('power', power);
       }
 
-      if (obj.getParameter('health') <= 0) {
+      if (obj.parameters.health') <= 0) {
         generateExplosions();
       } else {
-        const objects = obj.getParameter('collisions');
+        const objects = obj.parameters.collisions');
         for (let i = 0; i < objects.length; i++) {
           if (objects[i].type == 'player') {
             generateExplosions();
@@ -202,7 +202,7 @@ const config: any = {
   stopOnCollisionWithPlayer: {
     update: function() {
       const obj = this.context;
-      const objects = obj.getParameter('collisions');
+      const objects = obj.parameters.collisions');
 
       for (let i = 0, l = objects.length; i < l; i++) {
         if (objects[i].type == 'player') {
@@ -222,20 +222,20 @@ const config: any = {
     update: function() {
       const obj = this.context;
 
-      obj.getParameter('effects').splice(0);
+      obj.parameters.effects').splice(0);
     },
   },
   moveToDirection: {
     update: function(dt: number) {
       const obj = this.context;
-      const direction = obj.getParameter('direction');
+      const direction = obj.parameters.direction');
 
       if (direction) {
         obj.setPosition(
           utils.moveWithSpeed(
             obj.pos,
             direction,
-            obj.getParameter('speed') * dt,
+            obj.parameters.speed') * dt,
           ),
         );
       }
@@ -244,18 +244,18 @@ const config: any = {
   playerLevelUp: {
     update: function() {
       const obj = this.context;
-      const levelExp = obj.getParameter('levelTable')[
-        obj.getParameter('level')
+      const levelExp = obj.parameters.levelTable')[
+        obj.parameters.level')
       ];
 
-      if (obj.getParameter('levelTable')[obj.getParameter('level')]) {
+      if (obj.parameters.levelTable')[obj.parameters.level')]) {
         if (
-          obj.getParameter('exp') >
-          obj.getParameter('levelTable')[obj.getParameter('level')]
+          obj.parameters.exp') >
+          obj.parameters.levelTable')[obj.parameters.level')]
         ) {
-          obj.setParameter('exp', obj.getParameter('exp') - levelExp);
-          obj.setParameter('level', obj.getParameter('level') + 1);
-          obj.setParameter('spellPower', obj.getParameter('spellPower') + 1);
+          obj.setParameter('exp', obj.parameters.exp') - levelExp);
+          obj.setParameter('level', obj.parameters.level') + 1);
+          obj.setParameter('spellPower', obj.parameters.spellPower') + 1);
         }
       } else {
         obj.setParameter('level', 'MAX');
@@ -266,7 +266,7 @@ const config: any = {
     update: function() {
       const obj = this.context;
 
-      if (obj.getParameter('health') <= 0) {
+      if (obj.parameters.health') <= 0) {
         obj.layer.removeObjectOnNextTick(obj.id);
 
         const explosionConfig = gameConfigs.getConfig('explosion');
@@ -287,7 +287,7 @@ const config: any = {
         )[0];
         monsterController.setParameter(
           'monsterKilled',
-          monsterController.getParameter('monsterKilled') + 1,
+          monsterController.parameters.monsterKilled') + 1,
         );
 
         obj.layer.state.parameters.monstersKilled++;
@@ -295,7 +295,7 @@ const config: any = {
         const player = obj.layer.getObjectsByType('player')[0];
         player.setParameter(
           'exp',
-          player.getParameter('exp') + obj.getParameter('exp'),
+          player.parameters.exp') + obj.parameters.exp'),
         );
       }
     },
@@ -303,7 +303,7 @@ const config: any = {
   resetRangeCooldown: {
     update: function() {
       const obj = this.context;
-      const fireCooldown = obj.getParameter('fireCooldown');
+      const fireCooldown = obj.parameters.fireCooldown');
 
       fireCooldown && obj.setParameter('fireCooldown', fireCooldown - 1);
     },
@@ -311,7 +311,7 @@ const config: any = {
   resetMeleeCooldown: {
     update: function() {
       const obj = this.context;
-      const meleeCooldown = obj.getParameter('meleeCooldown');
+      const meleeCooldown = obj.parameters.meleeCooldown');
 
       meleeCooldown && obj.setParameter('meleeCooldown', meleeCooldown - 1);
     },
@@ -321,7 +321,7 @@ const config: any = {
       const obj = this.context;
       const player = obj.layer.getObjectsByType('player')[0];
 
-      if (!obj.getParameter('fireCooldown')) {
+      if (!obj.parameters.fireCooldown')) {
         var bulletConfig = gameConfigs.getConfig('mbullet');
         const direction = Phaser.Point.subtract(player.pos, obj.pos);
 
@@ -331,7 +331,7 @@ const config: any = {
 
         bull.sprite.setDegree(obj.pos.angle(player.pos));
 
-        obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
+        obj.setParameter('fireCooldown', obj.parameters.cooldown'));
       }
     },
   },
@@ -339,13 +339,13 @@ const config: any = {
     update: function(dt: number) {
       const obj = this.context;
       const player = obj.layer.getObjectsByType('player')[0];
-      const directionToPlayer = obj.getParameter('direction');
+      const directionToPlayer = obj.parameters.direction');
 
       if (
         Phaser.Point.distance(obj.pos, player.pos) <
-        obj.getParameter('fireRange')
+        obj.parameters.fireRange')
       ) {
-        if (!obj.getParameter('fireCooldown')) {
+        if (!obj.parameters.fireCooldown')) {
           var bulletConfig = gameConfigs.getConfig('mbullet2');
           bulletConfig.pos = obj.pos.clone();
 
@@ -353,14 +353,14 @@ const config: any = {
 
           bull.setParameter('direction', directionToPlayer);
 
-          obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
+          obj.setParameter('fireCooldown', obj.parameters.cooldown'));
         }
       } else {
         obj.setPosition(
           utils.moveWithSpeed(
             obj.pos,
             directionToPlayer,
-            obj.getParameter('speed') * dt,
+            obj.parameters.speed') * dt,
           ),
         );
       }
@@ -369,8 +369,8 @@ const config: any = {
   monsterBoss2Bullet: {
     update: function() {
       const obj = this.context;
-      const cooldown = obj.getParameter('cooldown');
-      const objects = obj.getParameter('collisions');
+      const cooldown = obj.parameters.cooldown');
+      const objects = obj.parameters.collisions');
 
       if (cooldown == 0) {
         obj.layer.removeObjectOnNextTick(obj.id);
@@ -393,7 +393,7 @@ const config: any = {
       function createExplosion() {
         const pos = obj.pos.clone();
         let explosionConfig;
-        const power = obj.getParameter('power');
+        const power = obj.parameters.power');
         let expl;
 
         explosionConfig = gameConfigs.getConfig('monsterExplosion');
@@ -451,14 +451,14 @@ const config: any = {
   triggerOnPlayerCollisionPowerUp: {
     update: function() {
       const obj = this.context;
-      const objects = obj.getParameter('collisions');
+      const objects = obj.parameters.collisions');
 
       for (let i = 0; i < objects.length; i++) {
         if (objects[i].type == 'player') {
-          //objects[i].setParameter('spellPower', objects[i].getParameter('spellPower') + obj.getParameter('power'));
+          //objects[i].setParameter('spellPower', objects[i].parameters.spellPower') + obj.parameters.power'));
           objects[i].setParameter(
             'exp',
-            objects[i].getParameter('exp') + obj.getParameter('exp'),
+            objects[i].parameters.exp') + obj.parameters.exp'),
           );
           obj.layer.removeObjectOnNextTick(obj.id);
           break;
@@ -469,28 +469,28 @@ const config: any = {
   summonOnCooldown: {
     update: function() {
       const obj = this.context;
-      const cooldown = obj.getParameter('cooldown');
+      const cooldown = obj.parameters.cooldown');
 
       function getProperMonster() {
         let random = Math.random() * 100;
         let config;
 
-        if (random <= obj.getParameter('chanceOfBoss')) {
+        if (random <= obj.parameters.chanceOfBoss')) {
           config = gameConfigs.getConfig('monsterBoss');
         } else {
-          random -= obj.getParameter('chanceOfBoss');
+          random -= obj.parameters.chanceOfBoss');
         }
 
-        if (!config && random <= obj.getParameter('chanceOfBoss2')) {
+        if (!config && random <= obj.parameters.chanceOfBoss2')) {
           config = gameConfigs.getConfig('monsterBoss2');
         } else {
-          random -= obj.getParameter('chanceOfBoss2');
+          random -= obj.parameters.chanceOfBoss2');
         }
 
-        if (!config && random <= obj.getParameter('chanceOfBoomer')) {
+        if (!config && random <= obj.parameters.chanceOfBoomer')) {
           config = gameConfigs.getConfig('monsterBoomer');
         } else {
-          random -= obj.getParameter('monsterBoomer');
+          random -= obj.parameters.monsterBoomer');
         }
 
         if (!config) {
@@ -507,12 +507,12 @@ const config: any = {
 
         const monster = obj.layer.addObject(monsterConfig);
 
-        if (player.getParameter('level') > 1) {
+        if (player.parameters.level') > 1) {
           monster.setParameter(
             'health',
-            monster.getParameter('health') *
+            monster.parameters.health') *
               0.75 *
-              player.getParameter('level'),
+              player.parameters.level'),
           );
         }
 

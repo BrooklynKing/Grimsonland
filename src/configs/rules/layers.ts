@@ -113,23 +113,23 @@ const config: any = {
 
       if (px < 30) {
         if (obj.translate.x < 0) {
-          obj.translate.x += Math.round(player.getParameter('speed') * dt);
+          obj.translate.x += Math.round(player.parameters.speed * dt);
         }
       }
       if (px > 70) {
         if (obj.translate.x > -300) {
-          obj.translate.x -= Math.round(player.getParameter('speed') * dt);
+          obj.translate.x -= Math.round(player.parameters.speed * dt);
         }
       }
 
       if (py < 25) {
         if (obj.translate.y < 0) {
-          obj.translate.y += Math.round(player.getParameter('speed') * dt);
+          obj.translate.y += Math.round(player.parameters.speed * dt);
         }
       }
       if (py > 75) {
         if (obj.translate.y > -300) {
-          obj.translate.y -= Math.round(player.getParameter('speed') * dt);
+          obj.translate.y -= Math.round(player.parameters.speed * dt);
         }
       }
     },

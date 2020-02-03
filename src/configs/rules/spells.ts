@@ -6,8 +6,8 @@ const config: any = {
     update: function() {
       const obj = this.context;
       const player = obj.layer.getObjectsByType('player')[0];
-      const fireCooldown = obj.getParameter('fireCooldown');
-      const spellPower = player.getParameter('spellPower');
+      const fireCooldown = obj.parameters.fireCooldown');
+      const spellPower = player.parameters.spellPower');
 
       function createBullet(direction: any, destination: any) {
         const bulletConfig = gameConfigs.getConfig('bullet');
@@ -17,12 +17,12 @@ const config: any = {
         bull.setParameter('direction', direction);
         bull.setParameter(
           'power',
-          bull.getParameter('power') + 5 * (spellPower - 1),
+          bull.parameters.power') + 5 * (spellPower - 1),
         );
         bull.sprite.setDegree(player.pos.angle(destination));
       }
 
-      if (player.getParameter('currentSpell') == 'fireball') {
+      if (player.parameters.currentSpell') == 'fireball') {
         if (
           obj.layer.game.input.mousePointer.isDown ||
           obj.layer.game.input.keyboard.isDown(32)
@@ -50,7 +50,7 @@ const config: any = {
               startDegree -= 20;
             }
             obj.parameters.cooldown = obj.defaultParameters.cooldown;
-            obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
+            obj.setParameter('fireCooldown', obj.parameters.cooldown'));
           }
         }
       }
@@ -61,21 +61,21 @@ const config: any = {
     update: function() {
       const obj = this.context;
       const player = obj.layer.getObjectsByType('player')[0];
-      const fireCooldown = obj.getParameter('fireCooldown');
+      const fireCooldown = obj.parameters.fireCooldown');
 
       function createTube(pos: Phaser.Point) {
-        const spellPower = player.getParameter('spellPower');
+        const spellPower = player.parameters.spellPower');
         const tubeConfig = gameConfigs.getConfig('hellfireTube');
         tubeConfig.pos = pos;
 
         const tube = obj.layer.addObject(tubeConfig);
         tube.setParameter(
           'power',
-          tube.getParameter('power') + 5 * (spellPower - 1),
+          tube.parameters.power') + 5 * (spellPower - 1),
         );
       }
 
-      if (player.getParameter('currentSpell') == 'hellfire') {
+      if (player.parameters.currentSpell') == 'hellfire') {
         if (
           obj.layer.game.input.mousePointer.isDown ||
           obj.layer.game.input.keyboard.isDown(32)
@@ -93,7 +93,7 @@ const config: any = {
             }
 
             obj.parameters.cooldown = obj.defaultParameters.cooldown;
-            obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
+            obj.setParameter('fireCooldown', obj.parameters.cooldown'));
           }
         }
       }
@@ -103,13 +103,13 @@ const config: any = {
   slowEnemies: {
     update: function() {
       const obj = this.context;
-      const objects = obj.getParameter('collisions');
+      const objects = obj.parameters.collisions');
 
       for (let i = 0; i < objects.length; i++) {
         if (objects[i].type == 'monster') {
-          const speed = objects[i].getParameter('speed');
-          const power = obj.getParameter('power');
-          const effects = objects[i].getParameter('effects') || [];
+          const speed = objects[i].parameters.speed');
+          const power = obj.parameters.power');
+          const effects = objects[i].parameters.effects') || [];
 
           if (speed < power) {
             objects[i].setParameter('speed', 0);
@@ -128,9 +128,9 @@ const config: any = {
     update: function() {
       const obj = this.context;
       const player = obj.layer.getObjectsByType('player')[0];
-      const fireCooldown = obj.getParameter('fireCooldown');
+      const fireCooldown = obj.parameters.fireCooldown');
 
-      if (player.getParameter('currentSpell') == 'teleport') {
+      if (player.parameters.currentSpell') == 'teleport') {
         if (
           obj.layer.game.input.mousePointer.isDown ||
           obj.layer.game.input.keyboard.isDown(32)
@@ -145,11 +145,11 @@ const config: any = {
             mouse.y -= obj.layer.translate.y;
 
             const direction = Phaser.Point.subtract(mouse, player.pos);
-            const spellPower = player.getParameter('spellPower');
+            const spellPower = player.parameters.spellPower');
             const destination = utils.moveWithSpeed(
               player.pos,
               direction,
-              obj.getParameter('power'),
+              obj.parameters.power'),
             );
             const cooldown: any =
               obj.defaultParameters.cooldown - 30 * (spellPower - 1);
@@ -169,7 +169,7 @@ const config: any = {
             player.setPosition(destination);
 
             obj.setParameter('cooldown', cooldown > 50 ? cooldown : 50);
-            obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
+            obj.setParameter('fireCooldown', obj.parameters.cooldown'));
           }
         }
       }
@@ -180,9 +180,9 @@ const config: any = {
     update: function() {
       const obj = this.context;
       const player = obj.layer.getObjectsByType('player')[0];
-      const fireCooldown = obj.getParameter('fireCooldown');
+      const fireCooldown = obj.parameters.fireCooldown');
 
-      if (player.getParameter('currentSpell') == 'frostShard') {
+      if (player.parameters.currentSpell') == 'frostShard') {
         if (
           obj.layer.game.input.mousePointer.isDown ||
           obj.layer.game.input.keyboard.isDown(32)
@@ -193,7 +193,7 @@ const config: any = {
               obj.layer.game.input.mousePointer.x,
               obj.layer.game.input.mousePointer.y,
             );
-            const spellPower = player.getParameter('spellPower');
+            const spellPower = player.parameters.spellPower');
             const destination = mousePosition.clone();
 
             destination.x -= obj.layer.translate.x;
@@ -211,10 +211,10 @@ const config: any = {
 
             fs.setParameter(
               'cooldown',
-              fs.getParameter('cooldown') + spellPowerBoost,
+              fs.parameters.cooldown') + spellPowerBoost,
             );
 
-            obj.setParameter('fireCooldown', obj.getParameter('cooldown'));
+            obj.setParameter('fireCooldown', obj.parameters.cooldown'));
           }
         }
       }
@@ -224,13 +224,13 @@ const config: any = {
   bulletMonsterCollision: {
     update: function() {
       const obj = this.context;
-      const objects = obj.getParameter('collisions');
+      const objects = obj.parameters.collisions');
 
       for (let i = 0, l = objects.length; i < l; i++) {
         if (objects[i].type == 'monster') {
           objects[i].setParameter(
             'health',
-            objects[i].getParameter('health') - obj.getParameter('power'),
+            objects[i].parameters.health') - obj.parameters.power'),
           );
 
           const blood = gameConfigs.getConfig('bloodSpray');
@@ -250,13 +250,13 @@ const config: any = {
   hellTubeMonsterCollision: {
     update: function() {
       const obj = this.context;
-      const objects = obj.getParameter('collisions');
+      const objects = obj.parameters.collisions');
 
       for (let i = 0, l = objects.length; i < l; i++) {
         if (objects[i].type == 'monster') {
           objects[i].setParameter(
             'health',
-            objects[i].getParameter('health') - obj.getParameter('power'),
+            objects[i].parameters.health') - obj.parameters.power'),
           );
 
           const blood = gameConfigs.getConfig('bloodSpray');

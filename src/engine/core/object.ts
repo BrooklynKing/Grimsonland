@@ -43,7 +43,7 @@ export default class GameObject {
   private inited: boolean;
 
   parameters: { [key: string]: any };
-  defaultParameters: { [key: string]: any };
+  readonly defaultParameters: { readonly [key: string]: any };
 
   constructor(config: IGameObjectConfig) {
     this.layer = config.layer;
