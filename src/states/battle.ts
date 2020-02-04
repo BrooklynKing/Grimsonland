@@ -1,5 +1,7 @@
+import Phaser from 'phaser';
+
 import collisions from '../engine/collisions';
-import GameLayer, { IGameLayerConfig } from '../engine/core/layer';
+import { GameLayer, IGameLayerConfig } from '../engine/core/layer';
 
 class GameState extends Phaser.State {
   private battleTheme: any;

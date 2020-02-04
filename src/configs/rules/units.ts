@@ -1,4 +1,6 @@
-import utils from './../../engine/utils';
+import Phaser from 'phaser';
+
+import { moveWithSpeed } from './../../engine/utils';
 import gameConfigs from '../index';
 
 const config: any = {
@@ -221,7 +223,7 @@ const config: any = {
 
       if (direction) {
         obj.setPosition(
-          utils.moveWithSpeed(obj.pos, direction, obj.parameters.speed * dt),
+          moveWithSpeed(obj.pos, direction, obj.parameters.speed * dt),
         );
       }
     },
@@ -333,11 +335,7 @@ const config: any = {
         }
       } else {
         obj.setPosition(
-          utils.moveWithSpeed(
-            obj.pos,
-            directionToPlayer,
-            obj.parameters.speed * dt,
-          ),
+          moveWithSpeed(obj.pos, directionToPlayer, obj.parameters.speed * dt),
         );
       }
     },

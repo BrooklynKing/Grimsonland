@@ -1,4 +1,6 @@
-import utils from './../../engine/utils';
+import Phaser from 'phaser';
+
+import { moveWithSpeed } from './../../engine/utils';
 import gameConfigs from '../index';
 
 const config: any = {
@@ -76,7 +78,7 @@ const config: any = {
         ) {
           if (!fireCooldown) {
             const destination = new Phaser.Point(0, 1),
-              point1 = utils.moveWithSpeed(player.pos, destination, 100);
+              point1 = moveWithSpeed(player.pos, destination, 100);
 
             for (let i = -10; i < 10; i++) {
               let movedPoint = point1
@@ -140,7 +142,7 @@ const config: any = {
 
             const direction = Phaser.Point.subtract(mouse, player.pos);
             const spellPower = player.parameters.spellPower;
-            const destination = utils.moveWithSpeed(
+            const destination = moveWithSpeed(
               player.pos,
               direction,
               obj.parameters.power,

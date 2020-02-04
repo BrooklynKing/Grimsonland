@@ -1,7 +1,7 @@
-import GameObject from './object';
-import GameLayer from './layer';
+import { GameObject } from './object';
+import { GameLayer } from './layer';
 
-import utils from '../utils';
+import { clone } from '../utils';
 
 export interface IGameRuleConfig {
   id: string;
@@ -10,7 +10,7 @@ export interface IGameRuleConfig {
   init(): void;
 }
 
-export default class GameRule {
+export class GameRule {
   private id: string;
   private parameters: { [key: string]: any };
   private inited: boolean;
@@ -22,8 +22,7 @@ export default class GameRule {
   constructor(config: IGameRuleConfig) {
     this.id = config.id;
     this._update = config.update;
-    this.parameters =
-      (config.parameters && utils.clone(config.parameters)) || {};
+    this.parameters = (config.parameters && clone(config.parameters)) || {};
     this._init = config.init;
     this.inited = false;
   }

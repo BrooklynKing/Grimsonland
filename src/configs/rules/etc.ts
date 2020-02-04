@@ -1,6 +1,8 @@
-import utils from './../../engine/utils';
+import Phaser from 'phaser';
+
+import { moveWithSpeed } from './../../engine/utils';
 import gameConfigs from '../index';
-import GameObject from '../../engine/core/object';
+import { GameObject } from '../../engine/core/object';
 
 const config: any = {
   bindPositionToLayer: {
@@ -63,11 +65,7 @@ const config: any = {
             Phaser.Point.distance(obj.pos, player.pos),
           ) - 10,
         );
-        let playerNextPlace = utils.moveWithSpeed(
-          player.pos,
-          playerDirection,
-          speed,
-        );
+        let playerNextPlace = moveWithSpeed(player.pos, playerDirection, speed);
         let _dv = Phaser.Point.subtract(playerNextPlace, obj.pos).normalize();
         let _odv = oldDirection.clone().normalize();
         let _ndv = Phaser.Point.add(_odv, _dv).normalize();

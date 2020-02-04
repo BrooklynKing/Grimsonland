@@ -1,12 +1,11 @@
-import GameRule from './rule';
-import GameLayer from './layer';
-
-import Sprite from '../sprite';
+import { GameRule } from './rule';
+import { GameLayer } from './layer';
+import { Sprite } from '../sprite';
 
 import gameConfigs from '../../configs';
 import renders from '../renderers';
 
-import utils from '../utils';
+import { clone } from '../utils';
 
 export interface IGameObjectConfig {
   id: string;
@@ -25,7 +24,7 @@ export interface IGameObjectConfig {
   init: any;
 }
 
-export default class GameObject {
+export class GameObject {
   id: string;
   layer: GameLayer;
   pos: Phaser.Point;
@@ -62,7 +61,7 @@ export default class GameObject {
       this.sprite = new Sprite({
         cache: this.layer.game.cache,
         url: config.sprite[0],
-        pos: config.sprite[1],
+        pos: new Phaser.Point(...config.sprite[1]),
         size: config.sprite[2],
         speed: config.sprite[3],
         frames: config.sprite[4],
@@ -80,9 +79,8 @@ export default class GameObject {
 
     this.shouldCheckCollisions = config.collisions;
     this.zIndex = config.zIndex || 0;
-    this.parameters =
-      (config.parameters && utils.clone(config.parameters)) || {};
-    this.defaultParameters = utils.clone(this.parameters);
+    this.parameters = (config.parameters && clone(config.parameters)) || {};
+    this.defaultParameters = clone(this.parameters);
     this.size = config.size;
 
     this.rules = config.rules || [];

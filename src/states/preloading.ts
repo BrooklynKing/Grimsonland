@@ -1,3 +1,5 @@
+import Phaser from 'phaser';
+
 class PreLoading extends Phaser.State {
   preload() {
     this.game.stage.backgroundColor = 0x0e0e0e;

@@ -1,3 +1,5 @@
+import Phaser from 'phaser';
+
 import gameConfigs from '../index';
 
 const config: any = {

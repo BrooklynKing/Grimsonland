@@ -1,3 +1,5 @@
+import Phaser from 'phaser';
+
 import states from './states';
 
 const game = new Phaser.Game(

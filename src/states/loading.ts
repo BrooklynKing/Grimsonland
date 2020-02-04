@@ -1,3 +1,5 @@
+import Phaser from 'phaser';
+
 class Loading extends Phaser.State {
   private text: any;
 

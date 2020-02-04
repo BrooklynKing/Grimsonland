@@ -23,11 +23,16 @@
     "typescript": "^3.7.5"
   },
   "dependencies": {
+    "phaser": "^2.6.2",
     "string-template": "^0.2.1"
   },
   "yoshi": {
     "separateCss": true,
     "exports": "Game",
+    "externals": {
+      "phaser": "Phaser",
+      "PIXI": "PIXI"
+    },
     "entry": {
       "game": "./index.ts"
     }

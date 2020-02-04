@@ -1,4 +1,3 @@
-import utils from './../../engine/utils';
 import format from 'string-template';
 
 const config: any = {

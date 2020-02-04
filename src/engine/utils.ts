@@ -1,4 +1,10 @@
-function moveWithSpeed(point: Phaser.Point, destination: any, speed: number) {
+import Phaser from 'phaser';
+
+export function moveWithSpeed(
+  point: Phaser.Point,
+  destination: any,
+  speed: number,
+) {
   if (!point || !destination) {
     return null;
   }
@@ -11,7 +17,7 @@ function moveWithSpeed(point: Phaser.Point, destination: any, speed: number) {
   return Phaser.Point.add(point, _destination);
 }
 
-const clone = (obj: any) => Object.assign({}, obj);
+export const clone = (obj: any) => Object.assign({}, obj);
 
 export default {
   clone: clone,

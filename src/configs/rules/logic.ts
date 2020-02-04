@@ -1,3 +1,4 @@
+import Phaser from 'phaser';
 import format from 'string-template';
 
 import gameConfigs from '../index';
@@ -46,6 +47,12 @@ const config: any = {
           this.parameters.currentMonsterCooldown &&
             this.parameters.currentMonsterCooldown--;
         }
+      }
+      if (
+        !obj.layer.getObjectsByType('monster').length &&
+        obj.parameters.monsterKilled < obj.parameters.monsterSpawned
+      ) {
+        obj.parameters.monserSpawned = obj.parameters.monsterKilled;
       } else {
         if (obj.parameters.monsterKilled >= obj.parameters.monsterOnWave) {
           obj.parameters.currentWave = obj.parameters.currentWave + 1;

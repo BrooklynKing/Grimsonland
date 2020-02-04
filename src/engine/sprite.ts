@@ -1,3 +1,5 @@
+import Phaser from 'phaser';
+
 export interface ISpriteConfig {
   cache: Phaser.Cache;
   url: string;
@@ -10,7 +12,7 @@ export interface ISpriteConfig {
   degree: number;
 }
 
-class Sprite {
+export class Sprite {
   size: [number, number];
   done: boolean;
 
@@ -37,11 +39,7 @@ class Sprite {
     degree,
   }: ISpriteConfig) {
     this.cache = cache;
-    if (pos instanceof Phaser.Point) {
-      this.pos = pos.clone();
-    } else {
-      this.pos = new Phaser.Point(pos[0], pos[1]);
-    }
+    this.pos = pos;
     this.defaultPosition = this.pos.clone();
     this.size = size;
     this.speed = typeof speed === 'number' ? speed : 0;
@@ -115,5 +113,3 @@ class Sprite {
     );
   }
 }
-
-export default Sprite;

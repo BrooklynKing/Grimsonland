@@ -1,13 +1,14 @@
-import utils from '../utils';
+import { clone } from '../utils';
 import gameConfigs from '../../configs';
 
-import GameObject, { IGameObjectConfig } from './object';
-import GameRule, { IGameRuleConfig } from './rule';
+import { GameObject, IGameObjectConfig } from './object';
+import { GameRule, IGameRuleConfig } from './rule';
+import BattleState from '../../states/battle';
 
 export interface IGameLayerConfig {
   id: string;
   background: string;
-  state: Phaser.State;
+  state: BattleState;
   ctx: CanvasRenderingContext2D;
   initList: string[];
   translate: ITranslate;
@@ -21,11 +22,11 @@ interface ITranslate {
   y: number;
 }
 
-export default class GameLayer {
+export class GameLayer {
   id: string;
   ctx: CanvasRenderingContext2D;
   game: Phaser.Game;
-  state: Phaser.State;
+  state: BattleState;
   initList: string[];
   background: CanvasPattern;
   size: number[];
@@ -65,7 +66,7 @@ export default class GameLayer {
   init() {
     if (!this.inited) {
       this.translate = this.config.translate
-        ? utils.clone(this.config.translate)
+        ? clone(this.config.translate)
         : { x: 0, y: 0 };
       this.config.initList.forEach(objectID =>
         this.addObject(gameConfigs.getConfig(objectID)),
@@ -147,7 +148,7 @@ export default class GameLayer {
       const obj = this.objects[id];
       if (obj) {
         obj.shouldCheckCollisions && this.state.collisions.removeObject(obj);
-        this.removeObject(obj.id);
+        this.removeObject(id);
       }
     }
   }

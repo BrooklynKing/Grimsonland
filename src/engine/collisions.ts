@@ -1,4 +1,4 @@
-import GameObject from './core/object';
+import { GameObject } from './core/object';
 
 function generate(config: { n: number; width: number; height: number }) {
   const n = config.n || 6;

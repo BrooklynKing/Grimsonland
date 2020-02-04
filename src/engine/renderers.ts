@@ -1,4 +1,4 @@
-import GameObject from './core/object';
+import { GameObject } from './core/object';
 
 function fog(obj: GameObject) {
   const ctx = obj.layer.ctx;
