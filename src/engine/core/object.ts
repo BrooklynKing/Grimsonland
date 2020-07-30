@@ -125,8 +125,7 @@ export class GameObject {
 
       if (this.shouldCheckCollisions) {
         this.collisions = new GameRule(gameConfigs.getRuleConfig('collisions'));
-        this.collisions.setContext(this);
-        this.collisions.init();
+        this.collisions.init(this);
       }
 
       for (let i = 0, l = rules.length; i < l; i++) {
@@ -142,15 +141,15 @@ export class GameObject {
   }
 
   update(dt: number) {
-    this.rules.forEach(rule => rule.update(dt));
+    this.rules.forEach(rule => rule.update(this, dt));
   }
 
   updateConditions(dt: number) {
-    this.conditions.forEach(condition => condition.update(dt));
+    this.conditions.forEach(condition => condition.update(this, dt));
   }
 
   updateCollisions(dt: number) {
-    this.collisions && this.collisions.update(dt);
+    this.collisions && this.collisions.update(this, dt);
   }
 
   setPosition(point: Phaser.Point) {
@@ -160,16 +159,14 @@ export class GameObject {
 
   addRule(config: any) {
     const rule = new GameRule(config);
-    rule.setContext(this);
-    rule.init();
+    rule.init(this);
 
     this.rules.push(rule);
   }
 
   addCondition(config: any) {
     const condition = new GameRule(config);
-    condition.setContext(this);
-    condition.init();
+    condition.init(this);
 
     this.conditions.push(condition);
   }

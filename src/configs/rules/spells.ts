@@ -1,17 +1,19 @@
-import Phaser from 'phaser';
+import Phaser, { Point } from 'phaser';
 
 import { moveWithSpeed } from './../../engine/utils';
 import gameConfigs from '../index';
+import { GameObject } from '../../engine/core/object';
 
-const config: any = {
+import { IGameRuleConfig } from './types';
+
+const config: { [key: string]: IGameRuleConfig } = {
   fireball: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const player = obj.layer.getObjectsByType('player')[0];
       const fireCooldown = obj.parameters.fireCooldown;
       const spellPower = player.parameters.spellPower;
 
-      function createBullet(direction: any, destination: any) {
+      function createBullet(direction: Point, destination: Point) {
         const bulletConfig = gameConfigs.getConfig('bullet');
         bulletConfig.pos = player.pos.clone();
 
@@ -57,8 +59,7 @@ const config: any = {
     },
   },
   hellfire: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const player = obj.layer.getObjectsByType('player')[0];
       const fireCooldown = obj.parameters.fireCooldown;
 
@@ -97,8 +98,7 @@ const config: any = {
     },
   },
   slowEnemies: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const objects = obj.parameters.collisions;
 
       for (let i = 0; i < objects.length; i++) {
@@ -121,8 +121,7 @@ const config: any = {
     },
   },
   teleport: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const player = obj.layer.getObjectsByType('player')[0];
       const fireCooldown = obj.parameters.fireCooldown;
 
@@ -147,7 +146,7 @@ const config: any = {
               direction,
               obj.parameters.power,
             );
-            const cooldown: any =
+            const cooldown: number =
               obj.defaultParameters.cooldown - 30 * (spellPower - 1);
 
             let teleportGate;
@@ -173,8 +172,7 @@ const config: any = {
     },
   },
   frostShard: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const player = obj.layer.getObjectsByType('player')[0];
       const fireCooldown = obj.parameters.fireCooldown;
 
@@ -215,8 +213,7 @@ const config: any = {
     },
   },
   bulletMonsterCollision: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const objects = obj.parameters.collisions;
 
       for (let i = 0, l = objects.length; i < l; i++) {
@@ -239,8 +236,7 @@ const config: any = {
     },
   },
   hellTubeMonsterCollision: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const objects = obj.parameters.collisions;
 
       for (let i = 0, l = objects.length; i < l; i++) {

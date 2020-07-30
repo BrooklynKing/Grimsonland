@@ -1,9 +1,12 @@
 import format from 'string-template';
 
-const config: any = {
+import { GameObject } from '../../engine/core/object';
+
+import { IGameRuleConfig } from './types';
+
+const config: { [key: string]: IGameRuleConfig } = {
   countMonsterKilled: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const template = obj.parameters.template;
 
       obj.parameters.text = format(template, {
@@ -12,8 +15,7 @@ const config: any = {
     },
   },
   timer: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const template = obj.parameters.template;
 
       obj.parameters.text = format(template, {
@@ -22,8 +24,7 @@ const config: any = {
     },
   },
   health: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const template = obj.parameters.template;
 
       obj.parameters.text = format(template, {
@@ -32,8 +33,7 @@ const config: any = {
     },
   },
   level: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const template = obj.parameters.template;
       const player = obj.layer.getObjectsByType('player')[0];
 
@@ -45,8 +45,7 @@ const config: any = {
     },
   },
   bestTime: {
-    init: function() {
-      const obj = this.context;
+    init: function(obj: GameObject) {
       const template = obj.parameters.template;
 
       obj.parameters.text = format(template, {
@@ -55,8 +54,7 @@ const config: any = {
     },
   },
   bestScore: {
-    init: function() {
-      const obj = this.context;
+    init: function(obj: GameObject) {
       const template = obj.parameters.template;
 
       obj.parameters.text = format(template, {

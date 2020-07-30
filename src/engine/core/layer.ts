@@ -126,7 +126,7 @@ export class GameLayer {
     if (!this.inited) return;
 
     for (let i in this.rules) {
-      this.rules.hasOwnProperty(i) && this.rules[i].update(dt);
+      this.rules.hasOwnProperty(i) && this.rules[i].update(this, dt);
     }
 
     for (let i in this.objects) {
@@ -159,8 +159,7 @@ export class GameLayer {
 
   addRule(config: IGameRuleConfig) {
     const rule = new GameRule(config);
-    rule.setContext(this);
-    rule.init();
+    rule.init(this);
     this.rules.push(rule);
   }
 
@@ -180,13 +179,6 @@ export class GameLayer {
   }
 
   addObject(config: IGameObjectConfig) {
-    if (this.objects.hasOwnProperty(config.id)) {
-      console.error(
-        'Object with such id already exist in this layer: ',
-        config.id,
-      );
-      return false;
-    }
     config.layer = this;
     config.id += Math.round(new Date().getTime() + Math.random() * 1000001);
 

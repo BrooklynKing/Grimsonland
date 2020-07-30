@@ -2,12 +2,13 @@ import Phaser from 'phaser';
 import format from 'string-template';
 
 import gameConfigs from '../index';
+import { GameObject } from '../../engine/core/object';
 
-const config: any = {
+import { IGameRuleConfig } from './types';
+
+const config: { [key: string]: IGameRuleConfig } = {
   monsterController: {
-    init: function() {
-      const obj = this.context;
-
+    init: function(obj: GameObject) {
       obj.parameters.currentWave = 1;
       obj.parameters.monsterOnWave = this.parameters.monsterCount[
         obj.parameters.currentWave - 1
@@ -15,13 +16,11 @@ const config: any = {
       obj.parameters.monsterKilled = 0;
       obj.parameters.monsterSpawned = 0;
 
-      this.leftOnWave = this.context.layer.addObject(
+      this.leftOnWave = obj.layer.addObject(
         gameConfigs.getConfig('leftOnWaveLabel'),
       );
     },
-    update: function() {
-      const obj = this.context;
-
+    update: function(obj: GameObject) {
       function createSpawn() {
         const rect = new Phaser.Rectangle(
           100 - obj.layer.translate.x,

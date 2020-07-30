@@ -3,19 +3,20 @@ import Phaser from 'phaser';
 import { moveWithSpeed } from './../../engine/utils';
 import gameConfigs from '../index';
 
-const config: any = {
-  playerDeath: {
-    update: function() {
-      const obj = this.context;
+import { GameObject } from '../../engine/core/object';
 
+import { IGameRuleConfig } from './types';
+
+const config: { [key: string]: IGameRuleConfig } = {
+  playerDeath: {
+    update: function(obj: GameObject) {
       if (obj.parameters.health <= 0) {
         obj.layer.state.stopBattle();
       }
     },
   },
   damageOnPlayerCollision: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const objects = obj.parameters.collisions;
 
       for (let i = 0; i < objects.length; i++) {
@@ -28,8 +29,7 @@ const config: any = {
     },
   },
   destroyOnPlayerCollision: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const objects = obj.parameters.collisions;
 
       for (let i = 0; i < objects.length; i++) {
@@ -46,8 +46,7 @@ const config: any = {
     },
   },
   triggerOnPlayerCollision: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const objects = obj.parameters.collisions;
 
       for (let i = 0; i < objects.length; i++) {
@@ -74,9 +73,7 @@ const config: any = {
     },
   },
   meleeAttack: {
-    update: function() {
-      const obj = this.context;
-
+    update: function(obj: GameObject) {
       if (!obj.parameters.meleeCooldown) {
         const objects = obj.parameters.collisions;
         for (let i = 0; i < objects.length; i++) {
@@ -98,9 +95,7 @@ const config: any = {
     },
   },
   monsterExplosion: {
-    update: function() {
-      const obj = this.context;
-
+    update: function(obj: GameObject) {
       if (!obj.parameters.exploded) {
         const objects = obj.parameters.collisions;
         for (let i = 0, l = objects.length; i < l; i++) {
@@ -116,9 +111,7 @@ const config: any = {
     },
   },
   monsterExplosionCondition: {
-    update: function() {
-      const obj = this.context;
-
+    update: function(obj: GameObject) {
       function generateExplosions() {
         const pos = obj.pos.clone();
         let explosionConfig;
@@ -191,8 +184,7 @@ const config: any = {
     },
   },
   stopOnCollisionWithPlayer: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const objects = obj.parameters.collisions;
 
       for (let i = 0, l = objects.length; i < l; i++) {
@@ -204,21 +196,17 @@ const config: any = {
     },
   },
   resetSpeed: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       obj.parameters.speed = obj.defaultParameters.speed;
     },
   },
   resetEffects: {
-    update: function() {
-      const obj = this.context;
-
+    update: function(obj: GameObject) {
       obj.parameters.effects.splice(0);
     },
   },
   moveToDirection: {
-    update: function(dt: number) {
-      const obj = this.context;
+    update: function(obj: GameObject, dt: number) {
       const direction = obj.parameters.direction;
 
       if (direction) {
@@ -229,8 +217,7 @@ const config: any = {
     },
   },
   playerLevelUp: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const levelExp = obj.parameters.levelTable[obj.parameters.level];
 
       if (obj.parameters.levelTable[obj.parameters.level]) {
@@ -247,9 +234,7 @@ const config: any = {
     },
   },
   monsterHealthStatus: {
-    update: function() {
-      const obj = this.context;
-
+    update: function(obj: GameObject) {
       if (obj.parameters.health <= 0) {
         obj.layer.removeObjectOnNextTick(obj.id);
 
@@ -280,24 +265,21 @@ const config: any = {
     },
   },
   resetRangeCooldown: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const fireCooldown = obj.parameters.fireCooldown;
 
       fireCooldown && (obj.parameters.fireCooldown = fireCooldown - 1);
     },
   },
   resetMeleeCooldown: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const meleeCooldown = obj.parameters.meleeCooldown;
 
       meleeCooldown && (obj.parameters.meleeCooldown = meleeCooldown - 1);
     },
   },
   monsterBossLogic: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const player = obj.layer.getObjectsByType('player')[0];
 
       if (!obj.parameters.fireCooldown) {
@@ -315,8 +297,7 @@ const config: any = {
     },
   },
   monsterBoss2Logic: {
-    update: function(dt: number) {
-      const obj = this.context;
+    update: function(obj: GameObject, dt: number) {
       const player = obj.layer.getObjectsByType('player')[0];
       const directionToPlayer = obj.parameters.direction;
 
@@ -341,8 +322,7 @@ const config: any = {
     },
   },
   monsterBoss2Bullet: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const cooldown = obj.parameters.cooldown;
       const objects = obj.parameters.collisions;
 
@@ -378,8 +358,7 @@ const config: any = {
     },
   },
   moveWithKeyboard: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const pos = obj.pos.clone();
       const direction: any = {};
 
@@ -409,9 +388,7 @@ const config: any = {
     },
   },
   selectSpellWithKeyboard: {
-    update: function() {
-      const obj = this.context;
-
+    update: function(obj: GameObject) {
       obj.layer.game.input.keyboard.isDown(49) &&
         (obj.parameters.currentSpell = 'fireball');
       obj.layer.game.input.keyboard.isDown(50) &&
@@ -423,8 +400,7 @@ const config: any = {
     },
   },
   triggerOnPlayerCollisionPowerUp: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const objects = obj.parameters.collisions;
 
       for (let i = 0; i < objects.length; i++) {
@@ -439,8 +415,7 @@ const config: any = {
     },
   },
   summonOnCooldown: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const cooldown = obj.parameters.cooldown;
 
       function getProperMonster() {

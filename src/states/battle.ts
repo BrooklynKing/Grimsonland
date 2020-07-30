@@ -13,7 +13,7 @@ class GameState extends Phaser.State {
   private gameLayer: GameLayer;
   collisions: any;
 
-  private parameters: {
+  parameters: {
     bestTime: number;
     gameTimer: number;
     monstersKilled: number;

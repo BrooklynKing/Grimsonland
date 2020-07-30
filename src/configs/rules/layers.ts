@@ -2,11 +2,13 @@ import Phaser from 'phaser';
 
 import gameConfigs from '../index';
 
-const config: any = {
-  random_trees: {
-    init: function() {
-      const obj = this.context;
+import { GameLayer } from '../../engine/core/layer';
 
+import { IGameRuleConfig } from './types';
+
+const config: { [key: string]: IGameRuleConfig } = {
+  random_trees: {
+    init: function(obj: GameLayer) {
       function getRandomPointInArea() {
         return [
           Math.round(Math.random() * obj.size[0]),
@@ -22,7 +24,7 @@ const config: any = {
         let point = getRandomPointInArea();
         config.pos = new Phaser.Point(point[0], point[1]);
 
-        this.context.addObject(config);
+        obj.addObject(config);
       }
 
       for (let i = 0; i < this.parameters.stones; i++) {
@@ -30,7 +32,7 @@ const config: any = {
         let point = getRandomPointInArea();
         config.pos = new Phaser.Point(point[0], point[1]);
 
-        /*const stone = */ this.context.addObject(config);
+        /*const stone = */ obj.addObject(config);
         //stone.sprite.setDegree(utils.getDegree(obj.pos, getRandomPointInArea(this.parameters.area))[0]);
       }
     },
@@ -40,13 +42,13 @@ const config: any = {
     },
   },
   spawn_heart: {
-    update: function() {
+    update: function(obj: GameLayer) {
       if (!this.parameters.currentCooldown) {
         const config = gameConfigs.getConfig('heart');
         const rect = new Phaser.Rectangle(50, 50, 1104, 868);
         config.pos = new Phaser.Point(rect.randomX, rect.randomY);
 
-        this.context.addObject(config);
+        obj.addObject(config);
 
         this.parameters.currentCooldown = this.parameters.cooldown;
       } else {
@@ -62,14 +64,14 @@ const config: any = {
     },
   },
   spawn_powerup: {
-    update: function() {
+    update: function(obj: GameLayer) {
       if (!this.parameters.currentCooldown) {
         const config = gameConfigs.getConfig('powerup');
 
         const rect = new Phaser.Rectangle(100, 100, 1000, 750);
         config.pos = new Phaser.Point(rect.randomX, rect.randomY);
 
-        this.context.addObject(config);
+        obj.addObject(config);
 
         this.parameters.currentCooldown = this.parameters.cooldown;
       } else {
@@ -86,7 +88,7 @@ const config: any = {
     },
   },
   spawn_terrain: {
-    init: function() {
+    init: function(obj: GameLayer) {
       const gateConfig = gameConfigs.getConfig('gate');
       let wallConfig;
 
@@ -96,19 +98,18 @@ const config: any = {
           wallConfig.size[0] * i + wallConfig.size[0] / 2,
           wallConfig.size[1] / 2,
         ];
-        const wall = this.context.addObject(wallConfig);
+        const wall = obj.addObject(wallConfig);
         //stone.sprite.setDegree(utils.getDegree(obj.pos, getRandomPointInArea(this.parameters.area))[0]);
       }
       gateConfig.pos = [
         wallConfig.pos.x + wallConfig.size[0] / 2 + gateConfig.size[0] / 2,
         (gateConfig.size[1] - 3) / 2,
       ];
-      const gate = this.context.addObject(gateConfig);
+      const gate = obj.addObject(gateConfig);
     },
   },
   goWithPlayer: {
-    update: function(dt: number) {
-      const obj = this.context;
+    update: function(obj: GameLayer, dt: number) {
       const player = obj.getObjectsByType('player')[0];
       const px = ((player.pos.x + obj.translate.x) / 1024) * 100;
       const py = ((player.pos.y + obj.translate.y) / 768) * 100;

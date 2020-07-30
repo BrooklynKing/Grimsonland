@@ -4,11 +4,11 @@ import { moveWithSpeed } from './../../engine/utils';
 import gameConfigs from '../index';
 import { GameObject } from '../../engine/core/object';
 
-const config: any = {
-  bindPositionToLayer: {
-    update: function() {
-      const obj = this.context;
+import { IGameRuleConfig } from './types';
 
+const config: { [key: string]: IGameRuleConfig } = {
+  bindPositionToLayer: {
+    update: function(obj: GameObject) {
       if (obj.pos.x - obj.sprite.size[0] / 2 < 0) {
         obj.pos.x = obj.sprite.size[0] / 2;
       } else if (obj.pos.x + obj.sprite.size[0] / 2 > obj.layer.size[0]) {
@@ -23,9 +23,7 @@ const config: any = {
     },
   },
   destroyAfterLeavingLayer: {
-    update: function() {
-      const obj = this.context as GameObject;
-
+    update: function(obj: GameObject) {
       if (
         obj.pos.y < -100 ||
         obj.pos.y - obj.sprite.size[1] - 100 > obj.layer.size[1] ||
@@ -38,16 +36,14 @@ const config: any = {
     },
   },
   setDirectionToPlayer: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const player = obj.layer.getObjectsByType('player')[0];
 
       obj.parameters.direction = Phaser.Point.subtract(player.pos, obj.pos);
     },
   },
   setDirectionToPlayerAdvance: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const player = obj.layer.getObjectsByType('player')[0];
       const playerDirection = player.parameters.direction;
       let oldDirection = obj.parameters.direction;
@@ -75,15 +71,11 @@ const config: any = {
     },
   },
   wandererAI: {
-    init: function() {
+    init: function(obj: GameObject) {
       const rect = new Phaser.Rectangle(100, 100, 1000, 750);
-      this.context.parameters.direction = new Phaser.Point(
-        rect.randomX,
-        rect.randomY,
-      );
+      obj.parameters.direction = new Phaser.Point(rect.randomX, rect.randomY);
     },
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const player = obj.layer.getObjectsByType('player')[0];
       const distance = Phaser.Point.distance(obj.pos, player.pos);
 
@@ -111,8 +103,7 @@ const config: any = {
     },
   },
   dynamicZIndex: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       let newZIndex = 0;
 
       obj.pos && (newZIndex += obj.pos.y);
@@ -122,25 +113,20 @@ const config: any = {
     },
   },
   collisions: {
-    init: function() {
-      const obj = this.context;
-
+    init: function(obj: GameObject) {
       const collisions: any = [];
       obj.parameters.collisions = collisions;
 
-      collisions.cells = new Array();
+      collisions.cells = [];
       obj.layer.state.collisions.updateObject(obj);
     },
-    update: function() {
-      const obj = this.context;
-
+    update: function(obj: GameObject) {
       obj.parameters.collisions.splice(0);
       obj.layer.state.collisions.updateObject(obj);
     },
   },
   rotateToMouse: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const destination = new Phaser.Point(
         obj.layer.game.input.mousePointer.x,
         obj.layer.game.input.mousePointer.y,
@@ -154,8 +140,7 @@ const config: any = {
     },
   },
   bindPositionToMouse: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const mousePosition = new Phaser.Point(
         obj.layer.game.input.mousePointer.x,
         obj.layer.game.input.mousePointer.y,
@@ -165,8 +150,7 @@ const config: any = {
     },
   },
   removeOnCooldown: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const cooldown = obj.parameters.cooldown;
 
       if (cooldown == 0) {
@@ -177,8 +161,7 @@ const config: any = {
     },
   },
   explosionOnCooldown: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const cooldown = obj.parameters.cooldown;
 
       if (cooldown == 0) {
@@ -194,9 +177,7 @@ const config: any = {
     },
   },
   explosionAfterSpriteDone: {
-    update: function() {
-      const obj = this.context as GameObject;
-
+    update: function(obj: GameObject) {
       if (obj.sprite.done) {
         obj.layer.removeObjectOnNextTick(obj.id);
 
@@ -208,24 +189,19 @@ const config: any = {
     },
   },
   destroyAfterSpriteDone: {
-    update: function() {
-      const obj = this.context;
-
+    update: function(obj: GameObject) {
       if (obj.sprite.done) {
         obj.layer.removeObjectOnNextTick(obj.id);
       }
     },
   },
   rotateByDirection: {
-    update: function() {
-      const obj = this.context;
-
+    update: function(obj: GameObject) {
       obj.sprite.rotateToDirection(obj.parameters.direction);
     },
   },
   rotateByPlayer: {
-    update: function() {
-      const obj = this.context;
+    update: function(obj: GameObject) {
       const player = obj.layer.getObjectsByType('player')[0];
 
       obj.sprite.rotateToDirection(Phaser.Point.subtract(player.pos, obj.pos));
