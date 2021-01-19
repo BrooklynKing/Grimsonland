@@ -1,9 +1,9 @@
-import spells from './spells';
-import logic from './logic';
-import units from './units';
-import effects from './effects';
-import terrain from './terrain';
-import ui from './ui';
+import * as spells from './spells';
+import * as logic from './logic';
+import * as units from './units';
+import * as effects from './effects';
+import * as terrain from './terrain';
+import * as ui from './ui';
 
 const objects: any = {
   ...logic,

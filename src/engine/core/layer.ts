@@ -1,8 +1,8 @@
 import { clone } from '../utils';
 import gameConfigs from '../../configs';
-
+import { IGameRuleConfig } from '../../configs/rules/types';
 import { GameObject, IGameObjectConfig } from './object';
-import { GameRule, IGameRuleConfig } from './rule';
+import { GameRule } from './rule';
 import BattleState from '../../states/battle';
 
 export interface IGameLayerConfig {
@@ -31,6 +31,7 @@ export class GameLayer {
   background: CanvasPattern;
   size: number[];
   translate: { x: number; y: number };
+  parameters: { [key: string]: any };
 
   private inited: boolean;
 
@@ -61,6 +62,7 @@ export class GameLayer {
     };
     this.objects = {};
     this.inited = false;
+    this.parameters = {};
   }
 
   init() {

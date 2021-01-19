@@ -1,17 +1,19 @@
-import spells from './spells';
-import logic from './logic';
-import units from './units';
-import layers from './layers';
-import ui from './ui';
-import etc from './etc';
+import * as spells from './spells';
+import * as logic from './logic';
+import * as units from './units';
+import * as layers from './layers';
+import * as ui from './ui';
+import * as etc from './etc';
 
-const rules: any = {};
+import { IGameRuleConfig } from './types';
 
-Object.assign(rules, logic);
-Object.assign(rules, spells);
-Object.assign(rules, units);
-Object.assign(rules, layers);
-Object.assign(rules, ui);
-Object.assign(rules, etc);
+const rules: { [key: string]: IGameRuleConfig } = {
+  ...logic,
+  ...spells,
+  ...units,
+  ...layers,
+  ...ui,
+  ...etc,
+};
 
 export default rules;

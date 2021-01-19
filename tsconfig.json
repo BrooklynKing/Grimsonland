@@ -10,6 +10,7 @@
     "noUnusedParameters": true,
     "module": "commonjs",
     "moduleResolution": "node",
+    "skipLibCheck": true,
     "importHelpers": true,
     "target": "es6",
     "jsx": "react",

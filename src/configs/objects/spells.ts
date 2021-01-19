@@ -1,129 +1,125 @@
-const config: any = {
-  fireballSpell: {
-    zIndex: 5000,
-    sprite: ['spellIcons', [0, 0], [32, 32]],
-    pos: [449, 748],
+export const fireballSpell = {
+  zIndex: 5000,
+  sprite: ['spellIcons', [0, 0], [32, 32]],
+  pos: [449, 748],
 
-    size: [32, 32],
-    render: 'spell',
-    parameters: {
-      bulletsFired: 0,
-      cooldown: 20,
-    },
-    type: 'spell',
-    rules: ['fireball'],
+  size: [32, 32],
+  render: 'spell',
+  parameters: {
+    bulletsFired: 0,
+    cooldown: 20,
   },
-  hellfireSpell: {
-    zIndex: 5000,
-    sprite: ['spellIcons', [96, 0], [32, 32]],
-    pos: [491, 748],
+  type: 'spell',
+  rules: ['fireball'],
+};
+export const hellfireSpell = {
+  zIndex: 5000,
+  sprite: ['spellIcons', [96, 0], [32, 32]],
+  pos: [491, 748],
 
-    size: [32, 32],
-    render: 'spell',
-    parameters: {
-      bulletsFired: 0,
-      cooldown: 800,
-    },
-    type: 'spell',
-    rules: ['hellfire'],
+  size: [32, 32],
+  render: 'spell',
+  parameters: {
+    bulletsFired: 0,
+    cooldown: 800,
   },
-  frostShardSpell: {
-    zIndex: 5000,
-    sprite: ['spellIcons', [224, 96], [32, 32]],
-    pos: [533, 748],
-    size: [32, 32],
-    render: 'spell',
-    parameters: {
-      shardsFired: 0,
-      cooldown: 500,
-    },
-    type: 'spell',
-    rules: ['frostShard'],
+  type: 'spell',
+  rules: ['hellfire'],
+};
+export const frostShardSpell = {
+  zIndex: 5000,
+  sprite: ['spellIcons', [224, 96], [32, 32]],
+  pos: [533, 748],
+  size: [32, 32],
+  render: 'spell',
+  parameters: {
+    shardsFired: 0,
+    cooldown: 500,
   },
-  teleportSpell: {
-    zIndex: 5000,
-    sprite: ['spellIcons', [64, 32], [32, 32]],
-    pos: [575, 748],
-    size: [32, 32],
-    render: 'spell',
-    parameters: {
-      power: 200,
-      teleportGates: 0,
-      cooldown: 200,
-    },
-    type: 'spell',
-    rules: ['teleport'],
+  type: 'spell',
+  rules: ['frostShard'],
+};
+export const teleportSpell = {
+  zIndex: 5000,
+  sprite: ['spellIcons', [64, 32], [32, 32]],
+  pos: [575, 748],
+  size: [32, 32],
+  render: 'spell',
+  parameters: {
+    power: 200,
+    teleportGates: 0,
+    cooldown: 200,
   },
-  teleportGate: {
-    zIndex: 0,
-    render: 'object',
-    sprite: ['arcaneGate', [0, 0], [32, 32], 7, [0, 1]],
-    pos: [466, 580],
-    size: [32, 32],
-    parameters: {
-      cooldown: 200,
-    },
-    type: 'spellElement',
-    rules: ['removeOnCooldown', 'dynamicZIndex'],
+  type: 'spell',
+  rules: ['teleport'],
+};
+export const teleportGate = {
+  zIndex: 0,
+  render: 'object',
+  sprite: ['arcaneGate', [0, 0], [32, 32], 7, [0, 1]],
+  pos: [466, 580],
+  size: [32, 32],
+  parameters: {
+    cooldown: 200,
   },
-
-  bullet: {
-    zIndex: 3,
-    collisions: true,
-    render: 'object',
-    sprite: ['fireball', [0, 0], [33, 33], 16, [0, 1, 2, 3]],
-    size: [25, 25],
-    type: 'spellElement',
-    parameters: {
-      power: 10,
-      cooldown: 100,
-      speed: 300,
-    },
-    conditions: ['bulletMonsterCollision'],
-    rules: [
-      'destroyAfterLeavingLayer',
-      'moveToDirection',
-      'dynamicZIndex',
-      'explosionOnCooldown',
-    ],
-  },
-  hellfireTube: {
-    zIndex: 3,
-    collisions: true,
-    render: 'object',
-    sprite: [
-      'hellfire',
-      [0, 0],
-      [21, 58],
-      14,
-      [2, 3, 4, 4, 3, 2, 2, 3, 4, 4, 3, 2, 2, 3, 4, 4, 3, 2],
-      null,
-      false,
-    ],
-    size: [50, 50],
-    type: 'spellElement',
-    parameters: {
-      power: 10,
-      cooldown: 150,
-      speed: 300,
-    },
-    conditions: ['hellTubeMonsterCollision'],
-    rules: ['dynamicZIndex', 'explosionOnCooldown'],
-  },
-  frostShard: {
-    zIndex: 3,
-    render: 'object',
-    collisions: true,
-    sprite: ['effects', [96, 0], [32, 32], 10, [0, 1, 2]],
-    type: 'spellElement',
-    size: [500, 500],
-    parameters: {
-      power: 60,
-      cooldown: 200,
-    },
-    conditions: ['slowEnemies'],
-    rules: ['removeOnCooldown', 'dynamicZIndex'],
-  },
+  type: 'spellElement',
+  rules: ['removeOnCooldown', 'dynamicZIndex'],
 };
 
-export default config;
+export const bullet = {
+  zIndex: 3,
+  collisions: true,
+  render: 'object',
+  sprite: ['fireball', [0, 0], [33, 33], 16, [0, 1, 2, 3]],
+  size: [25, 25],
+  type: 'spellElement',
+  parameters: {
+    power: 10,
+    cooldown: 100,
+    speed: 300,
+  },
+  conditions: ['bulletMonsterCollision'],
+  rules: [
+    'destroyAfterLeavingLayer',
+    'moveToDirection',
+    'dynamicZIndex',
+    'explosionOnCooldown',
+  ],
+};
+export const hellfireTube = {
+  zIndex: 3,
+  collisions: true,
+  render: 'object',
+  sprite: [
+    'hellfire',
+    [0, 0],
+    [21, 58],
+    14,
+    [2, 3, 4, 4, 3, 2, 2, 3, 4, 4, 3, 2, 2, 3, 4, 4, 3, 2],
+    null,
+    false,
+  ],
+  size: [50, 50],
+  type: 'spellElement',
+  parameters: {
+    power: 10,
+    cooldown: 150,
+    speed: 300,
+  },
+  conditions: ['hellTubeMonsterCollision'],
+  rules: ['dynamicZIndex', 'explosionOnCooldown'],
+};
+export const frostShard = {
+  zIndex: 3,
+  render: 'object',
+  collisions: true,
+  sprite: ['effects', [96, 0], [32, 32], 10, [0, 1, 2]],
+  type: 'spellElement',
+  size: [500, 500],
+  parameters: {
+    power: 60,
+    cooldown: 200,
+  },
+  conditions: ['slowEnemies'],
+  rules: ['removeOnCooldown', 'dynamicZIndex'],
+};

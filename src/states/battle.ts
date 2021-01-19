@@ -118,7 +118,7 @@ class GameState extends Phaser.State {
       },
       state: this,
       ctx: this.bitmap.ctx,
-      rules: ['random_trees', 'spawn_heart', 'spawn_powerup', 'goWithPlayer'],
+      rules: ['randomTrees', 'spawnHeart', 'spawnPowerup', 'goWithPlayer'],
     };
 
     this.gameLayer = new GameLayer(layerConfig);

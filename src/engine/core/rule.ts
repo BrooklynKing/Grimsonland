@@ -1,28 +1,15 @@
 import { GameObject } from './object';
 import { GameLayer } from './layer';
-
-import { clone } from '../utils';
-
-export interface IGameRuleConfig {
-  id: string;
-  update(obj: GameObject | GameLayer, dt: number): void;
-  parameters: { [key: string]: any };
-  init(): void;
-}
+import { IGameRuleConfig } from '../../configs/rules/types';
 
 export class GameRule {
-  private id: string;
-  private parameters: { [key: string]: any };
   private inited: boolean;
-  private context: GameObject | GameLayer;
 
-  private _update: (obj: GameObject | GameLayer, dt: number) => void;
-  private _init: (obj: GameObject | GameLayer) => void;
+  private _update: IGameRuleConfig['update'];
+  private _init: IGameRuleConfig['init'];
 
   constructor(config: IGameRuleConfig) {
-    this.id = config.id;
     this._update = config.update;
-    this.parameters = (config.parameters && clone(config.parameters)) || {};
     this._init = config.init;
     this.inited = false;
   }

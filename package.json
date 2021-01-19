@@ -9,7 +9,7 @@
   "author": "Oleksii Makodzeba",
   "license": "MIT",
   "scripts": {
-    "start": "yoshi start --entry-point=./server/start-fake-server.js",
+    "start": "yoshi start",
     "lint": "yoshi lint",
     "test": "",
     "build": "yoshi build",
@@ -20,14 +20,13 @@
   "devDependencies": {
     "gh-pages": "^1.0.0",
     "yoshi": "^4.29.0",
-    "typescript": "^3.7.5"
+    "typescript": "^4.1.3"
   },
   "dependencies": {
     "phaser": "^2.6.2",
     "string-template": "^0.2.1"
   },
   "yoshi": {
-    "separateCss": true,
     "exports": "Game",
     "externals": {
       "phaser": "Phaser",
