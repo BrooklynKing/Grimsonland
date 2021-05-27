@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import { moveWithSpeed } from './../../engine/utils';
+import { moveWithSpeed } from './utils';
 import gameConfigs from '../index';
 
 import { GameObject } from '../../engine/core/object';

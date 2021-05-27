@@ -3,6 +3,32 @@ import Phaser from 'phaser';
 import collisions from '../engine/collisions';
 import { GameLayer, IGameLayerConfig } from '../engine/core/layer';
 
+const LAYER_CONFIG: Omit<IGameLayerConfig, 'ctx' | 'state' | 'init'> = {
+  id: 'mainLayer',
+  size: [1324, 1068],
+  background: 'terrain',
+  initList: [
+    'player',
+    'cursor',
+    'counter',
+    'timer',
+    'bestTime',
+    'fireballSpell',
+    'hellfireSpell',
+    'frostShardSpell',
+    'teleportSpell',
+    'bestScore',
+    'level',
+    'fog',
+    'monsterController',
+  ],
+  translate: {
+    x: -150,
+    y: -150,
+  },
+  rules: ['randomTrees', 'spawnHeart', 'spawnPowerup', 'goWithPlayer'],
+};
+
 class GameState extends Phaser.State {
   private battleTheme: any;
   private deathTheme: any;
@@ -89,39 +115,15 @@ class GameState extends Phaser.State {
 
     this.add.image(0, 0, this.bitmap);
 
-    const layerConfig: IGameLayerConfig = {
-      id: 'mainLayer',
-      size: [1324, 1068],
-      background: 'terrain',
-      initList: [
-        'player',
-        'cursor',
-        'counter',
-        'timer',
-        'bestTime',
-        'fireballSpell',
-        'hellfireSpell',
-        'frostShardSpell',
-        'teleportSpell',
-        'bestScore',
-        'level',
-        'fog',
-        'monsterController',
-      ],
+    this.gameLayer = new GameLayer({
+      ...LAYER_CONFIG,
       init: function() {
         this.state.parameters.monstersKilled = 0;
         this.state.parameters.gameTimer = 0;
       },
-      translate: {
-        x: -150,
-        y: -150,
-      },
       state: this,
       ctx: this.bitmap.ctx,
-      rules: ['randomTrees', 'spawnHeart', 'spawnPowerup', 'goWithPlayer'],
-    };
-
-    this.gameLayer = new GameLayer(layerConfig);
+    });
     this.gameLayer.init();
   }
 
