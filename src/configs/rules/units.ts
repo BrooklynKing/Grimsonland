@@ -97,6 +97,23 @@ export const meleeAttack: IGameRuleConfig = {
   },
 };
 
+export const spellExplosion: IGameRuleConfig = {
+  update: function(obj: GameObject) {
+    if (!obj.parameters.exploded) {
+      const objects = obj.parameters.collisions;
+      for (let i = 0, l = objects.length; i < l; i++) {
+        if (objects[i].parameters.health && objects[i].type !== 'player') {
+          objects[i].parameters.health =
+            objects[i].parameters.health - obj.parameters.power;
+          break;
+        }
+      }
+
+      obj.parameters.exploded = true;
+    }
+  },
+}
+
 export const monsterExplosion: IGameRuleConfig = {
   update: function(obj: GameObject) {
     if (!obj.parameters.exploded) {

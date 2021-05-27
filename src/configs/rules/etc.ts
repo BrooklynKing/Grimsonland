@@ -176,7 +176,7 @@ export const explosionOnCooldown: IGameRuleConfig = {
     if (cooldown == 0) {
       obj.layer.removeObjectOnNextTick(obj.id);
 
-      const explosionConfig = gameConfigs.getConfig('monsterExplosion');
+      const explosionConfig = gameConfigs.getConfig('spellExplosion');
       explosionConfig.pos = new Phaser.Point(obj.pos.x, obj.pos.y);
       const expl = obj.layer.addObject(explosionConfig);
       expl.parameters.power = obj.parameters.power;
