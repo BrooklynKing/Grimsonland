@@ -100,7 +100,7 @@ export const hellfire: IGameRuleConfig = {
 
 export const slowEnemies: IGameRuleConfig = {
   update: function(obj: GameObject) {
-    const objects = obj.parameters.collisions;
+    const { objects } = obj.parameters.collisions;
 
     for (let i = 0; i < objects.length; i++) {
       if (objects[i].type == 'monster') {
@@ -217,7 +217,7 @@ export const frostShard: IGameRuleConfig = {
 
 export const bulletMonsterCollision: IGameRuleConfig = {
   update: function(obj: GameObject) {
-    const objects = obj.parameters.collisions;
+    const { objects } = obj.parameters.collisions;
 
     for (let i = 0, l = objects.length; i < l; i++) {
       if (objects[i].type == 'monster') {
@@ -241,7 +241,7 @@ export const bulletMonsterCollision: IGameRuleConfig = {
 
 export const hellTubeMonsterCollision: IGameRuleConfig = {
   update: function(obj: GameObject) {
-    const objects = obj.parameters.collisions;
+    const { objects } = obj.parameters.collisions;
 
     for (let i = 0, l = objects.length; i < l; i++) {
       if (objects[i].type == 'monster') {

@@ -119,14 +119,19 @@ export const dynamicZIndex: IGameRuleConfig = {
 
 export const collisions: IGameRuleConfig = {
   init: function (obj: GameObject) {
-    const collisions: any = [];
-    obj.parameters.collisions = collisions;
+    const collisions: {
+      objects: GameObject[]
+      cells: any[],
+    } = {
+      objects: [],
+      cells: []
+    };
 
-    collisions.cells = [];
+    obj.parameters.collisions = collisions;
     obj.layer.state.collisions.updateObject(obj);
   },
   update: function (obj: GameObject) {
-    obj.parameters.collisions.splice(0);
+    obj.parameters.collisions.objects.splice(0);
     obj.layer.state.collisions.updateObject(obj);
   },
 };

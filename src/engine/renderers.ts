@@ -1,6 +1,28 @@
 import { GameObject } from './core/object';
 
-function fog(obj: GameObject) {
+const ellipse = (
+  context: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  rx: number,
+  ry: number,
+  rot: number,
+  aStart: number,
+  aEnd: number,
+) => {
+  context.save();
+
+  context.translate(cx, cy);
+  context.rotate(rot);
+  context.translate(-rx, -ry);
+
+  context.scale(rx, ry);
+  context.arc(1, 1, 1, aStart, aEnd, false);
+
+  context.restore();
+} 
+
+const fog: Render = (obj: GameObject) => {
   const ctx = obj.layer.ctx;
   const x = obj.layer.getObjectsByType('player')[0].pos.x;
   const y = obj.layer.getObjectsByType('player')[0].pos.y;
@@ -17,7 +39,7 @@ function fog(obj: GameObject) {
   ctx.fill();
 }
 
-function healthBar(obj: GameObject) {
+const healthBar: Render = (obj: GameObject) => {
   const ctx = obj.layer.ctx;
   const x = Math.round(-obj.sprite.size[0] / 2);
   const y = Math.round(-obj.sprite.size[1] / 2 - 7);
@@ -47,7 +69,7 @@ function healthBar(obj: GameObject) {
   ctx.globalAlpha = 1;
 }
 
-function expBar(obj: GameObject) {
+const expBar: Render = (obj: GameObject) => {
   const x = -22;
   const y = 17;
   const width = 200;
@@ -86,7 +108,7 @@ function expBar(obj: GameObject) {
   textRender(obj);
 }
 
-function sprite(obj: GameObject, dt: number) {
+const sprite: Render = (obj: GameObject, dt: number) => {
   const ctx = obj.layer.ctx;
 
   ctx.globalAlpha = 1;
@@ -94,29 +116,7 @@ function sprite(obj: GameObject, dt: number) {
   obj.sprite.render(ctx);
 }
 
-function ellipse(
-  context: CanvasRenderingContext2D,
-  cx: number,
-  cy: number,
-  rx: number,
-  ry: number,
-  rot: number,
-  aStart: number,
-  aEnd: number,
-) {
-  context.save();
-
-  context.translate(cx, cy);
-  context.rotate(rot);
-  context.translate(-rx, -ry);
-
-  context.scale(rx, ry);
-  context.arc(1, 1, 1, aStart, aEnd, false);
-
-  context.restore();
-}
-
-function shadow(obj: GameObject) {
+const shadow: Render = (obj: GameObject) => {
   if (obj.size) {
     const ctx = obj.layer.ctx;
 
@@ -140,7 +140,7 @@ function shadow(obj: GameObject) {
   }
 }
 
-function effects(obj: GameObject) {
+const effects: Render = (obj: GameObject) => {
   const ctx = obj.layer.ctx;
   const effects = obj.parameters.effects;
 
@@ -160,19 +160,19 @@ function effects(obj: GameObject) {
   }
 }
 
-function objectRenderer(obj: GameObject, dt: number) {
+const objectRenderer: Render = (obj: GameObject, dt: number) => {
   shadow(obj);
   sprite(obj, dt);
 }
 
-function unitRenderer(obj: GameObject, dt: number) {
+const unitRenderer: Render = (obj: GameObject, dt: number) => {
   shadow(obj);
   healthBar(obj);
   sprite(obj, dt);
   effects(obj);
 }
 
-function spellRenderer(obj: GameObject, dt: number) {
+const spellRenderer: Render = (obj: GameObject, dt: number) => {
   const ctx = obj.layer.ctx;
   const x = Math.round(-obj.sprite.size[0] / 2 - 4);
   const y = Math.round(-obj.sprite.size[1] / 2 - 4);
@@ -221,7 +221,7 @@ function spellRenderer(obj: GameObject, dt: number) {
   ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }
 
-function ui(obj: GameObject, dt: number) {
+const ui: Render = (obj: GameObject, dt: number) => {
   const ctx = obj.layer.ctx;
 
   ctx.translate(-obj.layer.translate.x, -obj.layer.translate.y);
@@ -229,7 +229,7 @@ function ui(obj: GameObject, dt: number) {
   ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }
 
-function textRender(obj: GameObject) {
+const textRender: Render = (obj: GameObject) => {
   const ctx = obj.layer.ctx;
   let fontConfig = '';
 
@@ -252,7 +252,9 @@ function textRender(obj: GameObject) {
   ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }
 
-const renders: { [key: string]: any } = {
+export type Render<> = (obj: GameObject, dt?: number) => void;
+
+const renders = {
   shadow,
   fog,
   expBar,

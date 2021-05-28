@@ -185,7 +185,6 @@ export class GameLayer {
     config.id += Math.round(new Date().getTime() + Math.random() * 1000001);
 
     const obj = new GameObject(config);
-    obj.init();
 
     if (config.type && config.type !== 'default') {
       !this.sortedObjects[config.type] &&

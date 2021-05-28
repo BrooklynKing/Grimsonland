@@ -33,7 +33,7 @@ export const monsterController: IGameRuleConfig = {
     );
   },
   update: function(obj: GameObject) {
-    function createSpawn() {
+    const createSpawn = () => {
       const rect = new Phaser.Rectangle(
         100 - obj.layer.translate.x,
         100 - obj.layer.translate.y,

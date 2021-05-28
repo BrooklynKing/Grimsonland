@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 
 export function moveWithSpeed(
   point: Phaser.Point,
-  destination: any,
+  destination: Phaser.Point,
   speed: number,
 ) {
   if (!point || !destination) {

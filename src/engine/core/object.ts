@@ -3,25 +3,24 @@ import { GameLayer } from './layer';
 import { Sprite } from '../sprite';
 
 import gameConfigs from '../../configs';
-import renders from '../renderers';
+import renders, { Render } from '../renderers';
 
 import { clone } from '../utils';
+import { IGameRuleConfig } from '../../configs/rules/types';
 
 export interface IGameObjectConfig {
   id: string;
   layer: GameLayer;
   pos: Phaser.Point;
-  sprite: any[];
+  sprite: [string, [number, number], [number, number], number, Array<number>, string, boolean, number];
   size: number[];
   type: string;
   collisions: boolean;
   zIndex: number;
-  parameters: any;
+  parameters: { [key: string]: any };
   rules: string[];
   conditions: string[];
-  render: string | false;
-  update: any;
-  init: any;
+  render: (keyof typeof renders)[] | keyof typeof renders | false;
 }
 
 export class GameObject {
@@ -35,11 +34,11 @@ export class GameObject {
   zIndex: number;
 
   private collisions: GameRule;
-  private rules: any[];
-  private conditions: any[];
-  private noRender: boolean;
-  private customRender: any;
-  private inited: boolean;
+  private rules: GameRule[];
+  private _rulesForInit: string[];
+  private conditions: GameRule[];
+  private _conditionsForInit: string[];
+  private renderers: (keyof typeof renders)[] | false;
 
   parameters: { [key: string]: any };
   readonly defaultParameters: { readonly [key: string]: any };
@@ -83,61 +82,29 @@ export class GameObject {
     this.defaultParameters = clone(this.parameters);
     this.size = config.size;
 
-    this.rules = config.rules || [];
-    this.conditions = config.conditions || [];
+    this.rules = [];
+    this.conditions = [];
+    this._rulesForInit = config.rules || [];
+    this._conditionsForInit = config.conditions || [];
 
-    if (config.render) {
-      if (renders[config.render]) {
-        this.customRender = renders[config.render];
-      } else {
-        this.customRender = config.render;
-      }
-    } else {
-      if (config.render === false) {
-        this.noRender = true;
-      }
+    this.renderers = config.render === false ? false : Array.isArray(config.render) ? config.render : [config.render || 'sprite'];
+
+    if (this.shouldCheckCollisions) {
+      this.collisions = new GameRule(gameConfigs.getRuleConfig('collisions'));
+      this.collisions.init(this);
     }
-
-    this.inited = false;
+    this._rulesForInit.forEach((ruleID) => {
+      this.addRule(gameConfigs.getRuleConfig(ruleID));
+    })
+    this._conditionsForInit.forEach((ruleID) => {
+      this.addCondition(gameConfigs.getRuleConfig(ruleID));
+    })
   }
 
   render(dt: number) {
-    if (!this.noRender) {
-      if (this.customRender) {
-        if (Array.isArray(this.customRender)) {
-          this.customRender.forEach(renderer => renderer(this, dt));
-        } else {
-          this.customRender(this, dt);
-        }
-      } else {
-        renders.sprite(this, dt);
-      }
-    }
-  }
-
-  init() {
-    if (!this.inited) {
-      const rules = this.rules;
-      const conditions = this.conditions;
-
-      this.rules = [];
-      this.conditions = [];
-
-      if (this.shouldCheckCollisions) {
-        this.collisions = new GameRule(gameConfigs.getRuleConfig('collisions'));
-        this.collisions.init(this);
-      }
-
-      for (let i = 0, l = rules.length; i < l; i++) {
-        this.addRule(gameConfigs.getRuleConfig(rules[i]));
-      }
-
-      for (let i = 0, l = conditions.length; i < l; i++) {
-        this.addCondition(gameConfigs.getRuleConfig(conditions[i]));
-      }
-
-      this.inited = true;
-    }
+    if (this.renderers) {
+      this.renderers.forEach(renderer => renders[renderer](this, dt));
+    } 
   }
 
   update(dt: number) {
@@ -157,14 +124,14 @@ export class GameObject {
     this.pos.y = point.y;
   }
 
-  addRule(config: any) {
+  addRule(config: IGameRuleConfig) {
     const rule = new GameRule(config);
     rule.init(this);
 
     this.rules.push(rule);
   }
 
-  addCondition(config: any) {
+  addCondition(config: IGameRuleConfig) {
     const condition = new GameRule(config);
     condition.init(this);
 

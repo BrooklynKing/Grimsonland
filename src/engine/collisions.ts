@@ -90,10 +90,10 @@ function generate(config: { n: number; width: number; height: number }) {
                   objects[l].size,
                 )
               ) {
-                objects[k].parameters.collisions.indexOf(objects[l]) === -1 &&
-                  objects[k].parameters.collisions.push(objects[l]);
-                objects[l].parameters.collisions.indexOf(objects[k]) === -1 &&
-                  objects[l].parameters.collisions.push(objects[k]);
+                objects[k].parameters.collisions.objects.indexOf(objects[l]) === -1 &&
+                  objects[k].parameters.collisions.objects.push(objects[l]);
+                objects[l].parameters.collisions.objects.indexOf(objects[k]) === -1 &&
+                  objects[l].parameters.collisions.objects.push(objects[k]);
               }
             }
           }

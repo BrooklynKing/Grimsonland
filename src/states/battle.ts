@@ -30,14 +30,14 @@ const LAYER_CONFIG: Omit<IGameLayerConfig, 'ctx' | 'state' | 'init'> = {
 };
 
 class GameState extends Phaser.State {
-  private battleTheme: any;
-  private deathTheme: any;
+  private battleTheme: Phaser.Sound;
+  private deathTheme: Phaser.Sound;
 
-  private restartButton: any;
+  private restartButton: Phaser.Button;
 
-  private bitmap: any;
+  private bitmap: Phaser.BitmapData;
   private gameLayer: GameLayer;
-  collisions: any;
+  collisions: ReturnType<typeof collisions>;
 
   parameters: {
     bestTime: number;

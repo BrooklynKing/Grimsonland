@@ -4,8 +4,8 @@ const INFO_TEXT =
 import Phaser from 'phaser';
 
 class MainMenu extends Phaser.State {
-  private menuTheme: any;
-  private background: any;
+  private menuTheme: Phaser.Sound;
+  private background: Phaser.Image;
 
   init() {
     this.menuTheme = this.sound.add('menuTheme', 0.3, true);

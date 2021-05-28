@@ -17,7 +17,7 @@ export const playerDeath: IGameRuleConfig = {
 
 export const damageOnPlayerCollision: IGameRuleConfig = {
   update: function(obj: GameObject) {
-    const objects = obj.parameters.collisions;
+    const { objects } = obj.parameters.collisions;
 
     for (let i = 0; i < objects.length; i++) {
       if (objects[i].type == 'player') {
@@ -31,7 +31,8 @@ export const damageOnPlayerCollision: IGameRuleConfig = {
 
 export const destroyOnPlayerCollision: IGameRuleConfig = {
   update: function(obj: GameObject) {
-    const objects = obj.parameters.collisions;
+    const { objects } = obj.parameters.collisions;
+
 
     for (let i = 0; i < objects.length; i++) {
       if (objects[i].type == 'player') {
@@ -49,7 +50,7 @@ export const destroyOnPlayerCollision: IGameRuleConfig = {
 
 export const triggerOnPlayerCollision: IGameRuleConfig = {
   update: function(obj: GameObject) {
-    const objects = obj.parameters.collisions;
+    const { objects } = obj.parameters.collisions;
 
     for (let i = 0; i < objects.length; i++) {
       if (objects[i].type == 'player') {
@@ -77,7 +78,8 @@ export const triggerOnPlayerCollision: IGameRuleConfig = {
 export const meleeAttack: IGameRuleConfig = {
   update: function(obj: GameObject) {
     if (!obj.parameters.meleeCooldown) {
-      const objects = obj.parameters.collisions;
+      const { objects } = obj.parameters.collisions;
+
       for (let i = 0; i < objects.length; i++) {
         if (objects[i].type == 'player') {
           objects[i].parameters.health =
@@ -100,7 +102,8 @@ export const meleeAttack: IGameRuleConfig = {
 export const spellExplosion: IGameRuleConfig = {
   update: function(obj: GameObject) {
     if (!obj.parameters.exploded) {
-      const objects = obj.parameters.collisions;
+      const { objects } = obj.parameters.collisions;
+
       for (let i = 0, l = objects.length; i < l; i++) {
         if (objects[i].parameters.health && objects[i].type !== 'player') {
           objects[i].parameters.health =
@@ -117,7 +120,8 @@ export const spellExplosion: IGameRuleConfig = {
 export const monsterExplosion: IGameRuleConfig = {
   update: function(obj: GameObject) {
     if (!obj.parameters.exploded) {
-      const objects = obj.parameters.collisions;
+      const { objects } = obj.parameters.collisions;
+
       for (let i = 0, l = objects.length; i < l; i++) {
         if (objects[i].parameters.health) {
           objects[i].parameters.health =
@@ -193,7 +197,8 @@ export const monsterExplosionCondition: IGameRuleConfig = {
     if (obj.parameters.health <= 0) {
       generateExplosions();
     } else {
-      const objects = obj.parameters.collisions;
+      const { objects } = obj.parameters.collisions;
+
       for (let i = 0; i < objects.length; i++) {
         if (objects[i].type == 'player') {
           generateExplosions();
@@ -207,7 +212,7 @@ export const monsterExplosionCondition: IGameRuleConfig = {
 
 export const stopOnCollisionWithPlayer: IGameRuleConfig = {
   update: function(obj: GameObject) {
-    const objects = obj.parameters.collisions;
+    const { objects } = obj.parameters.collisions;
 
     for (let i = 0, l = objects.length; i < l; i++) {
       if (objects[i].type == 'player') {
@@ -354,7 +359,7 @@ export const monsterBoss2Logic: IGameRuleConfig = {
 export const monsterBoss2Bullet: IGameRuleConfig = {
   update: function(obj: GameObject) {
     const cooldown = obj.parameters.cooldown;
-    const objects = obj.parameters.collisions;
+    const { objects } = obj.parameters.collisions;
 
     if (cooldown == 0) {
       obj.layer.removeObjectOnNextTick(obj.id);
@@ -391,23 +396,17 @@ export const monsterBoss2Bullet: IGameRuleConfig = {
 export const moveWithKeyboard: IGameRuleConfig = {
   update: function(obj: GameObject) {
     const pos = obj.pos.clone();
-    const direction: any = {};
 
-    direction.left = obj.layer.game.input.keyboard.isDown(65);
-    direction.up = obj.layer.game.input.keyboard.isDown(87);
-    direction.down = obj.layer.game.input.keyboard.isDown(83);
-    direction.right = obj.layer.game.input.keyboard.isDown(68);
-
-    if (direction.right) {
+    if (obj.layer.game.input.keyboard.isDown(68)) {
       pos.x = obj.pos.x + 1;
     }
-    if (direction.left) {
+    if (obj.layer.game.input.keyboard.isDown(65)) {
       pos.x = obj.pos.x - 1;
     }
-    if (direction.down) {
+    if (obj.layer.game.input.keyboard.isDown(83)) {
       pos.y = obj.pos.y + 1;
     }
-    if (direction.up) {
+    if (obj.layer.game.input.keyboard.isDown(87)) {
       pos.y = obj.pos.y - 1;
     }
 
@@ -434,7 +433,7 @@ export const selectSpellWithKeyboard: IGameRuleConfig = {
 
 export const triggerOnPlayerCollisionPowerUp: IGameRuleConfig = {
   update: function(obj: GameObject) {
-    const objects = obj.parameters.collisions;
+    const { objects } = obj.parameters.collisions;
 
     for (let i = 0; i < objects.length; i++) {
       if (objects[i].type == 'player') {

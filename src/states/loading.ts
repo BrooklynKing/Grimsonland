@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 class Loading extends Phaser.State {
-  private text: any;
+  private text: Phaser.Text;
 
   preload() {
     this.game.stage.backgroundColor = 0x0e0e0e;
