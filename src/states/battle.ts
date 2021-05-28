@@ -98,11 +98,13 @@ class GameState extends Phaser.State {
   }
 
   initGameParameters() {
+    const bestTimeFromStorage = localStorage.getItem('bestTime');
+    const bestScoreFromStorage = localStorage.getItem('bestScore');
     this.parameters = {
       monstersKilled: 0,
       gameTimer: 0,
-      bestTime: parseInt(localStorage.getItem('bestTime')) || 0,
-      bestScore: parseInt(localStorage.getItem('bestScore')) || 0,
+      bestTime: bestTimeFromStorage ? parseInt(bestTimeFromStorage) || 0 : 0,
+      bestScore: bestScoreFromStorage ? parseInt(bestScoreFromStorage) || 0 : 0,
     };
   }
 

@@ -48,25 +48,21 @@ export const setDirectionToPlayerAdvance: IGameRuleConfig = {
   update: function (obj: GameObject) {
     const player = obj.layer.getObjectsByType('player')[0];
     const playerDirection = player.parameters.direction;
-    let oldDirection = obj.parameters.direction;
-
-    if (!oldDirection) {
-      oldDirection = Phaser.Point.subtract(player.pos, obj.pos);
-    }
+    const direction = obj.parameters.direction ||  Phaser.Point.subtract(player.pos, obj.pos);
 
     if (playerDirection == null) {
       obj.parameters.direction = Phaser.Point.subtract(player.pos, obj.pos);
     } else {
-      let speed = Math.abs(
+      const speed = Math.abs(
         Math.min(
           player.parameters.speed,
           Phaser.Point.distance(obj.pos, player.pos)
         ) - 10
       );
-      let playerNextPlace = moveWithSpeed(player.pos, playerDirection, speed);
-      let _dv = Phaser.Point.subtract(playerNextPlace, obj.pos).normalize();
-      let _odv = oldDirection.clone().normalize();
-      let _ndv = Phaser.Point.add(_odv, _dv).normalize();
+      const playerNextPlace = moveWithSpeed(player.pos, playerDirection, speed);
+      const _dv = Phaser.Point.subtract(playerNextPlace, obj.pos).normalize();
+      const _odv = direction.clone().normalize();
+      const _ndv = Phaser.Point.add(_odv, _dv).normalize();
 
       obj.parameters.direction = _ndv;
     }

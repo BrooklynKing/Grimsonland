@@ -480,8 +480,8 @@ export const summonOnCooldown: IGameRuleConfig = {
       return config;
     }
     if (cooldown == 0) {
-      let monsterConfig = getProperMonster();
-      let player = obj.layer.getObjectsByType('player')[0];
+      const monsterConfig = getProperMonster();
+      const player = obj.layer.getObjectsByType('player')[0];
 
       monsterConfig.pos = obj.pos.clone();
 

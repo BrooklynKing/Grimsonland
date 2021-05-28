@@ -38,7 +38,7 @@ export const fireball: IGameRuleConfig = {
           destination.y -= obj.layer.translate.y;
 
           for (let i = 0; i < spellPower; i++) {
-            let movedPoint = destination
+            const movedPoint = destination
               .clone()
               .rotate(player.pos.x, player.pos.y, startDegree, true);
 
@@ -82,7 +82,7 @@ export const hellfire: IGameRuleConfig = {
             point1 = moveWithSpeed(player.pos, destination, 100);
 
           for (let i = -10; i < 10; i++) {
-            let movedPoint = point1
+            const movedPoint = point1
               .clone()
               .rotate(player.pos.x, player.pos.y, 18 * i, true);
 
