@@ -62,7 +62,7 @@ export const monsterController: IGameRuleConfig = {
       !obj.layer.getObjectsByType('monster').length &&
       obj.parameters.monsterKilled < obj.parameters.monsterSpawned
     ) {
-      obj.parameters.monserSpawned = obj.parameters.monsterKilled;
+      obj.parameters.monsterSpawned = obj.parameters.monsterKilled;
     } else {
       if (obj.parameters.monsterKilled >= obj.parameters.monsterOnWave) {
         obj.parameters.currentWave = obj.parameters.currentWave + 1;

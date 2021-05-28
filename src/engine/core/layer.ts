@@ -128,7 +128,7 @@ export class GameLayer {
     if (!this.inited) return;
 
     for (let i in this.rules) {
-      this.rules.hasOwnProperty(i) && this.rules[i].update(this, dt);
+      this.rules[i].update(this, dt);
     }
 
     for (let i in this.objects) {
@@ -153,6 +153,17 @@ export class GameLayer {
         this.removeObject(id);
       }
     }
+    
+    Object.keys(this.sortedObjects).forEach((type: string) => {
+      const sortedObjectsByType = this.sortedObjects[type];
+      const existingObjects: string[] = [];
+      sortedObjectsByType.forEach((id: string) => {
+        if (this.objects[id]) {
+          existingObjects.push(id);
+        }
+      });
+      this.sortedObjects[type] = existingObjects;
+    })
   }
 
   removeObjectOnNextTick(id: string) {
@@ -169,11 +180,6 @@ export class GameLayer {
     if (this.objects.hasOwnProperty(id)) {
       this.objects[id].layer = null;
 
-      this.sortedObjects[this.objects[id].type].splice(
-        this.sortedObjects[this.objects[id].type].indexOf(id),
-        1,
-      );
-
       this.objects[id] = null;
 
       delete this.objects[id];
@@ -187,8 +193,7 @@ export class GameLayer {
     const obj = new GameObject(config);
 
     if (config.type && config.type !== 'default') {
-      !this.sortedObjects[config.type] &&
-        (this.sortedObjects[config.type] = []);
+      this.sortedObjects[config.type] = this.sortedObjects[config.type] || [];
       this.sortedObjects[config.type].push(obj.id);
     } else {
       this.sortedObjects['default'].push(obj.id);
@@ -201,11 +206,14 @@ export class GameLayer {
 
   getObjectsByType(type: string) {
     const objectsId = this.sortedObjects[type] || [];
-    const result = [];
+    const result: GameObject[] = [];
 
-    for (let i = 0, l = objectsId.length; i < l; i++) {
-      result.push(this.objects[objectsId[i]]);
-    }
+    objectsId.forEach((id) => {
+      if (this.objects[id]) {
+        result.push(this.objects[id]);
+      }
+    })
+
     return result;
   }
 
