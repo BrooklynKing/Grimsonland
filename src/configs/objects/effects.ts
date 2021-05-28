@@ -1,8 +1,10 @@
+import { ObjectTypes } from './types';
+
 export const mbullet = {
   zIndex: 3,
   collisions: true,
   sprite: ['darkblast', [0, 0], [38, 38], 12, [0, 1, 2, 3]],
-  type: 'monsterSpellElement',
+  type: ObjectTypes.MonsterSpellElement,
   render: 'object',
   size: [32, 32],
   conditions: ['damageOnPlayerCollision', 'destroyOnPlayerCollision'],
@@ -16,7 +18,7 @@ export const mbullet2 = {
   zIndex: 3,
   collisions: true,
   sprite: ['bossSpell', [0, 0], [30, 26], 10, [0, 1, 2]],
-  type: 'monsterSpellElement',
+  type: ObjectTypes.MonsterSpellElement,
   render: 'object',
   size: [28, 24],
   conditions: ['monsterBoss2Bullet'],
@@ -72,7 +74,7 @@ export const explosion = {
 export const monsterExplosion = {
   render: 'object',
   collisions: true,
-  type: 'spellEffect',
+  type: ObjectTypes.SpellEffect,
   conditions: ['monsterExplosion'],
   size: [39, 39],
   sprite: [
@@ -90,7 +92,7 @@ export const monsterExplosion = {
 export const spellExplosion = {
   render: 'object',
   collisions: true,
-  type: 'spellEffect',
+  type: ObjectTypes.SpellEffect,
   conditions: ['spellExplosion'],
   size: [39, 39],
   sprite: [
@@ -108,5 +110,5 @@ export const spellExplosion = {
 export const fog = {
   render: 'fog',
   zIndex: 2500,
-  type: 'effect',
+  type: ObjectTypes.Effect,
 };

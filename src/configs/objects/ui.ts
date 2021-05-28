@@ -1,4 +1,7 @@
+import { ObjectTypes } from './types';
+
 export const cursor = {
+  type: ObjectTypes.UI,
   zIndex: 3000,
   render: 'ui',
   pos: [400, 350],
@@ -6,6 +9,7 @@ export const cursor = {
   rules: ['bindPositionToMouse'],
 };
 export const counter = {
+  type: ObjectTypes.UI,
   zIndex: 3000,
   pos: [5, 13],
   render: 'text',
@@ -18,6 +22,7 @@ export const counter = {
   rules: ['countMonsterKilled'],
 };
 export const leftOnWaveLabel = {
+  type: ObjectTypes.UI,
   zIndex: 3000,
   pos: [5, 100],
   render: 'text',
@@ -29,6 +34,7 @@ export const leftOnWaveLabel = {
   },
 };
 export const level = {
+  type: ObjectTypes.UI,
   zIndex: 3000,
   pos: [35, 45],
   render: 'expBar',
@@ -41,6 +47,7 @@ export const level = {
   rules: ['level'],
 };
 export const timer = {
+  type: ObjectTypes.UI,
   zIndex: 3000,
   pos: [5, 23],
   render: 'text',
@@ -53,6 +60,7 @@ export const timer = {
   rules: ['timer'],
 };
 export const bestTime = {
+  type: ObjectTypes.UI,
   pos: [5, 370],
   zIndex: 3000,
   render: 'text',
@@ -65,6 +73,7 @@ export const bestTime = {
   rules: ['bestTime'],
 };
 export const bestScore = {
+  type: ObjectTypes.UI,
   pos: [5, 380],
   zIndex: 3000,
   render: 'text',

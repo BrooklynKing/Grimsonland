@@ -1,3 +1,5 @@
+import { ObjectTypes } from './types';
+
 export const fireballSpell = {
   zIndex: 5000,
   sprite: ['spellIcons', [0, 0], [32, 32]],
@@ -9,7 +11,7 @@ export const fireballSpell = {
     bulletsFired: 0,
     cooldown: 20,
   },
-  type: 'spell',
+  type: ObjectTypes.Spell,
   rules: ['fireball'],
 };
 export const hellfireSpell = {
@@ -23,7 +25,7 @@ export const hellfireSpell = {
     bulletsFired: 0,
     cooldown: 800,
   },
-  type: 'spell',
+  type: ObjectTypes.Spell,
   rules: ['hellfire'],
 };
 export const frostShardSpell = {
@@ -36,7 +38,7 @@ export const frostShardSpell = {
     shardsFired: 0,
     cooldown: 500,
   },
-  type: 'spell',
+  type: ObjectTypes.Spell,
   rules: ['frostShard'],
 };
 export const teleportSpell = {
@@ -50,7 +52,7 @@ export const teleportSpell = {
     teleportGates: 0,
     cooldown: 200,
   },
-  type: 'spell',
+  type: ObjectTypes.Spell,
   rules: ['teleport'],
 };
 export const teleportGate = {
@@ -62,7 +64,7 @@ export const teleportGate = {
   parameters: {
     cooldown: 200,
   },
-  type: 'spellElement',
+  type: ObjectTypes.SpellElement,
   rules: ['removeOnCooldown', 'dynamicZIndex'],
 };
 
@@ -72,7 +74,7 @@ export const bullet = {
   render: 'object',
   sprite: ['fireball', [0, 0], [33, 33], 16, [0, 1, 2, 3]],
   size: [25, 25],
-  type: 'spellElement',
+  type: ObjectTypes.SpellElement,
   parameters: {
     power: 10,
     cooldown: 100,
@@ -100,7 +102,7 @@ export const hellfireTube = {
     false,
   ],
   size: [50, 50],
-  type: 'spellElement',
+  type: ObjectTypes.SpellElement,
   parameters: {
     power: 10,
     cooldown: 150,
@@ -114,7 +116,7 @@ export const frostShard = {
   render: 'object',
   collisions: true,
   sprite: ['effects', [96, 0], [32, 32], 10, [0, 1, 2]],
-  type: 'spellElement',
+  type: ObjectTypes.SpellElement,
   size: [500, 500],
   parameters: {
     power: 60,

@@ -4,8 +4,11 @@ import gameConfigs from '../index';
 import { GameLayer } from '../../engine/core/layer';
 import { IGameRuleConfig } from './types';
 
-const trees = 100;
-const stones = 100;
+const TREES_COUNT = 100;
+const STONES_COUNT = 100;
+const HEART_SPAWN_COOLDOWN = 400;
+const EXP_SPAWN_COOLDOWN = 400;
+
 export const randomTrees: IGameRuleConfig = {
   init: function(obj: GameLayer) {
     function getRandomPointInArea() {
@@ -15,7 +18,7 @@ export const randomTrees: IGameRuleConfig = {
       ];
     }
 
-    for (let i = 0; i < trees; i++) {
+    for (let i = 0; i < TREES_COUNT; i++) {
       const config = gameConfigs.getConfig(
         'tree' + (Math.round(Math.random()) + 1),
       );
@@ -26,7 +29,7 @@ export const randomTrees: IGameRuleConfig = {
       obj.addObject(config);
     }
 
-    for (let i = 0; i < stones; i++) {
+    for (let i = 0; i < STONES_COUNT; i++) {
       const config = gameConfigs.getConfig('stones');
       const point = getRandomPointInArea();
       config.pos = new Phaser.Point(point[0], point[1]);
@@ -35,7 +38,6 @@ export const randomTrees: IGameRuleConfig = {
   },
 };
 
-const spawnHeartCooldown = 400;
 export const spawnHeart: IGameRuleConfig = {
   update: function(obj: GameLayer) {
     if (!obj.parameters.spawnHeartCurrentCooldown) {
@@ -45,17 +47,16 @@ export const spawnHeart: IGameRuleConfig = {
 
       obj.addObject(config);
 
-      obj.parameters.spawnHeartCurrentCooldown = spawnHeartCooldown;
+      obj.parameters.spawnHeartCurrentCooldown = HEART_SPAWN_COOLDOWN;
     } else {
       obj.parameters.spawnHeartCurrentCooldown--;
     }
   },
 };
 
-const spawnPowerupCooldown = 400;
-export const spawnPowerup: IGameRuleConfig = {
+export const spawnExp: IGameRuleConfig = {
   update: function(obj: GameLayer) {
-    if (!obj.parameters.spawnPowerupCurrentCooldown) {
+    if (!obj.parameters.spawnExpCurrentCooldown) {
       const config = gameConfigs.getConfig('powerup');
 
       const rect = new Phaser.Rectangle(100, 100, 1000, 750);
@@ -63,9 +64,9 @@ export const spawnPowerup: IGameRuleConfig = {
 
       obj.addObject(config);
 
-      obj.parameters.spawnPowerupCurrentCooldown = spawnPowerupCooldown;
+      obj.parameters.spawnExpCurrentCooldown = EXP_SPAWN_COOLDOWN;
     } else {
-      obj.parameters.spawnPowerupCurrentCooldown--;
+      obj.parameters.spawnExpCurrentCooldown--;
     }
   },
 };

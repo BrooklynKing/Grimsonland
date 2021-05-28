@@ -3,30 +3,33 @@ import Phaser from 'phaser';
 import collisions from '../engine/collisions';
 import { GameLayer, IGameLayerConfig } from '../engine/core/layer';
 
+import rules from '../configs/rules';
+import objects from '../configs/objects';
+
 const LAYER_CONFIG: Omit<IGameLayerConfig, 'ctx' | 'state' | 'init'> = {
   id: 'mainLayer',
   size: [1324, 1068],
   background: 'terrain',
   initList: [
-    'player',
-    'cursor',
-    'counter',
-    'timer',
-    'bestTime',
-    'fireballSpell',
-    'hellfireSpell',
-    'frostShardSpell',
-    'teleportSpell',
-    'bestScore',
-    'level',
-    'fog',
-    'monsterController',
+    objects.player,
+    objects.cursor,
+    objects.counter,
+    objects.timer,
+    objects.bestTime,
+    objects.fireballSpell,
+    objects.hellfireSpell,
+    objects.frostShardSpell,
+    objects.teleportSpell,
+    objects.bestScore,
+    objects.level,
+    objects.fog,
+    objects.monsterController,
   ],
   translate: {
     x: -150,
     y: -150,
   },
-  rules: ['randomTrees', 'spawnHeart', 'spawnPowerup', 'goWithPlayer'],
+  rules: [rules.randomTrees, rules.spawnHeart, rules.spawnExp, rules.goWithPlayer],
 };
 
 class GameState extends Phaser.State {

@@ -284,7 +284,7 @@ export const monsterHealthStatus: IGameRuleConfig = {
       }
 
       const monsterController = obj.layer.getObjectsByType(
-        'monsterController',
+        'controller',
       )[0];
       monsterController.parameters.monsterKilled =
         monsterController.parameters.monsterKilled + 1;

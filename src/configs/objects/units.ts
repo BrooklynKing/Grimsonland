@@ -1,3 +1,5 @@
+import { ObjectTypes } from './types';
+
 export const player = {
   zIndex: 20,
   sprite: ['hero', [0, 0], [32, 32], 6, [0, 1, 2]],
@@ -26,7 +28,7 @@ export const player = {
       9: 20000,
     },
   },
-  type: 'player',
+  type: ObjectTypes.Player,
   conditions: ['selectSpellWithKeyboard'],
   rules: [
     'moveWithKeyboard',
@@ -56,7 +58,7 @@ export const summonGate = {
     health: 10,
   },
   conditions: ['monsterHealthStatus'],
-  type: 'monster',
+  type: ObjectTypes.Monster,
   rules: ['summonOnCooldown', 'dynamicZIndex'],
 };
 export const monster = {
@@ -77,7 +79,7 @@ export const monster = {
     power: 5,
   },
   conditions: ['monsterHealthStatus', 'stopOnCollisionWithPlayer'],
-  type: 'monster',
+  type: ObjectTypes.Monster,
   rules: [
     'moveToDirection',
     'wandererAI',
@@ -102,7 +104,7 @@ export const monsterBoomer = {
     power: 10,
   },
   conditions: ['monsterHealthStatus', 'monsterExplosionCondition'],
-  type: 'monster',
+  type: ObjectTypes.Monster,
   rules: [
     'moveToDirection',
     'rotateByPlayer',
@@ -127,7 +129,7 @@ export const monsterBoss = {
     effects: [] as string[],
   },
   conditions: ['monsterHealthStatus', 'stopOnCollisionWithPlayer'],
-  type: 'monster',
+  type: ObjectTypes.Monster,
   rules: [
     'setDirectionToPlayer',
     'monsterBossLogic',
@@ -155,7 +157,7 @@ export const monsterBoss2 = {
     effects: [] as string[],
   },
   conditions: ['monsterHealthStatus', 'stopOnCollisionWithPlayer'],
-  type: 'monster',
+  type: ObjectTypes.Monster,
   rules: [
     'setDirectionToPlayer',
     'monsterBoss2Logic',
@@ -174,6 +176,7 @@ export const heart = {
   sprite: ['pumpkin', [0, 0], [32, 32], 5, [0, 1]],
   conditions: ['triggerOnPlayerCollision'],
   rules: ['dynamicZIndex'],
+  type: ObjectTypes.PowerUp,
   parameters: {
     power: 10,
   },
@@ -184,6 +187,7 @@ export const powerup = {
   collisions: true,
   sprite: ['powerUp', [0, 0], [72, 65], 15, [0, 1, 2, 1]],
   conditions: ['triggerOnPlayerCollisionPowerUp'],
+  type: ObjectTypes.PowerUp,
   parameters: {
     exp: 250,
   },
