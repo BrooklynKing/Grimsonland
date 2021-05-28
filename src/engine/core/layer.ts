@@ -209,6 +209,10 @@ export class GameLayer {
     return result;
   }
 
+  getObjectByID(id: string) {
+    return this.objects[id];
+  }
+
   clearLayer() {
     this.objects = {};
 

@@ -27,10 +27,9 @@ export const monsterController: IGameRuleConfig = {
     obj.parameters.monsterOnWave = monsterCount[obj.parameters.currentWave - 1];
     obj.parameters.monsterKilled = 0;
     obj.parameters.monsterSpawned = 0;
-
-    this.leftOnWave = obj.layer.addObject(
+    obj.parameters.leftOnWaveId = obj.layer.addObject(
       gameConfigs.getConfig('leftOnWaveLabel'),
-    );
+    ).id;
   },
   update: function(obj: GameObject) {
     const createSpawn = () => {
@@ -74,8 +73,9 @@ export const monsterController: IGameRuleConfig = {
       }
     }
 
-    this.leftOnWave.parameters.text = format(
-      this.leftOnWave.parameters.template,
+    const leftOnWave = obj.layer.getObjectByID(obj.parameters.leftOnWaveId);
+    leftOnWave.parameters.text = format(
+      leftOnWave.parameters.template,
       {
         count:
           obj.parameters.monsterKilled + '/' + obj.parameters.monsterOnWave,
