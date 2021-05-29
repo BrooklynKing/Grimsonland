@@ -3,10 +3,10 @@ import Phaser from 'phaser';
 import { moveWithSpeed } from './utils';
 
 import { GameObject } from '../../engine/core/object';
-import { IGameRuleConfig } from './types';
+import { GameRule } from './types';
 import { ObjectTypes } from '../objects/types';
 
-export const bindPositionToLayer: IGameRuleConfig = {
+export const bindPositionToLayer: GameRule = {
 	update(obj: GameObject) {
 		if (obj.pos.x - obj.sprite!.size[0] / 2 < 0) {
 			obj.pos.x = obj.sprite!.size[0] / 2;
@@ -22,7 +22,7 @@ export const bindPositionToLayer: IGameRuleConfig = {
 	},
 };
 
-export const destroyAfterLeavingLayer: IGameRuleConfig = {
+export const destroyAfterLeavingLayer: GameRule = {
 	update(obj: GameObject) {
 		if (
 			obj.pos.y < -100 ||
@@ -36,7 +36,7 @@ export const destroyAfterLeavingLayer: IGameRuleConfig = {
 	},
 };
 
-export const setDirectionToPlayer: IGameRuleConfig = {
+export const setDirectionToPlayer: GameRule = {
 	update(obj: GameObject) {
 		const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
 
@@ -44,7 +44,7 @@ export const setDirectionToPlayer: IGameRuleConfig = {
 	},
 };
 
-export const setDirectionToPlayerAdvance: IGameRuleConfig = {
+export const setDirectionToPlayerAdvance: GameRule = {
 	update(obj: GameObject) {
 		const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
 		const playerDirection: Phaser.Point | null = player.parameters.direction;
@@ -70,7 +70,7 @@ export const setDirectionToPlayerAdvance: IGameRuleConfig = {
 	},
 };
 
-export const wandererAI: IGameRuleConfig = {
+export const wandererAI: GameRule = {
 	init(obj: GameObject) {
 		const rect = new Phaser.Rectangle(100, 100, 1000, 750);
 		obj.parameters.direction = new Phaser.Point(rect.randomX, rect.randomY);
@@ -103,7 +103,7 @@ export const wandererAI: IGameRuleConfig = {
 	},
 };
 
-export const dynamicZIndex: IGameRuleConfig = {
+export const dynamicZIndex: GameRule = {
 	update(obj: GameObject) {
 		let newZIndex = 0;
 
@@ -114,7 +114,7 @@ export const dynamicZIndex: IGameRuleConfig = {
 	},
 };
 
-export const collisions: IGameRuleConfig = {
+export const collisions: GameRule = {
 	init(obj: GameObject) {
 		const collisions: {
 			objects: GameObject[];
@@ -133,7 +133,7 @@ export const collisions: IGameRuleConfig = {
 	},
 };
 
-export const rotateToMouse: IGameRuleConfig = {
+export const rotateToMouse: GameRule = {
 	update(obj: GameObject) {
 		const destination = new Phaser.Point(
 			obj.layer.game.input.mousePointer.x,
@@ -148,7 +148,7 @@ export const rotateToMouse: IGameRuleConfig = {
 	},
 };
 
-export const bindPositionToMouse: IGameRuleConfig = {
+export const bindPositionToMouse: GameRule = {
 	update(obj: GameObject) {
 		const mousePosition = new Phaser.Point(
 			obj.layer.game.input.mousePointer.x,
@@ -159,7 +159,7 @@ export const bindPositionToMouse: IGameRuleConfig = {
 	},
 };
 
-export const removeOnCooldown: IGameRuleConfig = {
+export const removeOnCooldown: GameRule = {
 	update(obj: GameObject) {
 		const cooldown = obj.parameters.cooldown;
 
@@ -171,7 +171,7 @@ export const removeOnCooldown: IGameRuleConfig = {
 	},
 };
 
-export const explosionOnCooldown: IGameRuleConfig = {
+export const explosionOnCooldown: GameRule = {
 	update(obj: GameObject) {
 		const cooldown = obj.parameters.cooldown;
 
@@ -187,7 +187,7 @@ export const explosionOnCooldown: IGameRuleConfig = {
 	},
 };
 
-export const explosionAfterSpriteDone: IGameRuleConfig = {
+export const explosionAfterSpriteDone: GameRule = {
 	update(obj: GameObject) {
 		if (obj.sprite!.done) {
 			obj.layer.removeObjectOnNextTick(obj.id);
@@ -199,7 +199,7 @@ export const explosionAfterSpriteDone: IGameRuleConfig = {
 	},
 };
 
-export const destroyAfterSpriteDone: IGameRuleConfig = {
+export const destroyAfterSpriteDone: GameRule = {
 	update(obj: GameObject) {
 		if (obj.sprite!.done) {
 			obj.layer.removeObjectOnNextTick(obj.id);
@@ -207,13 +207,13 @@ export const destroyAfterSpriteDone: IGameRuleConfig = {
 	},
 };
 
-export const rotateByDirection: IGameRuleConfig = {
+export const rotateByDirection: GameRule = {
 	update(obj: GameObject) {
 		obj.sprite!.rotateToDirection(obj.parameters.direction);
 	},
 };
 
-export const rotateByPlayer: IGameRuleConfig = {
+export const rotateByPlayer: GameRule = {
 	update(obj: GameObject) {
 		const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
 

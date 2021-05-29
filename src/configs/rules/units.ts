@@ -5,9 +5,9 @@ import { moveWithSpeed } from './utils';
 import { ObjectTypes } from '../objects/types';
 import { GameObject } from '../../engine/core/object';
 
-import { IGameRuleConfig } from './types';
+import { GameRule } from './types';
 
-export const playerDeath: IGameRuleConfig = {
+export const playerDeath: GameRule = {
 	update(obj: GameObject) {
 		if (obj.parameters.health <= 0) {
 			obj.layer.state.stopBattle();
@@ -15,7 +15,7 @@ export const playerDeath: IGameRuleConfig = {
 	},
 };
 
-export const damageOnPlayerCollision: IGameRuleConfig = {
+export const damageOnPlayerCollision: GameRule = {
 	update(obj: GameObject) {
 		const { objects } = obj.parameters.collisions;
 
@@ -29,7 +29,7 @@ export const damageOnPlayerCollision: IGameRuleConfig = {
 	},
 };
 
-export const destroyOnPlayerCollision: IGameRuleConfig = {
+export const destroyOnPlayerCollision: GameRule = {
 	update(obj: GameObject) {
 		const { objects } = obj.parameters.collisions;
 
@@ -45,7 +45,7 @@ export const destroyOnPlayerCollision: IGameRuleConfig = {
 	},
 };
 
-export const triggerOnPlayerCollision: IGameRuleConfig = {
+export const triggerOnPlayerCollision: GameRule = {
 	update(obj: GameObject) {
 		const { objects } = obj.parameters.collisions;
 
@@ -72,7 +72,7 @@ export const triggerOnPlayerCollision: IGameRuleConfig = {
 	},
 };
 
-export const meleeAttack: IGameRuleConfig = {
+export const meleeAttack: GameRule = {
 	update(obj: GameObject) {
 		if (!obj.parameters.meleeCooldown) {
 			const { objects } = obj.parameters.collisions;
@@ -96,7 +96,7 @@ export const meleeAttack: IGameRuleConfig = {
 	},
 };
 
-export const spellExplosion: IGameRuleConfig = {
+export const spellExplosion: GameRule = {
 	update(obj: GameObject) {
 		if (!obj.parameters.exploded) {
 			const { objects } = obj.parameters.collisions;
@@ -114,7 +114,7 @@ export const spellExplosion: IGameRuleConfig = {
 	},
 };
 
-export const monsterExplosion: IGameRuleConfig = {
+export const monsterExplosion: GameRule = {
 	update(obj: GameObject) {
 		if (!obj.parameters.exploded) {
 			const { objects } = obj.parameters.collisions;
@@ -172,7 +172,7 @@ const generateExplosions = (obj: GameObject) => {
 	expl.parameters.power = power;
 };
 
-export const monsterExplosionCondition: IGameRuleConfig = {
+export const monsterExplosionCondition: GameRule = {
 	update(obj: GameObject) {
 		if (obj.parameters.health <= 0) {
 			generateExplosions(obj);
@@ -190,7 +190,7 @@ export const monsterExplosionCondition: IGameRuleConfig = {
 	},
 };
 
-export const stopOnCollisionWithPlayer: IGameRuleConfig = {
+export const stopOnCollisionWithPlayer: GameRule = {
 	update(obj: GameObject) {
 		const { objects } = obj.parameters.collisions;
 
@@ -203,19 +203,19 @@ export const stopOnCollisionWithPlayer: IGameRuleConfig = {
 	},
 };
 
-export const resetSpeed: IGameRuleConfig = {
+export const resetSpeed: GameRule = {
 	update(obj: GameObject) {
 		obj.parameters.speed = obj.defaultParameters.speed;
 	},
 };
 
-export const resetEffects: IGameRuleConfig = {
+export const resetEffects: GameRule = {
 	update(obj: GameObject) {
 		obj.parameters.effects = {};
 	},
 };
 
-export const moveToDirection: IGameRuleConfig = {
+export const moveToDirection: GameRule = {
 	update(obj: GameObject, dt: number) {
 		const direction = obj.parameters.direction;
 
@@ -227,7 +227,7 @@ export const moveToDirection: IGameRuleConfig = {
 	},
 };
 
-export const playerLevelUp: IGameRuleConfig = {
+export const playerLevelUp: GameRule = {
 	update(obj: GameObject) {
 		const levelExp = obj.parameters.levelTable[obj.parameters.level];
 
@@ -245,7 +245,7 @@ export const playerLevelUp: IGameRuleConfig = {
 	},
 };
 
-export const monsterHealthStatus: IGameRuleConfig = {
+export const monsterHealthStatus: GameRule = {
 	update(obj: GameObject) {
 		if (obj.parameters.health <= 0) {
 			obj.layer.removeObjectOnNextTick(obj.id);
@@ -274,7 +274,7 @@ export const monsterHealthStatus: IGameRuleConfig = {
 	},
 };
 
-export const resetRangeCooldown: IGameRuleConfig = {
+export const resetRangeCooldown: GameRule = {
 	update(obj: GameObject) {
 		const fireCooldown = obj.parameters.fireCooldown;
 
@@ -282,7 +282,7 @@ export const resetRangeCooldown: IGameRuleConfig = {
 	},
 };
 
-export const resetMeleeCooldown: IGameRuleConfig = {
+export const resetMeleeCooldown: GameRule = {
 	update(obj: GameObject) {
 		const meleeCooldown = obj.parameters.meleeCooldown;
 
@@ -290,7 +290,7 @@ export const resetMeleeCooldown: IGameRuleConfig = {
 	},
 };
 
-export const monsterBossLogic: IGameRuleConfig = {
+export const monsterBossLogic: GameRule = {
 	update(obj: GameObject) {
 		const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
 
@@ -308,7 +308,7 @@ export const monsterBossLogic: IGameRuleConfig = {
 	},
 };
 
-export const monsterBoss2Logic: IGameRuleConfig = {
+export const monsterBoss2Logic: GameRule = {
 	update(obj: GameObject, dt: number) {
 		const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
 		const directionToPlayer = obj.parameters.direction;
@@ -338,7 +338,7 @@ const createExplosion = (obj: GameObject) => {
 	expl.parameters.power = power;
 };
 
-export const monsterBoss2Bullet: IGameRuleConfig = {
+export const monsterBoss2Bullet: GameRule = {
 	update(obj: GameObject) {
 		const cooldown = obj.parameters.cooldown;
 		const { objects } = obj.parameters.collisions;
@@ -363,7 +363,7 @@ export const monsterBoss2Bullet: IGameRuleConfig = {
 	},
 };
 
-export const moveWithKeyboard: IGameRuleConfig = {
+export const moveWithKeyboard: GameRule = {
 	update(obj: GameObject) {
 		const pos = obj.pos.clone();
 
@@ -388,7 +388,7 @@ export const moveWithKeyboard: IGameRuleConfig = {
 	},
 };
 
-export const selectSpellWithKeyboard: IGameRuleConfig = {
+export const selectSpellWithKeyboard: GameRule = {
 	update(obj: GameObject) {
 		obj.layer.game.input.keyboard.isDown(49) &&
 			(obj.parameters.currentSpell = 'fireball');
@@ -401,7 +401,7 @@ export const selectSpellWithKeyboard: IGameRuleConfig = {
 	},
 };
 
-export const triggerOnPlayerCollisionPowerUp: IGameRuleConfig = {
+export const triggerOnPlayerCollisionPowerUp: GameRule = {
 	update(obj: GameObject) {
 		const { objects } = obj.parameters.collisions;
 
@@ -417,7 +417,7 @@ export const triggerOnPlayerCollisionPowerUp: IGameRuleConfig = {
 	},
 };
 
-export const summonOnCooldown: IGameRuleConfig = {
+export const summonOnCooldown: GameRule = {
 	update(obj: GameObject) {
 		const cooldown = obj.parameters.cooldown;
 

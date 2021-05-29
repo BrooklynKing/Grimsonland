@@ -5,4 +5,4 @@ export * from './layers';
 export * from './ui';
 export * from './etc';
 
-//export { IGameRuleConfig } from './types';
+//export { GameRule } from './types';

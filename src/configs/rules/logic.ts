@@ -4,13 +4,13 @@ import format from 'string-template';
 import { ObjectTypes } from '../objects/types';
 import { GameObject } from '../../engine/core/object';
 
-import { IGameRuleConfig } from './types';
+import { GameRule } from './types';
 
 const monsterCount = [
 	10, 25, 50, 75, 100, 150, 200, 500, 1000, 2500, 5000, 10000,
 ];
 const monsterCooldown = 10;
-export const monsterController: IGameRuleConfig = {
+export const monsterController: GameRule = {
 	init(obj: GameObject) {
 		obj.parameters.currentWave = 1;
 		obj.parameters.monsterOnWave = monsterCount[obj.parameters.currentWave - 1];

@@ -6,7 +6,7 @@ import { IMAGES_LIST } from '../../assets/list';
 import { collisions as collisionRule } from '../../configs/rules/etc';
 import renders from '../../configs/renderers';
 
-import { IGameRuleConfig } from '../../configs/rules/types';
+import { GameRule } from '../../configs/rules/types';
 
 export interface IGameObjectConfig {
   pos?: Phaser.Point | [number, number];
@@ -25,8 +25,8 @@ export interface IGameObjectConfig {
   collisions?: boolean;
   zIndex?: number;
   parameters?: { [key: string]: any };
-  rules?: IGameRuleConfig[];
-  conditions?: IGameRuleConfig[];
+  rules?: GameRule[];
+  conditions?: GameRule[];
   render?: (keyof typeof renders)[] | keyof typeof renders | false;
 }
 
@@ -40,10 +40,10 @@ export class GameObject {
   shouldCheckCollisions: boolean;
   zIndex: number;
 
-  private collisions?: IGameRuleConfig;
-  private rules: IGameRuleConfig[];
+  private collisions?: GameRule;
+  private rules: GameRule[];
   private _rulesForInit: IGameObjectConfig['rules'];
-  private conditions: IGameRuleConfig[];
+  private conditions: GameRule[];
   private _conditionsForInit: IGameObjectConfig['conditions'];
   private renderers: (keyof typeof renders)[] | false;
 
@@ -139,13 +139,13 @@ export class GameObject {
     this.pos.y = point.y;
   }
 
-  addRule(rule: IGameRuleConfig) {
+  addRule(rule: GameRule) {
     rule.init?.(this);
 
     this.rules.push(rule);
   }
 
-  addCondition(condition: IGameRuleConfig) {
+  addCondition(condition: GameRule) {
     condition.init?.(this);
 
     this.conditions.push(condition);

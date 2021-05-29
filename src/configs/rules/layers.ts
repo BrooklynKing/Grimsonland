@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 
 import { ObjectTypes } from '../objects/types';
 import { GameLayer } from '../../engine/core/layer';
-import { IGameRuleConfig } from './types';
+import { GameRule } from './types';
 
 const TREES_COUNT = 100;
 const STONES_COUNT = 100;
@@ -16,7 +16,7 @@ const getRandomPointInArea = (obj: GameLayer) => {
 	];
 };
 
-export const randomTrees: IGameRuleConfig = {
+export const randomTrees: GameRule = {
 	init(obj: GameLayer) {
 		for (let i = 0; i < TREES_COUNT; i++) {
 			const point = getRandomPointInArea(obj);
@@ -32,7 +32,7 @@ export const randomTrees: IGameRuleConfig = {
 	},
 };
 
-export const spawnHeart: IGameRuleConfig = {
+export const spawnHeart: GameRule = {
 	update(obj: GameLayer) {
 		if (!obj.parameters.spawnHeartCurrentCooldown) {
 			const rect = new Phaser.Rectangle(50, 50, 1104, 868);
@@ -46,7 +46,7 @@ export const spawnHeart: IGameRuleConfig = {
 	},
 };
 
-export const spawnExp: IGameRuleConfig = {
+export const spawnExp: GameRule = {
 	update(obj: GameLayer) {
 		if (!obj.parameters.spawnExpCurrentCooldown) {
 			const rect = new Phaser.Rectangle(100, 100, 1000, 750);
@@ -60,7 +60,7 @@ export const spawnExp: IGameRuleConfig = {
 	},
 };
 
-export const goWithPlayer: IGameRuleConfig = {
+export const goWithPlayer: GameRule = {
 	update(obj: GameLayer, dt: number) {
 		const player = obj.getObjectsByType(ObjectTypes.Player)[0];
 		const px = ((player.pos.x + obj.translate.x) / 1024) * 100;

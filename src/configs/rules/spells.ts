@@ -4,9 +4,9 @@ import { ObjectTypes } from '../objects/types';
 import { moveWithSpeed } from './utils';
 import { GameObject } from '../../engine/core/object';
 
-import { Effects, IGameRuleConfig } from './types';
+import { Effects, GameRule } from './types';
 
-export const fireball: IGameRuleConfig = {
+export const fireball: GameRule = {
 	update(obj: GameObject) {
 		const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
 		const fireCooldown = obj.parameters.fireCooldown;
@@ -56,7 +56,7 @@ export const fireball: IGameRuleConfig = {
 	},
 };
 
-export const hellfire: IGameRuleConfig = {
+export const hellfire: GameRule = {
 	update(obj: GameObject) {
 		const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
 		const fireCooldown = obj.parameters.fireCooldown;
@@ -95,7 +95,7 @@ export const hellfire: IGameRuleConfig = {
 	},
 };
 
-export const slowEnemies: IGameRuleConfig = {
+export const slowEnemies: GameRule = {
 	update(obj: GameObject) {
 		const { objects } = obj.parameters.collisions;
 
@@ -116,7 +116,7 @@ export const slowEnemies: IGameRuleConfig = {
 		}
 	},
 };
-export const teleport: IGameRuleConfig = {
+export const teleport: GameRule = {
 	update(obj: GameObject) {
 		const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
 		const fireCooldown = obj.parameters.fireCooldown;
@@ -162,7 +162,7 @@ export const teleport: IGameRuleConfig = {
 	},
 };
 
-export const frostShard: IGameRuleConfig = {
+export const frostShard: GameRule = {
 	update(obj: GameObject) {
 		const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
 		const fireCooldown = obj.parameters.fireCooldown;
@@ -202,7 +202,7 @@ export const frostShard: IGameRuleConfig = {
 	},
 };
 
-export const bulletMonsterCollision: IGameRuleConfig = {
+export const bulletMonsterCollision: GameRule = {
 	update(obj: GameObject) {
 		const { objects } = obj.parameters.collisions;
 
@@ -226,7 +226,7 @@ export const bulletMonsterCollision: IGameRuleConfig = {
 	},
 };
 
-export const hellTubeMonsterCollision: IGameRuleConfig = {
+export const hellTubeMonsterCollision: GameRule = {
 	update(obj: GameObject) {
 		const { objects } = obj.parameters.collisions;
 

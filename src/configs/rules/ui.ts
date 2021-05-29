@@ -2,9 +2,9 @@ import format from 'string-template';
 
 import { ObjectTypes } from '../objects/types';
 import { GameObject } from '../../engine/core/object';
-import { IGameRuleConfig } from './types';
+import { GameRule } from './types';
 
-export const countMonsterKilled: IGameRuleConfig = {
+export const countMonsterKilled: GameRule = {
 	update(obj: GameObject) {
 		const template = obj.parameters.template;
 
@@ -14,7 +14,7 @@ export const countMonsterKilled: IGameRuleConfig = {
 	},
 };
 
-export const timer: IGameRuleConfig = {
+export const timer: GameRule = {
 	update(obj: GameObject) {
 		const template = obj.parameters.template;
 
@@ -24,7 +24,7 @@ export const timer: IGameRuleConfig = {
 	},
 };
 
-export const health: IGameRuleConfig = {
+export const health: GameRule = {
 	update(obj: GameObject) {
 		const template = obj.parameters.template;
 
@@ -35,7 +35,7 @@ export const health: IGameRuleConfig = {
 	},
 };
 
-export const level: IGameRuleConfig = {
+export const level: GameRule = {
 	update(obj: GameObject) {
 		const template = obj.parameters.template;
 		const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
@@ -48,7 +48,7 @@ export const level: IGameRuleConfig = {
 	},
 };
 
-export const bestTime: IGameRuleConfig = {
+export const bestTime: GameRule = {
 	init(obj: GameObject) {
 		const template = obj.parameters.template;
 
@@ -58,7 +58,7 @@ export const bestTime: IGameRuleConfig = {
 	},
 };
 
-export const bestScore: IGameRuleConfig = {
+export const bestScore: GameRule = {
 	init(obj: GameObject) {
 		const template = obj.parameters.template;
 

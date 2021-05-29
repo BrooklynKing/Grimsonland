@@ -1,4 +1,4 @@
-import { IGameRuleConfig } from '../../configs/rules/types';
+import { GameRule } from '../../configs/rules/types';
 import { GameObject, IGameObjectConfig } from './object';
 
 import { objectConfigs, OBJECTS_ID, ObjectTypes } from '../../configs/objects';
@@ -12,7 +12,7 @@ export interface IGameLayerConfig {
   ctx: CanvasRenderingContext2D;
   initList: OBJECTS_ID[];
   translate: ITranslate;
-  rules: IGameRuleConfig[];
+  rules: GameRule[];
   size: number[];
   init: () => void;
 }
@@ -38,7 +38,7 @@ export class GameLayer {
 
   private objects: { [key: string]: GameObject };
   private sortedObjects: { [key: string]: string[] };
-  private rules: IGameRuleConfig[];
+  private rules: GameRule[];
   private objectsToBeRemoved: string[] = [];
 
   constructor(config: IGameLayerConfig) {
@@ -168,7 +168,7 @@ export class GameLayer {
     this.objectsToBeRemoved.push(id);
   }
 
-  addRule(rule: IGameRuleConfig) {
+  addRule(rule: GameRule) {
     rule.init?.(this);
     this.rules.push(rule);
   }
