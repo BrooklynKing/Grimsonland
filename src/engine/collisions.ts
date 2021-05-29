@@ -1,6 +1,6 @@
 import { GameObject } from './core/object';
 
-function generate(config: { n: number; width: number; height: number }) {
+const generate = (config: { n: number; width: number; height: number }) => {
   const n = config.n || 6;
   const width = config.width || 800;
   const height = config.height || 600;
@@ -8,28 +8,26 @@ function generate(config: { n: number; width: number; height: number }) {
   const sizeY = height >> n;
   const cellGrid = new Array(sizeX * sizeY);
 
-  generateMap();
-
-  function generateMap() {
+  const generateMap = () => {
     for (let i = 0; i < cellGrid.length; i++) {
       cellGrid[i] = [];
     }
-  }
+  };
 
-  function getCell(point: number[]) {
+  const getCell = (point: number[]) => {
     return point[0] + point[1] * sizeY;
-  }
+  };
 
-  function removeObject(object: GameObject) {
+  const removeObject = (object: GameObject) => {
     const oldCells = object.parameters.collisions.cells;
 
     for (let i = 0; i < oldCells.length; i++) {
       cellGrid[oldCells[i]] &&
         cellGrid[oldCells[i]].splice(cellGrid[oldCells[i]].indexOf(object), 1);
     }
-  }
+  };
 
-  function getPointsOfObject(object: GameObject) {
+  const getPointsOfObject = (object: GameObject) => {
     const pos = object.pos!;
     const size = object.size!;
     const cells = [];
@@ -42,15 +40,15 @@ function generate(config: { n: number; width: number; height: number }) {
           getCell([
             (pos.x - size[0] / 2 + i * (size[0] / (1 + xIndex))) >> n,
             (pos.y - size[1] / 2 + j * (size[1] / (1 + yIndex))) >> n,
-          ]),
+          ])
         );
       }
     }
 
     return cells;
-  }
+  };
 
-  function updateObject(object: GameObject) {
+  const updateObject = (object: GameObject) => {
     const cells = getPointsOfObject(object);
     const oldCells = object.parameters.collisions.cells;
 
@@ -59,7 +57,7 @@ function generate(config: { n: number; width: number; height: number }) {
         cellGrid[oldCells[i]] &&
           cellGrid[oldCells[i]].splice(
             cellGrid[oldCells[i]].indexOf(object),
-            1,
+            1
           );
         cellGrid[cells[i]] &&
           cellGrid[cells[i]].indexOf(object) === -1 &&
@@ -71,9 +69,9 @@ function generate(config: { n: number; width: number; height: number }) {
           cellGrid[cells[i]].push(object);
       }
     }
-  }
+  };
 
-  function checkCollisions() {
+  const checkCollisions = () => {
     for (let i = 0; i <= sizeX; i++) {
       for (let j = 0; j <= sizeY; j++) {
         if (cellGrid[getCell([i, j])]) {
@@ -87,12 +85,14 @@ function generate(config: { n: number; width: number; height: number }) {
                   objects[k].pos,
                   objects[k].size,
                   objects[l].pos,
-                  objects[l].size,
+                  objects[l].size
                 )
               ) {
-                objects[k].parameters.collisions.objects.indexOf(objects[l]) === -1 &&
+                objects[k].parameters.collisions.objects.indexOf(objects[l]) ===
+                  -1 &&
                   objects[k].parameters.collisions.objects.push(objects[l]);
-                objects[l].parameters.collisions.objects.indexOf(objects[k]) === -1 &&
+                objects[l].parameters.collisions.objects.indexOf(objects[k]) ===
+                  -1 &&
                   objects[l].parameters.collisions.objects.push(objects[k]);
               }
             }
@@ -100,28 +100,26 @@ function generate(config: { n: number; width: number; height: number }) {
         }
       }
     }
-  }
+  };
 
-  function boxCollides(
+  const collides = (
+    x: number,
+    y: number,
+    r: number,
+    b: number,
+    x2: number,
+    y2: number,
+    r2: number,
+    b2: number
+  ) => r >= x2 || x < r2 || b >= y2 || y < b2;
+
+  const boxCollides = (
     pos: Phaser.Point,
     size: number[],
     pos2: Phaser.Point,
-    size2: number[],
-  ) {
-    function collides(
-      x: number,
-      y: number,
-      r: number,
-      b: number,
-      x2: number,
-      y2: number,
-      r2: number,
-      b2: number,
-    ) {
-      return !(r >= x2 || x < r2 || b >= y2 || y < b2);
-    }
-
-    return collides(
+    size2: number[]
+  ) =>
+    collides(
       pos.x + size[0] / 2,
       pos.y + size[1] / 2,
       pos.x - size[0] / 2,
@@ -129,9 +127,10 @@ function generate(config: { n: number; width: number; height: number }) {
       pos2.x + size2[0] / 2,
       pos2.y + size2[1] / 2,
       pos2.x - size2[0] / 2,
-      pos2.y - size2[1] / 2,
+      pos2.y - size2[1] / 2
     );
-  }
+
+  generateMap();
 
   return {
     cellGrid: cellGrid,
@@ -140,6 +139,6 @@ function generate(config: { n: number; width: number; height: number }) {
     check: checkCollisions,
     clear: generateMap,
   };
-}
+};
 
 export default generate;

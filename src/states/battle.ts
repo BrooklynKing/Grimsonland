@@ -28,7 +28,12 @@ const LAYER_CONFIG: Omit<IGameLayerConfig, 'ctx' | 'state' | 'init'> = {
     x: -150,
     y: -150,
   },
-  rules: [rules.randomTrees, rules.spawnHeart, rules.spawnExp, rules.goWithPlayer],
+  rules: [
+    rules.randomTrees,
+    rules.spawnHeart,
+    rules.spawnExp,
+    rules.goWithPlayer,
+  ],
 };
 
 class GameState extends Phaser.State {
@@ -81,18 +86,18 @@ class GameState extends Phaser.State {
       2,
       0,
       1,
-      2,
+      2
     );
 
     this.restartButton.addChild(
       this.add.text(-65, -15, 'RESTART', {
         fill: '#efefef',
-      }),
+      })
     );
     this.restartButton.addChild(
       this.add.text(-70, -70, 'YOU DIED!', {
         fill: '#EF0000',
-      }),
+      })
     );
 
     this.restartButton.anchor.setTo(0.5, 0.5);
@@ -114,14 +119,14 @@ class GameState extends Phaser.State {
     this.bitmap = this.add.bitmapData(
       this.game.canvas.width,
       this.game.canvas.height,
-      'battleBitmap',
+      'battleBitmap'
     );
 
     this.add.image(0, 0, this.bitmap);
 
     this.gameLayer = new GameLayer({
       ...LAYER_CONFIG,
-      init: function() {
+      init() {
         this.state.parameters.monstersKilled = 0;
         this.state.parameters.gameTimer = 0;
       },
@@ -160,7 +165,7 @@ class GameState extends Phaser.State {
         0,
         this.game.canvas.width,
         this.game.canvas.height,
-        'rgba(10,0,0,0.5)',
+        'rgba(10,0,0,0.5)'
       );
     } else {
       this.gameLayer.update(this.game.time.physicsElapsed);

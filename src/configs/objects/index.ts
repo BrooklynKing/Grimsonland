@@ -7,12 +7,12 @@ import * as ui from './ui';
 
 export const objectConfigs = {
     ...spells,
-    ...logic,
-    ...units,
-    ...effects,
-    ...terrain,
-    ...ui
-}
+	...logic,
+	...units,
+	...effects,
+	...terrain,
+	...ui,
+};
 
 export { ObjectTypes } from './types';
 

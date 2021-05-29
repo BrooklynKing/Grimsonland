@@ -11,3 +11,4 @@ export enum ObjectTypes {
     PowerUp = 'powerUp',
     UI = 'ui',
 }
+  

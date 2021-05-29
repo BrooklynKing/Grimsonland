@@ -1,19 +1,25 @@
-import { GameRule } from './rule';
 import { GameLayer } from './layer';
 import { Sprite } from '../sprite';
 
 import { IMAGES_LIST } from '../../assets/list';
 
 import { collisions as collisionRule } from '../../configs/rules/etc';
-import renders from '../renderers';
+import renders from '../../configs/renderers';
 
-import { clone } from '../utils';
 import { IGameRuleConfig } from '../../configs/rules/types';
-import { OBJECTS_ID } from '../../configs/objects';
 
 export interface IGameObjectConfig {
   pos?: Phaser.Point | [number, number];
-  sprite?: [IMAGES_LIST, [number, number], [number, number], number?, Array<number>?, string?, boolean?, number?];
+  sprite?: [
+    IMAGES_LIST,
+    [number, number],
+    [number, number],
+    number?,
+    Array<number>?,
+    string?,
+    boolean?,
+    number?
+  ];
   size?: number[];
   type: string;
   collisions?: boolean;
@@ -44,7 +50,7 @@ export class GameObject {
   parameters: { [key: string]: any };
   readonly defaultParameters: { readonly [key: string]: any };
 
-  constructor(config: IGameObjectConfig & { id: string, layer: GameLayer }) {
+  constructor(config: IGameObjectConfig & { id: string; layer: GameLayer }) {
     this.layer = config.layer;
     if (config.pos instanceof Phaser.Point) {
       this.pos = config.pos.clone();
@@ -83,40 +89,45 @@ export class GameObject {
 
     this.shouldCheckCollisions = Boolean(config.collisions);
     this.zIndex = config.zIndex || 0;
-    this.parameters = (config.parameters && clone(config.parameters)) || {};
-    this.defaultParameters = clone(this.parameters);
+    this.parameters = (config.parameters && { ...config.parameters }) || {};
+    this.defaultParameters = { ...this.parameters };
 
     this.rules = [];
     this.conditions = [];
     this._rulesForInit = config.rules || [];
     this._conditionsForInit = config.conditions || [];
 
-    this.renderers = config.render === false ? false : Array.isArray(config.render) ? config.render : [config.render || 'sprite'];
+    this.renderers =
+      config.render === false
+        ? false
+        : Array.isArray(config.render)
+        ? config.render
+        : [config.render || 'sprite'];
 
     if (this.shouldCheckCollisions) {
-      this.collisions = new GameRule(collisionRule);
+      this.collisions = collisionRule;
       this.collisions.init?.(this);
     }
     this._rulesForInit.forEach((rule) => {
       this.addRule(rule);
-    })
+    });
     this._conditionsForInit.forEach((condition) => {
       this.addCondition(condition);
-    })
+    });
   }
 
   render(dt: number) {
     if (this.renderers) {
-      this.renderers.forEach(renderer => renders[renderer](this, dt));
-    } 
+      this.renderers.forEach((renderer) => renders[renderer](this, dt));
+    }
   }
 
   update(dt: number) {
-    this.rules.forEach(rule => rule.update?.(this, dt));
+    this.rules.forEach((rule) => rule.update?.(this, dt));
   }
 
   updateConditions(dt: number) {
-    this.conditions.forEach(condition => condition.update?.(this, dt));
+    this.conditions.forEach((condition) => condition.update?.(this, dt));
   }
 
   updateCollisions(dt: number) {

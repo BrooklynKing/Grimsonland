@@ -12,7 +12,7 @@ const game = new Phaser.Game(
   false,
 );
 
-(window as any).game = game;
+window.game = game;
 
 game.state.add('preloading', states.preLoading, true);
 game.state.add('loading', states.loading);

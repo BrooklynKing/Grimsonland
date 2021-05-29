@@ -30,7 +30,7 @@ class MainMenu extends Phaser.State {
       2,
       0,
       1,
-      2,
+      2
     );
     const start = this.add.text(0, 3, 'START', {
       fill: '#efefef',

@@ -1,4 +1,3 @@
-import { clone } from '../utils';
 import { IGameRuleConfig } from '../../configs/rules/types';
 import { GameObject, IGameObjectConfig } from './object';
 
@@ -51,7 +50,7 @@ export class GameLayer {
 
     this.background = this.ctx.createPattern(
       this.game.cache.getImage(config.background),
-      'repeat',
+      'repeat'
     ) as CanvasPattern;
 
     this.size = config.size || [this.ctx.canvas.width, this.ctx.canvas.height];
@@ -63,22 +62,18 @@ export class GameLayer {
     this.inited = false;
     this.parameters = {};
     this.rules = config.rules || [];
-    this.translate = this.config.translate
-        ? clone(this.config.translate)
-        : { x: 0, y: 0 };
+    this.translate = config.translate
+      ? { ...config.translate }
+      : { x: 0, y: 0 };
   }
 
   init() {
     if (!this.inited) {
-      this.config.initList.forEach(objectID =>
-        this.addObjectByID(objectID),
-      );
+      this.config.initList.forEach((objectID) => this.addObjectByID(objectID));
 
       this.config.init && this.config.init();
 
-      this.rules.forEach(rule =>
-        rule.init?.(this),
-      );
+      this.rules.forEach((rule) => rule.init?.(this));
 
       this.inited = true;
     }
@@ -110,7 +105,7 @@ export class GameLayer {
           ctx.save();
           ctx.translate(
             Math.round(arr[i][j].pos.x),
-            Math.round(arr[i][j].pos.y),
+            Math.round(arr[i][j].pos.y)
           );
 
           arr[i][j].render(dt);
@@ -149,14 +144,14 @@ export class GameLayer {
       if (!id) {
         return;
       }
-      
+
       const obj = this.objects[id];
       if (obj) {
         obj.shouldCheckCollisions && this.state.collisions.removeObject(obj!);
         this.removeObject(id!);
       }
     }
-    
+
     Object.keys(this.sortedObjects).forEach((type: string) => {
       const sortedObjectsByType = this.sortedObjects[type];
       const existingObjects: string[] = [];
@@ -166,7 +161,7 @@ export class GameLayer {
         }
       });
       this.sortedObjects[type] = existingObjects;
-    })
+    });
   }
 
   removeObjectOnNextTick(id: string) {
@@ -188,7 +183,9 @@ export class GameLayer {
     const obj = new GameObject({
       ...config,
       layer: this,
-      id: `${id}-${Math.round(new Date().getTime() + Math.random() * 1000001).toString()}`,
+      id: `${id}-${Math.round(
+        new Date().getTime() + Math.random() * 1000001
+      ).toString()}`,
     });
 
     const type = config.type || 'default';
@@ -214,7 +211,7 @@ export class GameLayer {
       if (this.objects[id]) {
         result.push(this.objects[id]);
       }
-    })
+    });
 
     return result;
   }

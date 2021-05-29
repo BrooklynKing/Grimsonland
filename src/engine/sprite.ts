@@ -110,7 +110,7 @@ export class Sprite {
       Math.round(-this.size[0] / 2),
       Math.round(-this.size[1] / 2),
       this.size[0],
-      this.size[1],
+      this.size[1]
     );
   }
 }
