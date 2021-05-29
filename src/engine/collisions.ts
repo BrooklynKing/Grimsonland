@@ -105,13 +105,16 @@ const generate = (config: { n: number; width: number; height: number }) => {
   const collides = (
     x: number,
     y: number,
-    r: number,
-    b: number,
+    width: number,
+    height: number,
     x2: number,
     y2: number,
-    r2: number,
-    b2: number
-  ) => r >= x2 || x < r2 || b >= y2 || y < b2;
+    width2: number,
+    height2: number
+  ) => (x < x2 + width2 &&
+    x + width > x2 &&
+    y < y2 + height2 &&
+    y + height > y2);
 
   const boxCollides = (
     pos: Phaser.Point,
@@ -120,14 +123,14 @@ const generate = (config: { n: number; width: number; height: number }) => {
     size2: number[]
   ) =>
     collides(
-      pos.x + size[0] / 2,
-      pos.y + size[1] / 2,
       pos.x - size[0] / 2,
       pos.y - size[1] / 2,
-      pos2.x + size2[0] / 2,
-      pos2.y + size2[1] / 2,
+      size[0],
+      size[1],
       pos2.x - size2[0] / 2,
-      pos2.y - size2[1] / 2
+      pos2.y - size2[1] / 2,
+      size2[0],
+      size2[1]
     );
 
   generateMap();
