@@ -2,6 +2,8 @@ import { clone } from '../utils';
 import { IGameRuleConfig } from '../../configs/rules/types';
 import { GameObject, IGameObjectConfig } from './object';
 
+import { objectConfigs, OBJECTS_ID, ObjectTypes } from '../../configs/objects';
+
 import BattleState from '../../states/battle';
 
 export interface IGameLayerConfig {
@@ -9,7 +11,7 @@ export interface IGameLayerConfig {
   background: string;
   state: BattleState;
   ctx: CanvasRenderingContext2D;
-  initList: IGameObjectConfig[];
+  initList: OBJECTS_ID[];
   translate: ITranslate;
   rules: IGameRuleConfig[];
   size: number[];
@@ -26,7 +28,6 @@ export class GameLayer {
   ctx: CanvasRenderingContext2D;
   game: Phaser.Game;
   state: BattleState;
-  initList: IGameObjectConfig[];
   background: CanvasPattern;
   size: number[];
   translate: { x: number; y: number };
@@ -47,12 +48,11 @@ export class GameLayer {
     this.state = config.state;
     this.game = this.state.game;
     this.ctx = config.ctx;
-    this.initList = config.initList;
 
     this.background = this.ctx.createPattern(
       this.game.cache.getImage(config.background),
       'repeat',
-    );
+    ) as CanvasPattern;
 
     this.size = config.size || [this.ctx.canvas.width, this.ctx.canvas.height];
 
@@ -62,22 +62,22 @@ export class GameLayer {
     this.objects = {};
     this.inited = false;
     this.parameters = {};
+    this.rules = config.rules || [];
+    this.translate = this.config.translate
+        ? clone(this.config.translate)
+        : { x: 0, y: 0 };
   }
 
   init() {
     if (!this.inited) {
-      this.translate = this.config.translate
-        ? clone(this.config.translate)
-        : { x: 0, y: 0 };
-      this.config.initList.forEach(objectConfig =>
-        this.addObject(objectConfig),
+      this.config.initList.forEach(objectID =>
+        this.addObjectByID(objectID),
       );
 
       this.config.init && this.config.init();
 
-      this.rules = [];
-      this.config.rules.forEach(rule =>
-        this.addRule(rule),
+      this.rules.forEach(rule =>
+        rule.init?.(this),
       );
 
       this.inited = true;
@@ -146,10 +146,14 @@ export class GameLayer {
 
     while (this.objectsToBeRemoved.length) {
       const id = this.objectsToBeRemoved.pop();
+      if (!id) {
+        return;
+      }
+      
       const obj = this.objects[id];
       if (obj) {
-        obj.shouldCheckCollisions && this.state.collisions.removeObject(obj);
-        this.removeObject(id);
+        obj.shouldCheckCollisions && this.state.collisions.removeObject(obj!);
+        this.removeObject(id!);
       }
     }
     
@@ -176,19 +180,15 @@ export class GameLayer {
 
   removeObject(id: string) {
     if (this.objects.hasOwnProperty(id)) {
-      this.objects[id].layer = null;
-
-      this.objects[id] = null;
-
       delete this.objects[id];
     }
   }
 
-  addObject(config: IGameObjectConfig) {
+  private addObject(id: OBJECTS_ID, config: IGameObjectConfig) {
     const obj = new GameObject({
       ...config,
       layer: this,
-      id: Math.round(new Date().getTime() + Math.random() * 1000001).toString(),
+      id: `${id}-${Math.round(new Date().getTime() + Math.random() * 1000001).toString()}`,
     });
 
     const type = config.type || 'default';
@@ -201,7 +201,12 @@ export class GameLayer {
     return this.objects[obj.id];
   }
 
-  getObjectsByType(type: string) {
+  addObjectByID(id: OBJECTS_ID) {
+    const config = objectConfigs[id];
+    return this.addObject(id, config);
+  }
+
+  getObjectsByType(type: ObjectTypes) {
     const objectsId = this.sortedObjects[type] || [];
     const result: GameObject[] = [];
 
@@ -214,7 +219,7 @@ export class GameLayer {
     return result;
   }
 
-  getObjectByID(id: string) {
+  getObjectByID(id: OBJECTS_ID) {
     return this.objects[id];
   }
 
@@ -224,9 +229,7 @@ export class GameLayer {
     this.sortedObjects = {
       default: [],
     };
-
-    this.rules = [];
-
+    this.parameters = {};
     this.inited = false;
   }
 }

@@ -1,14 +1,17 @@
+import * as rules from '../rules';
+import { IGameObjectConfig } from '../../engine/core/object';
 import { ObjectTypes } from './types';
 
-export const cursor = {
+export const cursor: IGameObjectConfig = {
   type: ObjectTypes.UI,
   zIndex: 3000,
   render: 'ui',
   pos: [400, 350],
   sprite: ['cursor', [0, 0], [30, 30]],
-  rules: ['bindPositionToMouse'],
+  rules: [rules.bindPositionToMouse],
 };
-export const counter = {
+
+export const counter: IGameObjectConfig = {
   type: ObjectTypes.UI,
   zIndex: 3000,
   pos: [5, 13],
@@ -19,9 +22,10 @@ export const counter = {
     template: 'SCORE: {kills}',
     size: 14,
   },
-  rules: ['countMonsterKilled'],
+  rules: [rules.countMonsterKilled],
 };
-export const leftOnWaveLabel = {
+
+export const leftOnWaveLabel: IGameObjectConfig = {
   type: ObjectTypes.UI,
   zIndex: 3000,
   pos: [5, 100],
@@ -33,7 +37,8 @@ export const leftOnWaveLabel = {
     size: 14,
   },
 };
-export const level = {
+
+export const level: IGameObjectConfig = {
   type: ObjectTypes.UI,
   zIndex: 3000,
   pos: [35, 45],
@@ -44,9 +49,10 @@ export const level = {
     template: 'LEVEL: {level}',
     size: 14,
   },
-  rules: ['level'],
+  rules: [rules.level],
 };
-export const timer = {
+
+export const timer: IGameObjectConfig = {
   type: ObjectTypes.UI,
   zIndex: 3000,
   pos: [5, 23],
@@ -57,9 +63,10 @@ export const timer = {
     template: 'TIMER: {time}',
     size: 14,
   },
-  rules: ['timer'],
+  rules: [rules.timer],
 };
-export const bestTime = {
+
+export const bestTime: IGameObjectConfig = {
   type: ObjectTypes.UI,
   pos: [5, 370],
   zIndex: 3000,
@@ -70,9 +77,10 @@ export const bestTime = {
     size: 14,
     template: 'BEST TIME: {time}',
   },
-  rules: ['bestTime'],
+  rules: [rules.bestTime],
 };
-export const bestScore = {
+
+export const bestScore: IGameObjectConfig = {
   type: ObjectTypes.UI,
   pos: [5, 380],
   zIndex: 3000,
@@ -83,5 +91,5 @@ export const bestScore = {
     size: 14,
     template: 'BEST SCORE: {score}',
   },
-  rules: ['bestScore'],
+  rules: [rules.bestScore],
 };

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
-import gameConfigs from '../index';
 
+import { ObjectTypes } from '../objects/types';
 import { GameLayer } from '../../engine/core/layer';
 import { IGameRuleConfig } from './types';
 
@@ -13,27 +13,21 @@ export const randomTrees: IGameRuleConfig = {
   init: function(obj: GameLayer) {
     function getRandomPointInArea() {
       return [
-        Math.round(Math.random() * obj.size[0]),
-        Math.round(Math.random() * obj.size[1]),
+        Math.round(Math.random() * obj.size![0]),
+        Math.round(Math.random() * obj.size![1]),
       ];
     }
 
     for (let i = 0; i < TREES_COUNT; i++) {
-      const config = gameConfigs.getConfig(
-        'tree' + (Math.round(Math.random()) + 1),
-      );
-
       const point = getRandomPointInArea();
-      config.pos = new Phaser.Point(point[0], point[1]);
-
-      obj.addObject(config);
+      const tree = obj.addObjectByID(Math.random() > 0.5 ? 'tree2' : 'tree1');
+      tree.setPosition(new Phaser.Point(point[0], point[1]));
     }
 
     for (let i = 0; i < STONES_COUNT; i++) {
-      const config = gameConfigs.getConfig('stones');
       const point = getRandomPointInArea();
-      config.pos = new Phaser.Point(point[0], point[1]);
-      obj.addObject(config);
+      const stone = obj.addObjectByID('stones');
+      stone.setPosition(new Phaser.Point(point[0], point[1]));
     }
   },
 };
@@ -41,11 +35,9 @@ export const randomTrees: IGameRuleConfig = {
 export const spawnHeart: IGameRuleConfig = {
   update: function(obj: GameLayer) {
     if (!obj.parameters.spawnHeartCurrentCooldown) {
-      const config = gameConfigs.getConfig('heart');
       const rect = new Phaser.Rectangle(50, 50, 1104, 868);
-      config.pos = new Phaser.Point(rect.randomX, rect.randomY);
-
-      obj.addObject(config);
+      const heart = obj.addObjectByID('heart');
+      heart.setPosition(new Phaser.Point(rect.randomX, rect.randomY));
 
       obj.parameters.spawnHeartCurrentCooldown = HEART_SPAWN_COOLDOWN;
     } else {
@@ -57,12 +49,9 @@ export const spawnHeart: IGameRuleConfig = {
 export const spawnExp: IGameRuleConfig = {
   update: function(obj: GameLayer) {
     if (!obj.parameters.spawnExpCurrentCooldown) {
-      const config = gameConfigs.getConfig('powerup');
-
       const rect = new Phaser.Rectangle(100, 100, 1000, 750);
-      config.pos = new Phaser.Point(rect.randomX, rect.randomY);
-
-      obj.addObject(config);
+      const exp = obj.addObjectByID('powerup');
+      exp.setPosition(new Phaser.Point(rect.randomX, rect.randomY));
 
       obj.parameters.spawnExpCurrentCooldown = EXP_SPAWN_COOLDOWN;
     } else {
@@ -71,30 +60,9 @@ export const spawnExp: IGameRuleConfig = {
   },
 };
 
-export const spawnTerrain: IGameRuleConfig = {
-  init: function(obj: GameLayer) {
-    const gateConfig = gameConfigs.getConfig('gate');
-    let wallConfig;
-
-    for (let i = 0; i < 7; i++) {
-      wallConfig = gameConfigs.getConfig('wall');
-      wallConfig.pos = [
-        wallConfig.size[0] * i + wallConfig.size[0] / 2,
-        wallConfig.size[1] / 2,
-      ];
-      obj.addObject(wallConfig);
-    }
-    gateConfig.pos = [
-      wallConfig.pos.x + wallConfig.size[0] / 2 + gateConfig.size[0] / 2,
-      (gateConfig.size[1] - 3) / 2,
-    ];
-    const gate = obj.addObject(gateConfig);
-  },
-};
-
 export const goWithPlayer: IGameRuleConfig = {
   update: function(obj: GameLayer, dt: number) {
-    const player = obj.getObjectsByType('player')[0];
+    const player = obj.getObjectsByType(ObjectTypes.Player)[0];
     const px = ((player.pos.x + obj.translate.x) / 1024) * 100;
     const py = ((player.pos.y + obj.translate.y) / 768) * 100;
 

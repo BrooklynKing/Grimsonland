@@ -3,27 +3,26 @@ import Phaser from 'phaser';
 import collisions from '../engine/collisions';
 import { GameLayer, IGameLayerConfig } from '../engine/core/layer';
 
-import rules from '../configs/rules';
-import objects from '../configs/objects';
+import * as rules from '../configs/rules/layers';
 
 const LAYER_CONFIG: Omit<IGameLayerConfig, 'ctx' | 'state' | 'init'> = {
   id: 'mainLayer',
   size: [1324, 1068],
   background: 'terrain',
   initList: [
-    objects.player,
-    objects.cursor,
-    objects.counter,
-    objects.timer,
-    objects.bestTime,
-    objects.fireballSpell,
-    objects.hellfireSpell,
-    objects.frostShardSpell,
-    objects.teleportSpell,
-    objects.bestScore,
-    objects.level,
-    objects.fog,
-    objects.monsterController,
+    'player',
+    'cursor',
+    'counter',
+    'timer',
+    'bestTime',
+    'fireballSpell',
+    'hellfireSpell',
+    'frostShardSpell',
+    'teleportSpell',
+    'bestScore',
+    'level',
+    'fog',
+    'monsterController',
   ],
   translate: {
     x: -150,
@@ -33,23 +32,23 @@ const LAYER_CONFIG: Omit<IGameLayerConfig, 'ctx' | 'state' | 'init'> = {
 };
 
 class GameState extends Phaser.State {
-  private battleTheme: Phaser.Sound;
-  private deathTheme: Phaser.Sound;
+  private battleTheme!: Phaser.Sound;
+  private deathTheme!: Phaser.Sound;
 
-  private restartButton: Phaser.Button;
+  private restartButton!: Phaser.Button;
 
-  private bitmap: Phaser.BitmapData;
-  private gameLayer: GameLayer;
-  collisions: ReturnType<typeof collisions>;
+  private bitmap!: Phaser.BitmapData;
+  private gameLayer!: GameLayer;
+  collisions!: ReturnType<typeof collisions>;
 
-  parameters: {
+  parameters!: {
     bestTime: number;
     gameTimer: number;
     monstersKilled: number;
     bestScore: number;
   };
 
-  private pauseFlag: boolean;
+  private pauseFlag!: boolean;
 
   init() {
     this.battleTheme = this.sound.add('battleTheme', 0.3, true);

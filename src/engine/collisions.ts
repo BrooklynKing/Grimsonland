@@ -30,8 +30,8 @@ function generate(config: { n: number; width: number; height: number }) {
   }
 
   function getPointsOfObject(object: GameObject) {
-    const pos = object.pos;
-    const size = object.size;
+    const pos = object.pos!;
+    const size = object.size!;
     const cells = [];
     const xIndex = size[0] >> n;
     const yIndex = size[1] >> n;

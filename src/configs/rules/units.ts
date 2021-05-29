@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
 
 import { moveWithSpeed } from './utils';
-import gameConfigs from '../index';
 
+import { ObjectTypes } from '../objects/types';
 import { GameObject } from '../../engine/core/object';
 
 import { IGameRuleConfig } from './types';
@@ -36,10 +36,8 @@ export const destroyOnPlayerCollision: IGameRuleConfig = {
 
     for (let i = 0; i < objects.length; i++) {
       if (objects[i].type == 'player') {
-        const explosionConfig = gameConfigs.getConfig('explosion');
-        explosionConfig.pos = obj.pos.clone();
-
-        obj.layer.addObject(explosionConfig);
+        const expl = obj.layer.addObjectByID('explosion');
+        expl.setPosition(obj.pos.clone());
 
         obj.layer.removeObjectOnNextTick(obj.id);
         break;
@@ -85,11 +83,11 @@ export const meleeAttack: IGameRuleConfig = {
           objects[i].parameters.health =
             objects[i].parameters.health - obj.parameters.power;
 
-          const blood = gameConfigs.getConfig('bloodSpray');
-          blood.pos = objects[i].pos.clone();
-          blood.pos.x += 2;
-          blood.pos.y += -10;
-          obj.layer.addObject(blood);
+          const pos = objects[i].pos.clone();
+          pos.x += 2;
+          pos.y += -10;
+          const blood = obj.layer.addObjectByID('bloodSpray');
+          blood.setPosition(pos);
 
           obj.parameters.meleeCooldown = obj.parameters.cooldown;
           break;
@@ -139,58 +137,51 @@ export const monsterExplosionCondition: IGameRuleConfig = {
   update: function(obj: GameObject) {
     function generateExplosions() {
       const pos = obj.pos.clone();
-      let explosionConfig;
       const power = obj.parameters.power;
       let expl;
 
       obj.layer.removeObjectOnNextTick(obj.id);
 
-      explosionConfig = gameConfigs.getConfig('monsterExplosion');
-      explosionConfig.pos = new Phaser.Point(
-        pos.x - obj.size[0],
-        pos.y - obj.size[1],
-      );
-      expl = obj.layer.addObject(explosionConfig);
+      expl = obj.layer.addObjectByID('monsterExplosion');
+      expl.setPosition(new Phaser.Point(
+        pos.x - obj.size![0],
+        pos.y - obj.size![1],
+      ));
       expl.parameters.power = power;
 
-      explosionConfig = gameConfigs.getConfig('monsterExplosion');
-      explosionConfig.pos = new Phaser.Point(
-        pos.x + obj.size[0],
-        pos.y - obj.size[1],
-      );
-      expl = obj.layer.addObject(explosionConfig);
+      expl = obj.layer.addObjectByID('monsterExplosion');
+      expl.setPosition(new Phaser.Point(
+        pos.x + obj.size![0],
+        pos.y - obj.size![1],
+      ));
       expl.parameters.power = power;
 
-      explosionConfig = gameConfigs.getConfig('monsterExplosion');
-      explosionConfig.pos = new Phaser.Point(
-        pos.x - obj.size[0],
-        pos.y + obj.size[1],
-      );
-      expl = obj.layer.addObject(explosionConfig);
+      expl = obj.layer.addObjectByID('monsterExplosion');
+      expl.setPosition(new Phaser.Point(
+        pos.x - obj.size![0],
+        pos.y + obj.size![1],
+      ));
       expl.parameters.power = power;
 
-      explosionConfig = gameConfigs.getConfig('monsterExplosion');
-      explosionConfig.pos = new Phaser.Point(
-        pos.x + obj.size[0],
-        pos.y + obj.size[1],
-      );
-      expl = obj.layer.addObject(explosionConfig);
+      expl = obj.layer.addObjectByID('monsterExplosion');
+      expl.setPosition(new Phaser.Point(
+        pos.x + obj.size![0],
+        pos.y + obj.size![1],
+      ));
       expl.parameters.power = power;
 
-      explosionConfig = gameConfigs.getConfig('monsterExplosion');
-      explosionConfig.pos = new Phaser.Point(
-        pos.x - (3 / 2) * obj.size[0],
+      expl = obj.layer.addObjectByID('monsterExplosion');
+      expl.setPosition(new Phaser.Point(
+        pos.x - (3 / 2) * obj.size![0],
         pos.y,
-      );
-      expl = obj.layer.addObject(explosionConfig);
+      ));
       expl.parameters.power = power;
 
-      explosionConfig = gameConfigs.getConfig('monsterExplosion');
-      explosionConfig.pos = new Phaser.Point(
-        pos.x + (3 / 2) * obj.size[0],
+      expl = obj.layer.addObjectByID('monsterExplosion');
+      expl.setPosition(new Phaser.Point(
+        pos.x + (3 / 2) * obj.size![0],
         pos.y,
-      );
-      expl = obj.layer.addObject(explosionConfig);
+      ));
       expl.parameters.power = power;
     }
 
@@ -270,28 +261,26 @@ export const monsterHealthStatus: IGameRuleConfig = {
     if (obj.parameters.health <= 0) {
       obj.layer.removeObjectOnNextTick(obj.id);
 
-      const explosionConfig = gameConfigs.getConfig('explosion');
-      explosionConfig.pos = obj.pos.clone();
+      const expl = obj.layer.addObjectByID('explosion');
+      expl.setPosition(obj.pos.clone());
 
-      obj.layer.addObject(explosionConfig);
 
-      const blood = gameConfigs.getConfig('blood');
-      blood.pos = obj.pos.clone();
-      obj.layer.addObject(blood);
+      const blood = obj.layer.addObjectByID('blood');
+      blood.setPosition(obj.pos.clone());
 
       if (!obj.layer.state.parameters.monstersKilled) {
         obj.layer.state.parameters.monstersKilled = 0;
       }
 
       const monsterController = obj.layer.getObjectsByType(
-        'controller',
+        ObjectTypes.Controller,
       )[0];
       monsterController.parameters.monsterKilled =
         monsterController.parameters.monsterKilled + 1;
 
       obj.layer.state.parameters.monstersKilled++;
 
-      const player = obj.layer.getObjectsByType('player')[0];
+      const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
       player.parameters.exp = player.parameters.exp + obj.parameters.exp;
     }
   },
@@ -315,17 +304,16 @@ export const resetMeleeCooldown: IGameRuleConfig = {
 
 export const monsterBossLogic: IGameRuleConfig = {
   update: function(obj: GameObject) {
-    const player = obj.layer.getObjectsByType('player')[0];
+    const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
 
     if (!obj.parameters.fireCooldown) {
-      var bulletConfig = gameConfigs.getConfig('mbullet');
       const direction = Phaser.Point.subtract(player.pos, obj.pos);
 
-      bulletConfig.pos = obj.pos.clone();
-      const bull = obj.layer.addObject(bulletConfig);
+      const bull = obj.layer.addObjectByID('mbullet');
+      bull.setPosition(obj.pos.clone())
       bull.parameters.direction = direction;
 
-      bull.sprite.setDegree(obj.pos.angle(player.pos));
+      bull.sprite!.setDegree(obj.pos.angle(player.pos));
 
       obj.parameters.fireCooldown = obj.parameters.cooldown;
     }
@@ -334,16 +322,13 @@ export const monsterBossLogic: IGameRuleConfig = {
 
 export const monsterBoss2Logic: IGameRuleConfig = {
   update: function(obj: GameObject, dt: number) {
-    const player = obj.layer.getObjectsByType('player')[0];
+    const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
     const directionToPlayer = obj.parameters.direction;
 
     if (Phaser.Point.distance(obj.pos, player.pos) < obj.parameters.fireRange) {
       if (!obj.parameters.fireCooldown) {
-        var bulletConfig = gameConfigs.getConfig('mbullet2');
-        bulletConfig.pos = obj.pos.clone();
-
-        const bull = obj.layer.addObject(bulletConfig);
-
+        const bull = obj.layer.addObjectByID('mbullet2');
+        bull.setPosition(obj.pos.clone())
         bull.parameters.direction = directionToPlayer;
 
         obj.parameters.fireCooldown = obj.parameters.cooldown;
@@ -381,13 +366,10 @@ export const monsterBoss2Bullet: IGameRuleConfig = {
 
     function createExplosion() {
       const pos = obj.pos.clone();
-      let explosionConfig;
       const power = obj.parameters.power;
-      let expl;
 
-      explosionConfig = gameConfigs.getConfig('monsterExplosion');
-      explosionConfig.pos = new Phaser.Point(pos.x, pos.y);
-      expl = obj.layer.addObject(explosionConfig);
+      const expl = obj.layer.addObjectByID('monsterExplosion');
+      expl.setPosition(pos);
       expl.parameters.power = power;
     }
   },
@@ -451,41 +433,36 @@ export const summonOnCooldown: IGameRuleConfig = {
   update: function(obj: GameObject) {
     const cooldown = obj.parameters.cooldown;
 
-    function getProperMonster() {
+    const getProperMonster = () => {
       let random = Math.random() * 100;
-      let config;
+      let config: 'monster' | 'monsterBoss' | 'monsterBoss2' | 'monsterBoomer' = 'monster';
 
       if (random <= obj.parameters.chanceOfBoss) {
-        config = gameConfigs.getConfig('monsterBoss');
+        config = 'monsterBoss';
       } else {
         random -= obj.parameters.chanceOfBoss;
       }
 
       if (!config && random <= obj.parameters.chanceOfBoss2) {
-        config = gameConfigs.getConfig('monsterBoss2');
+        config ='monsterBoss2';
       } else {
         random -= obj.parameters.chanceOfBoss2;
       }
 
       if (!config && random <= obj.parameters.chanceOfBoomer) {
-        config = gameConfigs.getConfig('monsterBoomer');
+        config = 'monsterBoomer';
       } else {
         random -= obj.parameters.monsterBoomer;
       }
 
-      if (!config) {
-        config = gameConfigs.getConfig('monster');
-      }
-
       return config;
     }
+    
     if (cooldown == 0) {
-      const monsterConfig = getProperMonster();
-      const player = obj.layer.getObjectsByType('player')[0];
+      const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
 
-      monsterConfig.pos = obj.pos.clone();
-
-      const monster = obj.layer.addObject(monsterConfig);
+      const monster = obj.layer.addObjectByID(getProperMonster());
+      monster.setPosition(obj.pos.clone());
 
       if (player.parameters.level > 1) {
         monster.parameters.health =

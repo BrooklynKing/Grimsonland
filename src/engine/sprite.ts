@@ -5,11 +5,11 @@ export interface ISpriteConfig {
   url: string;
   pos: Phaser.Point;
   size: [number, number];
-  speed: number;
-  frames: number[];
-  dir: string;
-  once: boolean;
-  degree: number;
+  speed?: number;
+  frames?: number[];
+  dir?: string;
+  once?: boolean;
+  degree?: number;
 }
 
 export class Sprite {
@@ -43,12 +43,13 @@ export class Sprite {
     this.defaultPosition = this.pos.clone();
     this.size = size;
     this.speed = typeof speed === 'number' ? speed : 0;
-    this.frames = frames;
+    this.frames = frames || [];
     this.frameIndex = 0;
     this.url = url;
     this.dir = dir || 'horizontal';
-    this.once = once;
+    this.once = Boolean(once);
     this.degree = degree || 0;
+    this.done = false;
   }
 
   update(dt: number) {

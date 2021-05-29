@@ -1,6 +1,8 @@
+import * as rules from '../rules';
+import { IGameObjectConfig } from '../../engine/core/object';
 import { ObjectTypes } from './types';
 
-export const player = {
+export const player: IGameObjectConfig = {
   zIndex: 20,
   sprite: ['hero', [0, 0], [32, 32], 6, [0, 1, 2]],
   pos: [662, 534],
@@ -29,20 +31,21 @@ export const player = {
     },
   },
   type: ObjectTypes.Player,
-  conditions: ['selectSpellWithKeyboard'],
+  conditions: [rules.selectSpellWithKeyboard],
   rules: [
-    'moveWithKeyboard',
-    'rotateToMouse',
-    'bindPositionToLayer',
-    'playerDeath',
-    'moveToDirection',
-    'dynamicZIndex',
-    'resetSpeed',
-    'resetEffects',
-    'playerLevelUp',
+    rules.moveWithKeyboard,
+    rules.rotateToMouse,
+    rules.bindPositionToLayer,
+    rules.playerDeath,
+    rules.moveToDirection,
+    rules.dynamicZIndex,
+    rules.resetSpeed,
+    rules.resetEffects,
+    rules.playerLevelUp,
   ],
 };
-export const summonGate = {
+
+export const summonGate: IGameObjectConfig = {
   zIndex: 0,
   render: 'object',
   sprite: ['arcaneGate', [0, 0], [32, 32], 7, [0, 1]],
@@ -57,11 +60,12 @@ export const summonGate = {
     chanceOfBoomer: 20,
     health: 10,
   },
-  conditions: ['monsterHealthStatus'],
+  conditions: [rules.monsterHealthStatus],
   type: ObjectTypes.Monster,
-  rules: ['summonOnCooldown', 'dynamicZIndex'],
+  rules: [rules.summonOnCooldown, rules.dynamicZIndex],
 };
-export const monster = {
+
+export const monster: IGameObjectConfig = {
   zIndex: 1,
   sprite: ['demons', [0, 128], [32, 32], 6, [0, 1, 2]],
   size: [20, 28],
@@ -78,19 +82,19 @@ export const monster = {
     health: 20,
     power: 5,
   },
-  conditions: ['monsterHealthStatus', 'stopOnCollisionWithPlayer'],
+  conditions: [rules.monsterHealthStatus, rules.stopOnCollisionWithPlayer],
   type: ObjectTypes.Monster,
   rules: [
-    'moveToDirection',
-    'wandererAI',
-    'rotateByDirection',
-    'meleeAttack',
-    'dynamicZIndex',
-    'resetEffects',
-    'resetMeleeCooldown',
+    rules.moveToDirection,
+    rules.wandererAI,
+    rules.rotateByDirection,
+    rules.meleeAttack,
+    rules.dynamicZIndex,
+    rules.resetEffects,
+    rules.resetMeleeCooldown,
   ],
 };
-export const monsterBoomer = {
+export const monsterBoomer: IGameObjectConfig = {
   zIndex: 1,
   sprite: ['demons', [96, 128], [32, 32], 6, [0, 1, 2]],
   size: [20, 28],
@@ -103,18 +107,18 @@ export const monsterBoomer = {
     health: 10,
     power: 10,
   },
-  conditions: ['monsterHealthStatus', 'monsterExplosionCondition'],
+  conditions: [rules.monsterHealthStatus, rules.monsterExplosionCondition],
   type: ObjectTypes.Monster,
   rules: [
-    'moveToDirection',
-    'rotateByPlayer',
-    'setDirectionToPlayerAdvance',
-    'dynamicZIndex',
-    'resetSpeed',
-    'resetEffects',
+    rules.moveToDirection,
+    rules.rotateByPlayer,
+    rules.setDirectionToPlayerAdvance,
+    rules.dynamicZIndex,
+    rules.resetSpeed,
+    rules.resetEffects,
   ],
 };
-export const monsterBoss = {
+export const monsterBoss: IGameObjectConfig = {
   zIndex: 1,
   collisions: true,
   sprite: ['bigMonsters', [0, 0], [32, 50], 6, [0, 1, 2]],
@@ -128,20 +132,21 @@ export const monsterBoss = {
     health: 50,
     effects: [] as string[],
   },
-  conditions: ['monsterHealthStatus', 'stopOnCollisionWithPlayer'],
+  conditions: [rules.monsterHealthStatus, rules.stopOnCollisionWithPlayer],
   type: ObjectTypes.Monster,
   rules: [
-    'setDirectionToPlayer',
-    'monsterBossLogic',
-    'moveToDirection',
-    'rotateByDirection',
-    'dynamicZIndex',
-    'resetSpeed',
-    'resetEffects',
-    'resetRangeCooldown',
+    rules.setDirectionToPlayer,
+    rules.monsterBossLogic,
+    rules.moveToDirection,
+    rules.rotateByDirection,
+    rules.dynamicZIndex,
+    rules.resetSpeed,
+    rules.resetEffects,
+    rules.resetRangeCooldown,
   ],
 };
-export const monsterBoss2 = {
+
+export const monsterBoss2: IGameObjectConfig = {
   zIndex: 1,
   collisions: true,
   sprite: ['boss', [0, 0], [96, 48], 6, [0, 1, 2]],
@@ -156,37 +161,39 @@ export const monsterBoss2 = {
     health: 30,
     effects: [] as string[],
   },
-  conditions: ['monsterHealthStatus', 'stopOnCollisionWithPlayer'],
+  conditions: [rules.monsterHealthStatus, rules.stopOnCollisionWithPlayer],
   type: ObjectTypes.Monster,
   rules: [
-    'setDirectionToPlayer',
-    'monsterBoss2Logic',
-    'rotateByDirection',
-    'dynamicZIndex',
-    'resetSpeed',
-    'resetEffects',
-    'resetRangeCooldown',
+    rules.setDirectionToPlayer,
+    rules.monsterBoss2Logic,
+    rules.rotateByDirection,
+    rules.dynamicZIndex,
+    rules.resetSpeed,
+    rules.resetEffects,
+    rules.resetRangeCooldown,
   ],
 };
-export const heart = {
+
+export const heart: IGameObjectConfig = {
   zIndex: 3,
   render: 'object',
   collisions: true,
   size: [25, 25],
   sprite: ['pumpkin', [0, 0], [32, 32], 5, [0, 1]],
-  conditions: ['triggerOnPlayerCollision'],
-  rules: ['dynamicZIndex'],
+  conditions: [rules.triggerOnPlayerCollision],
+  rules: [rules.dynamicZIndex],
   type: ObjectTypes.PowerUp,
   parameters: {
     power: 10,
   },
 };
-export const powerup = {
+
+export const powerup: IGameObjectConfig = {
   zIndex: 2,
   size: [25, 25],
   collisions: true,
   sprite: ['powerUp', [0, 0], [72, 65], 15, [0, 1, 2, 1]],
-  conditions: ['triggerOnPlayerCollisionPowerUp'],
+  conditions: [rules.triggerOnPlayerCollisionPowerUp],
   type: ObjectTypes.PowerUp,
   parameters: {
     exp: 250,

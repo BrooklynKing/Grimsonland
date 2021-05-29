@@ -1,23 +1,23 @@
 import Phaser from 'phaser';
 
 import { moveWithSpeed } from './utils';
-import gameConfigs from '../index';
 
 import { GameObject } from '../../engine/core/object';
 import { IGameRuleConfig } from './types';
+import { ObjectTypes } from '../objects/types';
 
 export const bindPositionToLayer: IGameRuleConfig = {
   update: function (obj: GameObject) {
-    if (obj.pos.x - obj.sprite.size[0] / 2 < 0) {
-      obj.pos.x = obj.sprite.size[0] / 2;
-    } else if (obj.pos.x + obj.sprite.size[0] / 2 > obj.layer.size[0]) {
-      obj.pos.x = obj.layer.size[0] - obj.sprite.size[0] / 2;
+    if (obj.pos.x - obj.sprite!.size[0] / 2 < 0) {
+      obj.pos.x = obj.sprite!.size[0] / 2;
+    } else if (obj.pos.x + obj.sprite!.size[0] / 2 > obj.layer.size[0]) {
+      obj.pos.x = obj.layer.size[0] - obj.sprite!.size[0] / 2;
     }
 
-    if (obj.pos.y - obj.sprite.size[1] / 2 < 0) {
-      obj.pos.y = obj.sprite.size[1] / 2;
-    } else if (obj.pos.y + obj.sprite.size[1] / 2 > obj.layer.size[1]) {
-      obj.pos.y = obj.layer.size[1] - obj.sprite.size[1] / 2;
+    if (obj.pos.y - obj.sprite!.size[1] / 2 < 0) {
+      obj.pos.y = obj.sprite!.size[1] / 2;
+    } else if (obj.pos.y + obj.sprite!.size[1] / 2 > obj.layer.size[1]) {
+      obj.pos.y = obj.layer.size[1] - obj.sprite!.size[1] / 2;
     }
   },
 };
@@ -26,8 +26,8 @@ export const destroyAfterLeavingLayer: IGameRuleConfig = {
   update: function (obj: GameObject) {
     if (
       obj.pos.y < -100 ||
-      obj.pos.y - obj.sprite.size[1] - 100 > obj.layer.size[1] ||
-      obj.pos.x - obj.sprite.size[0] - 100 > obj.layer.size[0] ||
+      obj.pos.y - obj.sprite!.size[1] - 100 > obj.layer.size[1] ||
+      obj.pos.x - obj.sprite!.size[0] - 100 > obj.layer.size[0] ||
       obj.pos.x < -100
     ) {
       obj.layer.removeObjectOnNextTick(obj.id);
@@ -38,7 +38,7 @@ export const destroyAfterLeavingLayer: IGameRuleConfig = {
 
 export const setDirectionToPlayer: IGameRuleConfig = {
   update: function (obj: GameObject) {
-    const player = obj.layer.getObjectsByType('player')[0];
+    const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
 
     obj.parameters.direction = Phaser.Point.subtract(player.pos, obj.pos);
   },
@@ -46,8 +46,8 @@ export const setDirectionToPlayer: IGameRuleConfig = {
 
 export const setDirectionToPlayerAdvance: IGameRuleConfig = {
   update: function (obj: GameObject) {
-    const player = obj.layer.getObjectsByType('player')[0];
-    const playerDirection = player.parameters.direction;
+    const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
+    const playerDirection: Phaser.Point | null = player.parameters.direction;
     const direction = obj.parameters.direction ||  Phaser.Point.subtract(player.pos, obj.pos);
 
     if (playerDirection == null) {
@@ -75,7 +75,7 @@ export const wandererAI: IGameRuleConfig = {
     obj.parameters.direction = new Phaser.Point(rect.randomX, rect.randomY);
   },
   update: function (obj: GameObject) {
-    const player = obj.layer.getObjectsByType('player')[0];
+    const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
     const distance = Phaser.Point.distance(obj.pos, player.pos);
 
     if (distance <= obj.parameters.scentRange) {
@@ -107,7 +107,7 @@ export const dynamicZIndex: IGameRuleConfig = {
     let newZIndex = 0;
 
     obj.pos && (newZIndex += obj.pos.y);
-    obj.sprite && (newZIndex += obj.sprite.size[1] / 2);
+    obj.sprite && (newZIndex += obj.sprite!.size[1] / 2);
 
     obj.zIndex = obj.pos.y > 0 ? Math.round(newZIndex) : 0;
   },
@@ -143,7 +143,7 @@ export const rotateToMouse: IGameRuleConfig = {
     destination.y -= obj.layer.translate.y;
 
     const directionToMouse = Phaser.Point.subtract(destination, obj.pos);
-    obj.sprite.rotateToDirection(directionToMouse);
+    obj.sprite!.rotateToDirection(directionToMouse);
   },
 };
 
@@ -177,10 +177,10 @@ export const explosionOnCooldown: IGameRuleConfig = {
     if (cooldown == 0) {
       obj.layer.removeObjectOnNextTick(obj.id);
 
-      const explosionConfig = gameConfigs.getConfig('spellExplosion');
-      explosionConfig.pos = new Phaser.Point(obj.pos.x, obj.pos.y);
-      const expl = obj.layer.addObject(explosionConfig);
+      const expl = obj.layer.addObjectByID('spellExplosion');
+      expl.setPosition(new Phaser.Point(obj.pos.x, obj.pos.y));
       expl.parameters.power = obj.parameters.power;
+
     } else {
       obj.parameters.cooldown = cooldown - 1;
     }
@@ -189,12 +189,11 @@ export const explosionOnCooldown: IGameRuleConfig = {
 
 export const explosionAfterSpriteDone: IGameRuleConfig = {
   update: function (obj: GameObject) {
-    if (obj.sprite.done) {
+    if (obj.sprite!.done) {
       obj.layer.removeObjectOnNextTick(obj.id);
 
-      const explosionConfig = gameConfigs.getConfig('monsterExplosion');
-      explosionConfig.pos = new Phaser.Point(obj.pos.x, obj.pos.y);
-      const expl = obj.layer.addObject(explosionConfig) as GameObject;
+      const expl = obj.layer.addObjectByID('monsterExplosion');
+      expl.setPosition(new Phaser.Point(obj.pos.x, obj.pos.y));
       expl.parameters.power = obj.parameters.power;
     }
   },
@@ -202,7 +201,7 @@ export const explosionAfterSpriteDone: IGameRuleConfig = {
 
 export const destroyAfterSpriteDone: IGameRuleConfig = {
   update: function (obj: GameObject) {
-    if (obj.sprite.done) {
+    if (obj.sprite!.done) {
       obj.layer.removeObjectOnNextTick(obj.id);
     }
   },
@@ -210,14 +209,14 @@ export const destroyAfterSpriteDone: IGameRuleConfig = {
 
 export const rotateByDirection: IGameRuleConfig = {
   update: function (obj: GameObject) {
-    obj.sprite.rotateToDirection(obj.parameters.direction);
+    obj.sprite!.rotateToDirection(obj.parameters.direction);
   },
 };
 
 export const rotateByPlayer: IGameRuleConfig = {
   update: function (obj: GameObject) {
-    const player = obj.layer.getObjectsByType('player')[0];
+    const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
 
-    obj.sprite.rotateToDirection(Phaser.Point.subtract(player.pos, obj.pos));
+    obj.sprite!.rotateToDirection(Phaser.Point.subtract(player.pos, obj.pos));
   },
 };

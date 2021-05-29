@@ -1,3 +1,4 @@
+import { ObjectTypes } from '../configs/objects/types';
 import { GameObject } from './core/object';
 
 const ellipse = (
@@ -22,10 +23,10 @@ const ellipse = (
   context.restore();
 } 
 
-const fog: Render = (obj: GameObject) => {
+const fog: Render = (obj) => {
   const ctx = obj.layer.ctx;
-  const x = obj.layer.getObjectsByType('player')[0].pos.x;
-  const y = obj.layer.getObjectsByType('player')[0].pos.y;
+  const x = obj.layer.getObjectsByType(ObjectTypes.Player)[0].pos.x;
+  const y = obj.layer.getObjectsByType(ObjectTypes.Player)[0].pos.y;
   const grad = obj.layer.ctx.createRadialGradient(x, y, 0, x, y, 700);
 
   grad.addColorStop(0, 'rgba(0, 0, 0, 0)');
@@ -39,11 +40,11 @@ const fog: Render = (obj: GameObject) => {
   ctx.fill();
 }
 
-const healthBar: Render = (obj: GameObject) => {
+const healthBar: Render = (obj) => {
   const ctx = obj.layer.ctx;
-  const x = Math.round(-obj.sprite.size[0] / 2);
-  const y = Math.round(-obj.sprite.size[1] / 2 - 7);
-  const width = obj.sprite.size[0];
+  const x = Math.round(-obj.sprite!.size[0] / 2);
+  const y = Math.round(-obj.sprite!.size[1] / 2 - 7);
+  const width = obj.sprite!.size[0];
   const height = 3;
 
   ctx.globalAlpha = 0.5;
@@ -69,13 +70,13 @@ const healthBar: Render = (obj: GameObject) => {
   ctx.globalAlpha = 1;
 }
 
-const expBar: Render = (obj: GameObject) => {
+const expBar: Render = (obj, dt) => {
   const x = -22;
   const y = 17;
   const width = 200;
   const height = 40;
   const ctx = obj.layer.ctx;
-  const player = obj.layer.getObjectsByType('player')[0];
+  const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
 
   ctx.translate(-obj.layer.translate.x, -obj.layer.translate.y);
 
@@ -105,18 +106,18 @@ const expBar: Render = (obj: GameObject) => {
 
   ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 
-  textRender(obj);
+  textRender(obj, dt);
 }
 
-const sprite: Render = (obj: GameObject, dt: number) => {
+const sprite: Render = (obj, dt) => {
   const ctx = obj.layer.ctx;
 
   ctx.globalAlpha = 1;
-  obj.sprite.update(dt);
-  obj.sprite.render(ctx);
+  obj.sprite!.update(dt);
+  obj.sprite!.render(ctx);
 }
 
-const shadow: Render = (obj: GameObject) => {
+const shadow: Render = (obj) => {
   if (obj.size) {
     const ctx = obj.layer.ctx;
 
@@ -126,8 +127,8 @@ const shadow: Render = (obj: GameObject) => {
     ellipse(
       ctx,
       0,
-      +obj.sprite.size[1] / 2 - 3,
-      Math.min(obj.sprite.size[0], obj.size[0]) / 2 + 8,
+      +obj.sprite!.size[1] / 2 - 3,
+      Math.min(obj.sprite!.size[0], obj.size![0]) / 2 + 8,
       5,
       0,
       0,
@@ -140,7 +141,7 @@ const shadow: Render = (obj: GameObject) => {
   }
 }
 
-const effects: Render = (obj: GameObject) => {
+const effects: Render = (obj) => {
   const ctx = obj.layer.ctx;
   const effects = obj.parameters.effects;
 
@@ -151,7 +152,7 @@ const effects: Render = (obj: GameObject) => {
       ctx.drawImage(
         obj.layer.game.cache.getImage('frostEffect'),
         -16,
-        +(obj.sprite.size[1] / 2) - 32,
+        +(obj.sprite!.size[1] / 2) - 32,
         32,
         32,
       );
@@ -160,30 +161,30 @@ const effects: Render = (obj: GameObject) => {
   }
 }
 
-const objectRenderer: Render = (obj: GameObject, dt: number) => {
-  shadow(obj);
+const objectRenderer: Render = (obj, dt) => {
+  shadow(obj, dt);
   sprite(obj, dt);
 }
 
-const unitRenderer: Render = (obj: GameObject, dt: number) => {
-  shadow(obj);
-  healthBar(obj);
+const unitRenderer: Render = (obj, dt) => {
+  shadow(obj, dt);
+  healthBar(obj, dt);
   sprite(obj, dt);
-  effects(obj);
+  effects(obj, dt);
 }
 
-const spellRenderer: Render = (obj: GameObject, dt: number) => {
+const spellRenderer: Render = (obj, dt) => {
   const ctx = obj.layer.ctx;
-  const x = Math.round(-obj.sprite.size[0] / 2 - 4);
-  const y = Math.round(-obj.sprite.size[1] / 2 - 4);
-  const width = obj.sprite.size[0] + 8;
-  const height = obj.sprite.size[1] + 8;
+  const x = Math.round(-obj.sprite!.size[0] / 2 - 4);
+  const y = Math.round(-obj.sprite!.size[1] / 2 - 4);
+  const width = obj.sprite!.size[0] + 8;
+  const height = obj.sprite!.size[1] + 8;
 
   ctx.translate(-obj.layer.translate.x, -obj.layer.translate.y);
 
   if (
     obj.id.indexOf(
-      obj.layer.getObjectsByType('player')[0].parameters.currentSpell,
+      obj.layer.getObjectsByType(ObjectTypes.Player)[0].parameters.currentSpell,
     ) !== -1
   ) {
     ctx.fillStyle = 'rgb(0, 250, 0)';
@@ -221,7 +222,7 @@ const spellRenderer: Render = (obj: GameObject, dt: number) => {
   ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }
 
-const ui: Render = (obj: GameObject, dt: number) => {
+const ui: Render = (obj, dt) => {
   const ctx = obj.layer.ctx;
 
   ctx.translate(-obj.layer.translate.x, -obj.layer.translate.y);
@@ -229,7 +230,7 @@ const ui: Render = (obj: GameObject, dt: number) => {
   ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }
 
-const textRender: Render = (obj: GameObject) => {
+const textRender: Render = (obj) => {
   const ctx = obj.layer.ctx;
   let fontConfig = '';
 
@@ -252,7 +253,7 @@ const textRender: Render = (obj: GameObject) => {
   ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 }
 
-export type Render<> = (obj: GameObject, dt?: number) => void;
+export type Render = (obj: GameObject, dt: number) => void;
 
 const renders = {
   shadow,

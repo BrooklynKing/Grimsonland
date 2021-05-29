@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import format from 'string-template';
 
-import gameConfigs from '../index';
+import { ObjectTypes } from '../objects/types';
 import { GameObject } from '../../engine/core/object';
 
 import { IGameRuleConfig } from './types';
@@ -27,8 +27,8 @@ export const monsterController: IGameRuleConfig = {
     obj.parameters.monsterOnWave = monsterCount[obj.parameters.currentWave - 1];
     obj.parameters.monsterKilled = 0;
     obj.parameters.monsterSpawned = 0;
-    obj.parameters.leftOnWaveId = obj.layer.addObject(
-      gameConfigs.getConfig('leftOnWaveLabel'),
+    obj.parameters.leftOnWaveId = obj.layer.addObjectByID(
+     'leftOnWaveLabel',
     ).id;
   },
   update: function(obj: GameObject) {
@@ -39,12 +39,10 @@ export const monsterController: IGameRuleConfig = {
         800 - obj.layer.translate.x,
         550 - obj.layer.translate.y,
       );
-      const summonGate = gameConfigs.getConfig('summonGate');
 
-      summonGate.pos = new Phaser.Point(rect.randomX, rect.randomY);
-      summonGate.pos.x = Math.min(1100, Math.max(50, summonGate.pos.x));
-      summonGate.pos.y = Math.min(900, Math.max(50, summonGate.pos.y));
-      obj.layer.addObject(summonGate);
+      const pos = new Phaser.Point(Math.min(1100, Math.max(50, rect.randomX)), Math.min(900, Math.max(50, rect.randomY)));
+      const gate = obj.layer.addObjectByID('summonGate');
+      gate.setPosition(pos)
     }
 
     if (obj.parameters.monsterSpawned < obj.parameters.monsterOnWave) {
@@ -59,7 +57,7 @@ export const monsterController: IGameRuleConfig = {
       }
     }
     if (
-      !obj.layer.getObjectsByType('monster').length &&
+      !obj.layer.getObjectsByType(ObjectTypes.Monster).length &&
       obj.parameters.monsterKilled < obj.parameters.monsterSpawned
     ) {
       obj.parameters.monsterSpawned = obj.parameters.monsterKilled;

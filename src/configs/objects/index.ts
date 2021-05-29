@@ -5,13 +5,15 @@ import * as effects from './effects';
 import * as terrain from './terrain';
 import * as ui from './ui';
 
-const objects: any = {
-  ...logic,
-  ...spells,
-  ...units,
-  ...effects,
-  ...ui,
-  ...terrain,
-};
+export const objectConfigs = {
+    ...spells,
+    ...logic,
+    ...units,
+    ...effects,
+    ...terrain,
+    ...ui
+}
 
-export default objects;
+export { ObjectTypes } from './types';
+
+export type OBJECTS_ID = keyof typeof objectConfigs;

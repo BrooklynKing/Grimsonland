@@ -1,5 +1,6 @@
 import format from 'string-template';
 
+import { ObjectTypes } from '../objects/types';
 import { GameObject } from '../../engine/core/object';
 import { IGameRuleConfig } from './types';
 
@@ -28,7 +29,7 @@ export const health: IGameRuleConfig = {
     const template = obj.parameters.template;
 
     obj.parameters.text = format(template, {
-      health: obj.layer.getObjectsByType('player')[0].parameters.health,
+      health: obj.layer.getObjectsByType(ObjectTypes.Player)[0].parameters.health,
     });
   },
 };
@@ -36,7 +37,7 @@ export const health: IGameRuleConfig = {
 export const level: IGameRuleConfig = {
   update: function(obj: GameObject) {
     const template = obj.parameters.template;
-    const player = obj.layer.getObjectsByType('player')[0];
+    const player = obj.layer.getObjectsByType(ObjectTypes.Player)[0];
 
     obj.parameters.text = format(template, {
       level: player.parameters.level,

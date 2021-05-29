@@ -4,11 +4,7 @@ export function moveWithSpeed(
   point: Phaser.Point,
   destination: Phaser.Point,
   speed: number,
-) {
-  if (!point || !destination) {
-    return null;
-  }
-
+):  Phaser.Point {
   const _destination = destination
     .clone()
     .normalize()
