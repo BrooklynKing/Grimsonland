@@ -24,7 +24,7 @@ const ellipse = (
 	context.restore();
 };
 
-const fog: Render = (obj) => {
+export const fog: Render = (obj) => {
 	const ctx = obj.layer.ctx;
 	const x = obj.layer.getObjectsByType(ObjectTypes.Player)[0].pos.x;
 	const y = obj.layer.getObjectsByType(ObjectTypes.Player)[0].pos.y;
@@ -41,7 +41,7 @@ const fog: Render = (obj) => {
 	ctx.fill();
 };
 
-const healthBar: Render = (obj) => {
+export const healthBar: Render = (obj) => {
 	const ctx = obj.layer.ctx;
 	const x = Math.round(-obj.sprite!.size[0] / 2);
 	const y = Math.round(-obj.sprite!.size[1] / 2 - 7);
@@ -71,7 +71,7 @@ const healthBar: Render = (obj) => {
 	ctx.globalAlpha = 1;
 };
 
-const expBar: Render = (obj, dt) => {
+export const expBar: Render = (obj, dt) => {
 	const x = -22;
 	const y = 17;
 	const width = 200;
@@ -107,10 +107,10 @@ const expBar: Render = (obj, dt) => {
 
 	ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 
-	textRender(obj, dt);
+	text(obj, dt);
 };
 
-const sprite: Render = (obj, dt) => {
+export const sprite: Render = (obj, dt) => {
 	const ctx = obj.layer.ctx;
 
 	ctx.globalAlpha = 1;
@@ -118,7 +118,7 @@ const sprite: Render = (obj, dt) => {
 	obj.sprite!.render(ctx);
 };
 
-const shadow: Render = (obj) => {
+export const shadow: Render = (obj) => {
 	if (obj.size) {
 		const ctx = obj.layer.ctx;
 
@@ -142,7 +142,7 @@ const shadow: Render = (obj) => {
 	}
 };
 
-const effects: Render = (obj) => {
+export const effects: Render = (obj) => {
 	const ctx = obj.layer.ctx;
 
 	if (!obj.parameters.effects) {
@@ -164,19 +164,19 @@ const effects: Render = (obj) => {
 	});
 };
 
-const objectRenderer: Render = (obj, dt) => {
+export const object: Render = (obj, dt) => {
 	shadow(obj, dt);
 	sprite(obj, dt);
 };
 
-const unitRenderer: Render = (obj, dt) => {
+export const unit: Render = (obj, dt) => {
 	shadow(obj, dt);
 	healthBar(obj, dt);
 	sprite(obj, dt);
 	effects(obj, dt);
 };
 
-const spellRenderer: Render = (obj, dt) => {
+export const spell: Render = (obj, dt) => {
 	const ctx = obj.layer.ctx;
 	const x = Math.round(-obj.sprite!.size[0] / 2 - 4);
 	const y = Math.round(-obj.sprite!.size[1] / 2 - 4);
@@ -225,7 +225,7 @@ const spellRenderer: Render = (obj, dt) => {
 	ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 };
 
-const ui: Render = (obj, dt) => {
+export const ui: Render = (obj, dt) => {
 	const ctx = obj.layer.ctx;
 
 	ctx.translate(-obj.layer.translate.x, -obj.layer.translate.y);
@@ -233,7 +233,7 @@ const ui: Render = (obj, dt) => {
 	ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 };
 
-const textRender: Render = (obj) => {
+export const text: Render = (obj) => {
 	const ctx = obj.layer.ctx;
 	let fontConfig = '';
 
@@ -257,19 +257,3 @@ const textRender: Render = (obj) => {
 };
 
 export type Render = (obj: GameObject, dt: number) => void;
-
-const renders = {
-	shadow,
-	fog,
-	expBar,
-	healthBar,
-	sprite,
-	effects,
-	ui,
-	object: objectRenderer,
-	text: textRender,
-	spell: spellRenderer,
-	unit: unitRenderer,
-};
-
-export default renders;

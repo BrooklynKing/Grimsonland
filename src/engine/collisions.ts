@@ -1,6 +1,6 @@
 import { GameObject } from './core/object';
 
-const generate = (config: { n: number; width: number; height: number }) => {
+export const bootstrapCollisions = (config: { n: number; width: number; height: number }) => {
   const n = config.n || 6;
   const width = config.width || 800;
   const height = config.height || 600;
@@ -143,5 +143,3 @@ const generate = (config: { n: number; width: number; height: number }) => {
     clear: generateMap,
   };
 };
-
-export default generate;

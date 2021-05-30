@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import collisions from '../engine/collisions';
+import { bootstrapCollisions } from '../engine/collisions';
 import { GameLayer, IGameLayerConfig } from '../engine/core/layer';
 
 import * as rules from '../configs/rules/layers';
@@ -41,10 +41,11 @@ class GameState extends Phaser.State {
   private deathTheme!: Phaser.Sound;
 
   private restartButton!: Phaser.Button;
+  private restartText!: Phaser.Text;
 
   private bitmap!: Phaser.BitmapData;
   private gameLayer!: GameLayer;
-  collisions!: ReturnType<typeof collisions>;
+  collisions!: ReturnType<typeof bootstrapCollisions>;
 
   parameters!: {
     bestTime: number;
@@ -63,7 +64,7 @@ class GameState extends Phaser.State {
   create() {
     this.pauseFlag = false;
 
-    this.collisions = collisions({
+    this.collisions = bootstrapCollisions({
       n: 6,
       width: 1500,
       height: 1200,
@@ -72,7 +73,8 @@ class GameState extends Phaser.State {
     this.initGameParameters();
     this.initGameLayer();
     this.initControls();
-
+    //console.log(this.game.renderer.view)
+    this.game.renderer.view.classList.add('no-pointer');
     this.battleTheme.play();
   }
 
@@ -89,17 +91,17 @@ class GameState extends Phaser.State {
       2
     );
 
+    this.restartText = this.add.text(510, 335, 'YOU DIED!', {
+      fill: '#EF0000',
+    });
+    this.restartText.anchor.setTo(0.5, 0.5);
+    this.restartText.kill();
+
     this.restartButton.addChild(
       this.add.text(-65, -15, 'RESTART', {
         fill: '#efefef',
       })
     );
-    this.restartButton.addChild(
-      this.add.text(-70, -70, 'YOU DIED!', {
-        fill: '#EF0000',
-      })
-    );
-
     this.restartButton.anchor.setTo(0.5, 0.5);
     this.restartButton.kill();
   }
@@ -141,6 +143,7 @@ class GameState extends Phaser.State {
     this.battleTheme.stop();
     this.deathTheme.play();
     this.restartButton.revive();
+    this.restartText.revive();
     this.pauseFlag = true;
   }
 
@@ -182,6 +185,7 @@ class GameState extends Phaser.State {
     this.collisions.clear();
 
     this.restartButton.kill();
+    this.restartText.kill();
 
     this.gameLayer.clearLayer();
     this.gameLayer.init();
