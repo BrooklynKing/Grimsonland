@@ -1,8 +1,8 @@
 import * as rules from '../rules';
-import { IGameObjectConfig } from '../../engine/core/object';
+import { GameObjectConfig } from '../../engine/core/object';
 import { ObjectTypes } from './types';
 
-export const monsterController: IGameObjectConfig = {
+export const monsterController: GameObjectConfig = {
 	render: false,
 	collisions: false,
 	type: ObjectTypes.Controller,

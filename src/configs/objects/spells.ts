@@ -1,8 +1,8 @@
 import * as rules from '../rules';
-import { IGameObjectConfig } from '../../engine/core/object';
+import { GameObjectConfig } from '../../engine/core/object';
 import { ObjectTypes } from './types';
 
-export const fireballSpell: IGameObjectConfig = {
+export const fireballSpell: GameObjectConfig = {
 	zIndex: 5000,
 	sprite: ['spellIcons', [0, 0], [32, 32]],
 	pos: [449, 748],
@@ -17,7 +17,7 @@ export const fireballSpell: IGameObjectConfig = {
 	rules: [rules.fireball],
 };
 
-export const hellfireSpell: IGameObjectConfig = {
+export const hellfireSpell: GameObjectConfig = {
 	zIndex: 5000,
 	sprite: ['spellIcons', [96, 0], [32, 32]],
 	pos: [491, 748],
@@ -32,7 +32,7 @@ export const hellfireSpell: IGameObjectConfig = {
 	rules: [rules.hellfire],
 };
 
-export const frostShardSpell: IGameObjectConfig = {
+export const frostShardSpell: GameObjectConfig = {
 	zIndex: 5000,
 	sprite: ['spellIcons', [224, 96], [32, 32]],
 	pos: [533, 748],
@@ -46,7 +46,7 @@ export const frostShardSpell: IGameObjectConfig = {
 	rules: [rules.frostShard],
 };
 
-export const teleportSpell: IGameObjectConfig = {
+export const teleportSpell: GameObjectConfig = {
 	zIndex: 5000,
 	sprite: ['spellIcons', [64, 32], [32, 32]],
 	pos: [575, 748],
@@ -61,7 +61,7 @@ export const teleportSpell: IGameObjectConfig = {
 	rules: [rules.teleport],
 };
 
-export const teleportGate: IGameObjectConfig = {
+export const teleportGate: GameObjectConfig = {
 	zIndex: 0,
 	render: 'object',
 	sprite: ['arcaneGate', [0, 0], [32, 32], 7, [0, 1]],
@@ -74,7 +74,7 @@ export const teleportGate: IGameObjectConfig = {
 	rules: [rules.removeOnCooldown, rules.dynamicZIndex],
 };
 
-export const bullet: IGameObjectConfig = {
+export const bullet: GameObjectConfig = {
 	zIndex: 3,
 	collisions: true,
 	render: 'object',
@@ -95,7 +95,7 @@ export const bullet: IGameObjectConfig = {
 	],
 };
 
-export const hellfireTube: IGameObjectConfig = {
+export const hellfireTube: GameObjectConfig = {
 	zIndex: 3,
 	collisions: true,
 	render: 'object',
@@ -119,7 +119,7 @@ export const hellfireTube: IGameObjectConfig = {
 	rules: [rules.dynamicZIndex, rules.explosionOnCooldown],
 };
 
-export const frostShard: IGameObjectConfig = {
+export const frostShard: GameObjectConfig = {
 	zIndex: 3,
 	render: 'object',
 	collisions: true,

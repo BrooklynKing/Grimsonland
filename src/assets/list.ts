@@ -1,6 +1,5 @@
 export const IMAGES = {
     mainmenu: "../assets/img/mainmenu.jpeg",
-    deathmenu: "../assets/img/deathbackground.jpg",
     bigMonsters: "../assets/img/bigMonsters.png",
     boss: "../assets/img/boss.png",
     bossSpell: "../assets/img/bossSpell.png",

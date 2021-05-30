@@ -1,8 +1,8 @@
 import * as rules from '../rules';
-import { IGameObjectConfig } from '../../engine/core/object';
+import { GameObjectConfig } from '../../engine/core/object';
 import { ObjectTypes } from './types';
 
-export const player: IGameObjectConfig = {
+export const player: GameObjectConfig = {
   zIndex: 20,
   sprite: ['hero', [0, 0], [32, 32], 6, [0, 1, 2]],
   pos: [662, 534],
@@ -45,7 +45,7 @@ export const player: IGameObjectConfig = {
   ],
 };
 
-export const summonGate: IGameObjectConfig = {
+export const summonGate: GameObjectConfig = {
   zIndex: 0,
   render: 'object',
   sprite: ['arcaneGate', [0, 0], [32, 32], 7, [0, 1]],
@@ -65,7 +65,7 @@ export const summonGate: IGameObjectConfig = {
   rules: [rules.summonOnCooldown, rules.dynamicZIndex],
 };
 
-export const monster: IGameObjectConfig = {
+export const monster: GameObjectConfig = {
   zIndex: 1,
   sprite: ['demons', [0, 128], [32, 32], 6, [0, 1, 2]],
   size: [20, 28],
@@ -94,7 +94,7 @@ export const monster: IGameObjectConfig = {
     rules.resetMeleeCooldown,
   ],
 };
-export const monsterBoomer: IGameObjectConfig = {
+export const monsterBoomer: GameObjectConfig = {
   zIndex: 1,
   sprite: ['demons', [96, 128], [32, 32], 6, [0, 1, 2]],
   size: [20, 28],
@@ -118,7 +118,7 @@ export const monsterBoomer: IGameObjectConfig = {
     rules.resetEffects,
   ],
 };
-export const monsterBoss: IGameObjectConfig = {
+export const monsterBoss: GameObjectConfig = {
   zIndex: 1,
   collisions: true,
   sprite: ['bigMonsters', [0, 0], [32, 50], 6, [0, 1, 2]],
@@ -146,7 +146,7 @@ export const monsterBoss: IGameObjectConfig = {
   ],
 };
 
-export const monsterBoss2: IGameObjectConfig = {
+export const monsterBoss2: GameObjectConfig = {
   zIndex: 1,
   collisions: true,
   sprite: ['boss', [0, 0], [96, 48], 6, [0, 1, 2]],
@@ -174,7 +174,7 @@ export const monsterBoss2: IGameObjectConfig = {
   ],
 };
 
-export const heart: IGameObjectConfig = {
+export const heart: GameObjectConfig = {
   zIndex: 3,
   render: 'object',
   collisions: true,
@@ -188,7 +188,7 @@ export const heart: IGameObjectConfig = {
   },
 };
 
-export const powerup: IGameObjectConfig = {
+export const powerup: GameObjectConfig = {
   zIndex: 2,
   size: [25, 25],
   collisions: true,

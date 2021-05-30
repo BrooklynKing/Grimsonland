@@ -36,7 +36,7 @@ const LAYER_CONFIG: Omit<IGameLayerConfig, 'ctx' | 'state' | 'init'> = {
   ],
 };
 
-class GameState extends Phaser.State {
+export class Battle extends Phaser.State {
   private battleTheme!: Phaser.Sound;
   private deathTheme!: Phaser.Sound;
 
@@ -73,7 +73,7 @@ class GameState extends Phaser.State {
     this.initGameParameters();
     this.initGameLayer();
     this.initControls();
-    //console.log(this.game.renderer.view)
+
     this.game.renderer.view.classList.add('no-pointer');
     this.battleTheme.play();
   }
@@ -142,8 +142,11 @@ class GameState extends Phaser.State {
     this.updateBestScores();
     this.battleTheme.stop();
     this.deathTheme.play();
+
     this.restartButton.revive();
     this.restartText.revive();
+    this.game.renderer.view.classList.remove('no-pointer');
+    
     this.pauseFlag = true;
   }
 
@@ -186,6 +189,7 @@ class GameState extends Phaser.State {
 
     this.restartButton.kill();
     this.restartText.kill();
+    this.game.renderer.view.classList.add('no-pointer');
 
     this.gameLayer.clearLayer();
     this.gameLayer.init();
@@ -195,5 +199,3 @@ class GameState extends Phaser.State {
     this.prepareForRender();
   }
 }
-
-export default GameState;

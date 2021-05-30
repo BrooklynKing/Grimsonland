@@ -1,8 +1,8 @@
-import { IGameObjectConfig } from '../../engine/core/object';
+import { GameObjectConfig } from '../../engine/core/object';
 import * as rules from '../rules';
 import { ObjectTypes } from './types';
 
-export const mbullet: IGameObjectConfig = {
+export const mbullet: GameObjectConfig = {
 	zIndex: 3,
 	collisions: true,
 	sprite: ['darkblast', [0, 0], [38, 38], 12, [0, 1, 2, 3]],
@@ -21,7 +21,7 @@ export const mbullet: IGameObjectConfig = {
 	],
 };
 
-export const mbullet2: IGameObjectConfig = {
+export const mbullet2: GameObjectConfig = {
 	zIndex: 3,
 	collisions: true,
 	sprite: ['bossSpell', [0, 0], [30, 26], 10, [0, 1, 2]],
@@ -43,7 +43,7 @@ export const mbullet2: IGameObjectConfig = {
 	],
 };
 
-export const blood: IGameObjectConfig = {
+export const blood: GameObjectConfig = {
 	type: ObjectTypes.Effect,
 	zIndex: 2,
 	sprite: ['monsterBlood', [0, 0], [32, 13]],
@@ -53,7 +53,7 @@ export const blood: IGameObjectConfig = {
 	rules: [rules.removeOnCooldown],
 };
 
-export const bloodSpray: IGameObjectConfig = {
+export const bloodSpray: GameObjectConfig = {
 	type: ObjectTypes.Effect,
 	zIndex: 2,
 	sprite: [
@@ -69,7 +69,7 @@ export const bloodSpray: IGameObjectConfig = {
 	rules: [rules.destroyAfterSpriteDone, rules.dynamicZIndex],
 };
 
-export const explosion: IGameObjectConfig = {
+export const explosion: GameObjectConfig = {
 	type: ObjectTypes.Effect,
 	render: 'object',
 	size: [39, 39],
@@ -85,7 +85,7 @@ export const explosion: IGameObjectConfig = {
 	rules: [rules.destroyAfterSpriteDone, rules.dynamicZIndex],
 };
 
-export const monsterExplosion: IGameObjectConfig = {
+export const monsterExplosion: GameObjectConfig = {
 	render: 'object',
 	collisions: true,
 	type: ObjectTypes.SpellEffect,
@@ -103,7 +103,7 @@ export const monsterExplosion: IGameObjectConfig = {
 	rules: [rules.destroyAfterSpriteDone, rules.dynamicZIndex],
 };
 
-export const spellExplosion: IGameObjectConfig = {
+export const spellExplosion: GameObjectConfig = {
 	render: 'object',
 	collisions: true,
 	type: ObjectTypes.SpellEffect,
@@ -121,7 +121,7 @@ export const spellExplosion: IGameObjectConfig = {
 	rules: [rules.destroyAfterSpriteDone, rules.dynamicZIndex],
 };
 
-export const fog: IGameObjectConfig = {
+export const fog: GameObjectConfig = {
 	render: 'fog',
 	zIndex: 2500,
 	type: ObjectTypes.Effect,

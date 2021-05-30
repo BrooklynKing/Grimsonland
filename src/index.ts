@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import states from './states';
+import { PreLoading, Loading, Battle, MainMenu } from './states';
 
 const game = new Phaser.Game(
   1024,
@@ -14,7 +14,7 @@ const game = new Phaser.Game(
 
 window.game = game;
 
-game.state.add('preloading', states.preLoading, true);
-game.state.add('loading', states.loading);
-game.state.add('battle', states.battle);
-game.state.add('mainMenu', states.mainMenu);
+game.state.add('PreLoading', PreLoading, true);
+game.state.add('Loading', Loading);
+game.state.add('Battle', Battle);
+game.state.add('MainMenu', MainMenu);

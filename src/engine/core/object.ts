@@ -8,7 +8,7 @@ import * as renders from '../../configs/renderers';
 
 import { GameRule } from '../../configs/rules/types';
 
-export interface IGameObjectConfig {
+export interface GameObjectConfig {
   pos?: Phaser.Point | [number, number];
   sprite?: [
     IMAGES_LIST,
@@ -42,15 +42,15 @@ export class GameObject {
 
   private collisions?: GameRule;
   private rules: GameRule[];
-  private _rulesForInit: IGameObjectConfig['rules'];
+  private _rulesForInit: GameObjectConfig['rules'];
   private conditions: GameRule[];
-  private _conditionsForInit: IGameObjectConfig['conditions'];
+  private _conditionsForInit: GameObjectConfig['conditions'];
   private renderers: (keyof typeof renders)[] | false;
 
   parameters: { [key: string]: any };
   readonly defaultParameters: { readonly [key: string]: any };
 
-  constructor(config: IGameObjectConfig & { id: string; layer: GameLayer }) {
+  constructor(config: GameObjectConfig & { id: string; layer: GameLayer }) {
     this.layer = config.layer;
     if (config.pos instanceof Phaser.Point) {
       this.pos = config.pos.clone();

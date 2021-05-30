@@ -1,9 +1,9 @@
+import Phaser from 'phaser';
+
 const INFO_TEXT =
   ' MOVING: WASD\n AIM: MOUSE\n CAST SPELL: MOUSE CLICK OR SPACE\n SELECT SPELL: 1, 2, 3.';
 
-import Phaser from 'phaser';
-
-class MainMenu extends Phaser.State {
+export class MainMenu extends Phaser.State {
   private menuTheme!: Phaser.Sound;
   private background!: Phaser.Image;
 
@@ -49,12 +49,10 @@ class MainMenu extends Phaser.State {
   }
 
   startGame() {
-    this.game.state.start('battle');
+    this.game.state.start('Battle');
   }
 
   shutdown() {
     this.menuTheme.stop();
   }
 }
-
-export default MainMenu;

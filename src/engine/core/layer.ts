@@ -1,14 +1,14 @@
 import { GameRule } from '../../configs/rules/types';
-import { GameObject, IGameObjectConfig } from './object';
+import { GameObject, GameObjectConfig } from './object';
 
 import { objectConfigs, OBJECTS_ID, ObjectTypes } from '../../configs/objects';
 
-import BattleState from '../../states/battle';
+import type { Battle } from '../../states/battle';
 
 export interface IGameLayerConfig {
   id: string;
   background: string;
-  state: BattleState;
+  state: Battle;
   ctx: CanvasRenderingContext2D;
   initList: OBJECTS_ID[];
   translate: ITranslate;
@@ -26,7 +26,7 @@ export class GameLayer {
   id: string;
   ctx: CanvasRenderingContext2D;
   game: Phaser.Game;
-  state: BattleState;
+  state: Battle;
   background: CanvasPattern;
   size: number[];
   translate: { x: number; y: number };
@@ -179,7 +179,7 @@ export class GameLayer {
     }
   }
 
-  private addObject(id: OBJECTS_ID, config: IGameObjectConfig) {
+  private addObject(id: OBJECTS_ID, config: GameObjectConfig) {
     const obj = new GameObject({
       ...config,
       layer: this,

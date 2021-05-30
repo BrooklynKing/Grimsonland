@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 
 import { IMAGES, AUDIO } from '../assets/list';
 
-class Loading extends Phaser.State {
+export class Loading extends Phaser.State {
   private text!: Phaser.Text;
 
   preload() {
@@ -27,8 +27,6 @@ class Loading extends Phaser.State {
 
   create() {
     this.text.destroy();
-    this.game.state.start('mainMenu');
+    this.game.state.start('MainMenu');
   }
 }
-
-export default Loading;

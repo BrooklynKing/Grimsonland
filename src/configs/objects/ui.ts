@@ -1,8 +1,8 @@
 import * as rules from '../rules';
-import { IGameObjectConfig } from '../../engine/core/object';
+import { GameObjectConfig } from '../../engine/core/object';
 import { ObjectTypes } from './types';
 
-export const cursor: IGameObjectConfig = {
+export const cursor: GameObjectConfig = {
   type: ObjectTypes.UI,
   zIndex: 3000,
   render: 'ui',
@@ -11,7 +11,7 @@ export const cursor: IGameObjectConfig = {
   rules: [rules.bindPositionToMouse],
 };
 
-export const counter: IGameObjectConfig = {
+export const counter: GameObjectConfig = {
   type: ObjectTypes.UI,
   zIndex: 3000,
   pos: [5, 13],
@@ -25,7 +25,7 @@ export const counter: IGameObjectConfig = {
   rules: [rules.countMonsterKilled],
 };
 
-export const leftOnWaveLabel: IGameObjectConfig = {
+export const leftOnWaveLabel: GameObjectConfig = {
   type: ObjectTypes.UI,
   zIndex: 3000,
   pos: [5, 100],
@@ -38,7 +38,7 @@ export const leftOnWaveLabel: IGameObjectConfig = {
   },
 };
 
-export const level: IGameObjectConfig = {
+export const level: GameObjectConfig = {
   type: ObjectTypes.UI,
   zIndex: 3000,
   pos: [35, 45],
@@ -52,7 +52,7 @@ export const level: IGameObjectConfig = {
   rules: [rules.level],
 };
 
-export const timer: IGameObjectConfig = {
+export const timer: GameObjectConfig = {
   type: ObjectTypes.UI,
   zIndex: 3000,
   pos: [5, 23],
@@ -66,7 +66,7 @@ export const timer: IGameObjectConfig = {
   rules: [rules.timer],
 };
 
-export const bestTime: IGameObjectConfig = {
+export const bestTime: GameObjectConfig = {
   type: ObjectTypes.UI,
   pos: [5, 370],
   zIndex: 3000,
@@ -80,7 +80,7 @@ export const bestTime: IGameObjectConfig = {
   rules: [rules.bestTime],
 };
 
-export const bestScore: IGameObjectConfig = {
+export const bestScore: GameObjectConfig = {
   type: ObjectTypes.UI,
   pos: [5, 380],
   zIndex: 3000,
