@@ -1,10 +1,11 @@
 import Phaser from 'phaser';
 
+import { ObjectTypes } from '../objects/constants';
+
 import { moveWithSpeed } from './utils';
 
-import { GameObject } from '../../engine/core/object';
-import { GameRule } from './types';
-import { ObjectTypes } from '../objects/types';
+import type { GameObject } from '../../engine/core/object';
+import type { GameRule } from './types';
 
 export const bindPositionToLayer: GameRule = {
 	update(obj: GameObject) {

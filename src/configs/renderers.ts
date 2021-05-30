@@ -1,6 +1,7 @@
-import { ObjectTypes } from './objects/types';
-import { Effects } from './rules/types';
-import { GameObject } from '../engine/core/object';
+import { ObjectTypes } from './objects/constants';
+import { Effects } from './rules/constants';
+
+import type { GameObject } from '../engine/core/object';
 
 const ellipse = (
 	context: CanvasRenderingContext2D,

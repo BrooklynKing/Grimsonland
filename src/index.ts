@@ -7,14 +7,13 @@ const game = new Phaser.Game(
   768,
   Phaser.CANVAS,
   'main',
-  null,
+  PreLoading,
   false,
   false,
 );
 
-window.game = game;
-
-game.state.add('PreLoading', PreLoading, true);
 game.state.add('Loading', Loading);
 game.state.add('Battle', Battle);
 game.state.add('MainMenu', MainMenu);
+
+window.game = game;

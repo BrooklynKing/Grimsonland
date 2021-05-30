@@ -1,11 +1,13 @@
-import { GameRule } from '../../configs/rules/types';
+import * as objectConfigs from '../../configs/objects';
 import { GameObject, GameObjectConfig } from './object';
 
-import { objectConfigs, OBJECTS_ID, ObjectTypes } from '../../configs/objects';
-
+import type { GameRule } from '../../configs/rules/types';
+import type { ObjectTypes } from '../../configs/objects/constants';
 import type { Battle } from '../../states/battle';
 
-export interface IGameLayerConfig {
+type OBJECTS_ID = keyof typeof objectConfigs;
+
+export interface GameLayerConfig {
   id: string;
   background: string;
   state: Battle;
@@ -34,14 +36,14 @@ export class GameLayer {
 
   private inited: boolean;
 
-  private config: IGameLayerConfig;
+  private config: GameLayerConfig;
 
   private objects: { [key: string]: GameObject };
   private sortedObjects: { [key: string]: string[] };
   private rules: GameRule[];
   private objectsToBeRemoved: string[] = [];
 
-  constructor(config: IGameLayerConfig) {
+  constructor(config: GameLayerConfig) {
     this.config = config;
     this.id = config.id;
     this.state = config.state;

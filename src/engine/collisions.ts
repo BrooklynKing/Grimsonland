@@ -1,4 +1,4 @@
-import { GameObject } from './core/object';
+import type { GameObject } from './core/object';
 
 export const bootstrapCollisions = (config: { n: number; width: number; height: number }) => {
   const n = config.n || 6;

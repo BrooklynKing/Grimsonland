@@ -1,8 +1,9 @@
 import format from 'string-template';
 
-import { ObjectTypes } from '../objects/types';
-import { GameObject } from '../../engine/core/object';
-import { GameRule } from './types';
+import { ObjectTypes } from '../objects/constants';
+
+import type { GameObject } from '../../engine/core/object';
+import type { GameRule } from './types';
 
 export const countMonsterKilled: GameRule = {
 	update(obj: GameObject) {

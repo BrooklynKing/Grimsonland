@@ -1,6 +1,8 @@
 import * as rules from '../rules';
-import { GameObjectConfig } from '../../engine/core/object';
-import { ObjectTypes } from './types';
+
+import { ObjectTypes } from './constants';
+
+import type { GameObjectConfig } from '../../engine/core/object';
 
 export const tree1: GameObjectConfig = {
 	type: ObjectTypes.Terrain,

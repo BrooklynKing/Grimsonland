@@ -1,8 +1,9 @@
 import Phaser from 'phaser';
 
-import { ObjectTypes } from '../objects/types';
-import { GameLayer } from '../../engine/core/layer';
-import { GameRule } from './types';
+import { ObjectTypes } from '../objects/constants';
+
+import type { GameLayer } from '../../engine/core/layer';
+import type { GameRule } from './types';
 
 const TREES_COUNT = 100;
 const STONES_COUNT = 100;

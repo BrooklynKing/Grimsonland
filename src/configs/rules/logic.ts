@@ -1,10 +1,10 @@
 import Phaser from 'phaser';
 import format from 'string-template';
 
-import { ObjectTypes } from '../objects/types';
-import { GameObject } from '../../engine/core/object';
+import { ObjectTypes } from '../objects/constants';
 
-import { GameRule } from './types';
+import type { GameObject } from '../../engine/core/object';
+import type { GameRule } from './types';
 
 const monsterCount = [
 	10, 25, 50, 75, 100, 150, 200, 500, 1000, 2500, 5000, 10000,

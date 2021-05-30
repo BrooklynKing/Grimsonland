@@ -1,11 +1,11 @@
 import Phaser from 'phaser';
 
 import { bootstrapCollisions } from '../engine/collisions';
-import { GameLayer, IGameLayerConfig } from '../engine/core/layer';
+import { GameLayer, GameLayerConfig } from '../engine/core/layer';
 
 import * as rules from '../configs/rules/layers';
 
-const LAYER_CONFIG: Omit<IGameLayerConfig, 'ctx' | 'state' | 'init'> = {
+const LAYER_CONFIG: Omit<GameLayerConfig, 'ctx' | 'state' | 'init'> = {
   id: 'mainLayer',
   size: [1324, 1068],
   background: 'terrain',

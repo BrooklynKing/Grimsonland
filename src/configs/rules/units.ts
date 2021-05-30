@@ -2,10 +2,10 @@ import Phaser from 'phaser';
 
 import { moveWithSpeed } from './utils';
 
-import { ObjectTypes } from '../objects/types';
-import { GameObject } from '../../engine/core/object';
+import { ObjectTypes } from '../objects/constants';
 
-import { GameRule } from './types';
+import type { GameObject } from '../../engine/core/object';
+import type { GameRule } from './types';
 
 export const playerDeath: GameRule = {
 	update(obj: GameObject) {

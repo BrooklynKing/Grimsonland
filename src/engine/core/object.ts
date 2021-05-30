@@ -1,4 +1,3 @@
-import { GameLayer } from './layer';
 import { Sprite } from '../sprite';
 
 import { IMAGES_LIST } from '../../assets/list';
@@ -6,7 +5,8 @@ import { IMAGES_LIST } from '../../assets/list';
 import { collisions as collisionRule } from '../../configs/rules/etc';
 import * as renders from '../../configs/renderers';
 
-import { GameRule } from '../../configs/rules/types';
+import type { GameRule } from '../../configs/rules/types';
+import type { GameLayer } from './layer';
 
 export interface GameObjectConfig {
   pos?: Phaser.Point | [number, number];

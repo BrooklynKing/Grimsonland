@@ -1,10 +1,11 @@
 import Phaser, { Point } from 'phaser';
 
-import { ObjectTypes } from '../objects/types';
+import { ObjectTypes } from '../objects/constants';
 import { moveWithSpeed } from './utils';
-import { GameObject } from '../../engine/core/object';
+import { Effects } from './constants';
 
-import { Effects, GameRule } from './types';
+import type { GameObject } from '../../engine/core/object';
+import type { GameRule } from './types';
 
 export const fireball: GameRule = {
 	update(obj: GameObject) {

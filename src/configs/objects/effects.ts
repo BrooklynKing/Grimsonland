@@ -1,6 +1,7 @@
-import { GameObjectConfig } from '../../engine/core/object';
 import * as rules from '../rules';
-import { ObjectTypes } from './types';
+import { ObjectTypes } from './constants';
+
+import type { GameObjectConfig } from '../../engine/core/object';
 
 export const mbullet: GameObjectConfig = {
 	zIndex: 3,
