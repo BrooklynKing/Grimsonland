@@ -4,8 +4,7 @@ import { ObjectTypes } from '../objects/constants';
 
 import { moveWithSpeed } from './utils';
 
-import type { GameObject } from '../../engine/core/object';
-import type { GameRule } from './types';
+import type { GameObject, GameRule } from '../../engine';
 
 export const bindPositionToLayer: GameRule = {
 	update(obj: GameObject) {
@@ -128,17 +127,6 @@ export const rotateToMouse: GameRule = {
 
 		const directionToMouse = Phaser.Point.subtract(destination, obj.pos);
 		obj.sprite!.rotateToDirection(directionToMouse);
-	},
-};
-
-export const bindPositionToMouse: GameRule = {
-	update(obj: GameObject) {
-		const mousePosition = new Phaser.Point(
-			obj.layer.game.input.mousePointer.x,
-			obj.layer.game.input.mousePointer.y
-		);
-
-		obj.setPosition(mousePosition.clone());
 	},
 };
 

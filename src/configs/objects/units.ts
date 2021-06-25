@@ -1,15 +1,16 @@
 import * as rules from '../rules';
 
 import { ObjectTypes } from './constants';
+import { unit as unitRender, object as objectRender, sprite as spriteRender  } from '../renderers';
 
-import type { GameObjectConfig } from '../../engine/core/object';
+import type { GameObjectConfig } from '../../engine';
 
 export const player: GameObjectConfig = {
   zIndex: 20,
   sprite: ['hero', [0, 0], [32, 32], 6, [0, 1, 2]],
   pos: [662, 534],
   size: [25, 32],
-  render: 'unit',
+  render: unitRender,
   collisions: true,
   parameters: {
     speed: 150,
@@ -49,7 +50,7 @@ export const player: GameObjectConfig = {
 
 export const summonGate: GameObjectConfig = {
   zIndex: 0,
-  render: 'object',
+  render: objectRender,
   sprite: ['arcaneGate', [0, 0], [32, 32], 7, [0, 1]],
   pos: [466, 580],
   size: [25, 30],
@@ -72,7 +73,7 @@ export const monster: GameObjectConfig = {
   sprite: ['demons', [0, 128], [32, 32], 6, [0, 1, 2]],
   size: [20, 28],
   collisions: true,
-  render: 'unit',
+  render: unitRender,
   parameters: {
     speed: 25,
     cooldown: 70,
@@ -101,7 +102,7 @@ export const monsterBoomer: GameObjectConfig = {
   sprite: ['demons', [96, 128], [32, 32], 6, [0, 1, 2]],
   size: [20, 28],
   collisions: true,
-  render: 'unit',
+  render: unitRender,
   parameters: {
     speed: 100,
     exp: 30,
@@ -125,7 +126,7 @@ export const monsterBoss: GameObjectConfig = {
   collisions: true,
   sprite: ['bigMonsters', [0, 0], [32, 50], 6, [0, 1, 2]],
   size: [25, 40],
-  render: 'unit',
+  render: unitRender,
   parameters: {
     speed: 50,
     exp: 60,
@@ -153,7 +154,7 @@ export const monsterBoss2: GameObjectConfig = {
   collisions: true,
   sprite: ['boss', [0, 0], [96, 48], 6, [0, 1, 2]],
   size: [40, 45],
-  render: 'unit',
+  render: unitRender,
   parameters: {
     speed: 15,
     cooldown: 200,
@@ -178,7 +179,7 @@ export const monsterBoss2: GameObjectConfig = {
 
 export const heart: GameObjectConfig = {
   zIndex: 3,
-  render: 'object',
+  render: objectRender,
   collisions: true,
   size: [25, 25],
   sprite: ['pumpkin', [0, 0], [32, 32], 5, [0, 1]],
@@ -191,6 +192,7 @@ export const heart: GameObjectConfig = {
 };
 
 export const powerup: GameObjectConfig = {
+  render: spriteRender,
   zIndex: 2,
   size: [25, 25],
   collisions: true,

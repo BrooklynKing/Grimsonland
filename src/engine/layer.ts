@@ -1,28 +1,11 @@
-import * as objectConfigs from '../../configs/objects';
-import { GameObject, GameObjectConfig } from './object';
+import * as objectConfigs from "../configs/objects";
+import { GameObject } from "./object";
 
-import type { GameRule } from '../../configs/rules/types';
-import type { ObjectTypes } from '../../configs/objects/constants';
-import type { Battle } from '../../states/battle';
+import type { GameRule, GameLayerConfig, GameObjectConfig } from "./types";
+import type { ObjectTypes } from "../configs/objects/constants";
+import type { Battle } from "../states/battle";
 
-type OBJECTS_ID = keyof typeof objectConfigs;
-
-export interface GameLayerConfig {
-  id: string;
-  background: string;
-  state: Battle;
-  ctx: CanvasRenderingContext2D;
-  initList: OBJECTS_ID[];
-  translate: ITranslate;
-  rules: GameRule[];
-  size: number[];
-  init: () => void;
-}
-
-interface ITranslate {
-  x: number;
-  y: number;
-}
+export type OBJECTS_ID = keyof typeof objectConfigs;
 
 export class GameLayer {
   id: string;
@@ -52,7 +35,7 @@ export class GameLayer {
 
     this.background = this.ctx.createPattern(
       this.game.cache.getImage(config.background),
-      'repeat'
+      "repeat"
     ) as CanvasPattern;
 
     this.size = config.size || [this.ctx.canvas.width, this.ctx.canvas.height];
@@ -190,7 +173,7 @@ export class GameLayer {
       ).toString()}`,
     });
 
-    const type = config.type || 'default';
+    const type = config.type || "default";
 
     this.sortedObjects[type] = this.sortedObjects[type] || [];
     this.sortedObjects[type].push(obj.id);

@@ -1,33 +1,7 @@
-import { Sprite } from '../sprite';
+import { Sprite } from "./sprite";
 
-import { IMAGES_LIST } from '../../assets/list';
-
-import * as renders from '../../configs/renderers';
-
-import type { GameRule } from '../../configs/rules/types';
-import type { GameLayer } from './layer';
-
-export interface GameObjectConfig {
-  pos?: Phaser.Point | [number, number];
-  sprite?: [
-    IMAGES_LIST,
-    [number, number],
-    [number, number],
-    number?,
-    Array<number>?,
-    string?,
-    boolean?,
-    number?
-  ];
-  size?: number[];
-  type: string;
-  collisions?: boolean;
-  zIndex?: number;
-  parameters?: { [key: string]: any };
-  rules?: GameRule[];
-  conditions?: GameRule[];
-  render?: (keyof typeof renders)[] | keyof typeof renders | false;
-}
+import type { GameObjectConfig, GameRule, Render } from "./types";
+import type { GameLayer } from "./layer";
 
 export class GameObject {
   id: string;
@@ -36,16 +10,15 @@ export class GameObject {
   sprite?: Sprite;
   size?: number[];
   type: string;
-  shouldCheckCollisions: boolean;
   zIndex: number;
-
+  shouldCheckCollisions: boolean;
   collisions: {
     objects: GameObject[];
     cells: any[];
   };
   private rules: GameRule[];
   private conditions: GameRule[];
-  private renderers: (keyof typeof renders)[] | false;
+  private renderers: Render[];
 
   parameters: { [key: string]: any };
   readonly defaultParameters: { readonly [key: string]: any };
@@ -85,19 +58,17 @@ export class GameObject {
       this.size = config.size;
     }
 
-    this.type = config.type || 'default';
-
+    this.type = config.type || "default";
 
     this.zIndex = config.zIndex || 0;
     this.parameters = (config.parameters && { ...config.parameters }) || {};
     this.defaultParameters = { ...this.parameters };
 
-    this.renderers =
-      config.render === false
-        ? false
-        : Array.isArray(config.render)
+    this.renderers = config.render
+      ? Array.isArray(config.render)
         ? config.render
-        : [config.render || 'sprite'];
+        : [config.render]
+      : [];
 
     this.rules = [];
     const rulesForInit = config.rules || [];
@@ -123,9 +94,7 @@ export class GameObject {
   }
 
   render(dt: number) {
-    if (this.renderers) {
-      this.renderers.forEach((renderer) => renders[renderer](this, dt));
-    }
+    this.renderers.forEach((renderer) => renderer(this, dt));
   }
 
   update(dt: number) {
@@ -139,7 +108,7 @@ export class GameObject {
   updateCollisions() {
     if (this.shouldCheckCollisions) {
       this.collisions.objects = [];
-		  this.layer.state.collisions.updateObject(this);
+      this.layer.state.collisions.updateObject(this);
     }
   }
 

@@ -1,10 +1,8 @@
 import Phaser from 'phaser';
-import format from 'string-template';
 
 import { ObjectTypes } from '../objects/constants';
 
-import type { GameObject } from '../../engine/core/object';
-import type { GameRule } from './types';
+import type { GameObject, GameRule } from '../../engine';
 
 const monsterCount = [
 	10, 25, 50, 75, 100, 150, 200, 500, 1000, 2500, 5000, 10000,
@@ -62,8 +60,6 @@ export const monsterController: GameRule = {
 		}
 
 		const leftOnWave = obj.layer.getObjectByID(obj.parameters.leftOnWaveId);
-		leftOnWave.parameters.text = format(leftOnWave.parameters.template, {
-			count: obj.parameters.monsterKilled + '/' + obj.parameters.monsterOnWave,
-		});
+		leftOnWave.parameters.text = `LEFT ON THIS WAVE: ${obj.parameters.monsterKilled + '/' + obj.parameters.monsterOnWave}`;
 	},
 };

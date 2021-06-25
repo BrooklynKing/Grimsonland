@@ -2,7 +2,7 @@ import * as rules from '../rules';
 
 import { ObjectTypes } from './constants';
 
-import type { GameObjectConfig } from '../../engine/core/object';
+import type { GameObjectConfig } from '../../engine';
 
 export const monsterController: GameObjectConfig = {
 	render: false,

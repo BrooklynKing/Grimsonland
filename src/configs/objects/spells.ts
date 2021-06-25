@@ -1,7 +1,8 @@
 import * as rules from '../rules';
 import { ObjectTypes } from './constants';
+import { object as objectRender, spell as spellRender } from '../renderers';
 
-import type { GameObjectConfig } from '../../engine/core/object';
+import type { GameObjectConfig } from '../../engine';
 
 export const fireballSpell: GameObjectConfig = {
 	zIndex: 5000,
@@ -9,7 +10,7 @@ export const fireballSpell: GameObjectConfig = {
 	pos: [449, 748],
 
 	size: [32, 32],
-	render: 'spell',
+	render: spellRender,
 	parameters: {
 		bulletsFired: 0,
 		cooldown: 20,
@@ -24,7 +25,7 @@ export const hellfireSpell: GameObjectConfig = {
 	pos: [491, 748],
 
 	size: [32, 32],
-	render: 'spell',
+	render: spellRender,
 	parameters: {
 		bulletsFired: 0,
 		cooldown: 800,
@@ -38,7 +39,7 @@ export const frostShardSpell: GameObjectConfig = {
 	sprite: ['spellIcons', [224, 96], [32, 32]],
 	pos: [533, 748],
 	size: [32, 32],
-	render: 'spell',
+	render: spellRender,
 	parameters: {
 		shardsFired: 0,
 		cooldown: 500,
@@ -52,7 +53,7 @@ export const teleportSpell: GameObjectConfig = {
 	sprite: ['spellIcons', [64, 32], [32, 32]],
 	pos: [575, 748],
 	size: [32, 32],
-	render: 'spell',
+	render: spellRender,
 	parameters: {
 		power: 200,
 		teleportGates: 0,
@@ -64,7 +65,7 @@ export const teleportSpell: GameObjectConfig = {
 
 export const teleportGate: GameObjectConfig = {
 	zIndex: 0,
-	render: 'object',
+	render: objectRender,
 	sprite: ['arcaneGate', [0, 0], [32, 32], 7, [0, 1]],
 	pos: [466, 580],
 	size: [32, 32],
@@ -78,7 +79,7 @@ export const teleportGate: GameObjectConfig = {
 export const bullet: GameObjectConfig = {
 	zIndex: 3,
 	collisions: true,
-	render: 'object',
+	render: objectRender,
 	sprite: ['fireball', [0, 0], [33, 33], 16, [0, 1, 2, 3]],
 	size: [25, 25],
 	type: ObjectTypes.SpellElement,
@@ -99,7 +100,7 @@ export const bullet: GameObjectConfig = {
 export const hellfireTube: GameObjectConfig = {
 	zIndex: 3,
 	collisions: true,
-	render: 'object',
+	render: objectRender,
 	sprite: [
 		'hellfire',
 		[0, 0],
@@ -122,7 +123,7 @@ export const hellfireTube: GameObjectConfig = {
 
 export const frostShard: GameObjectConfig = {
 	zIndex: 3,
-	render: 'object',
+	render: objectRender,
 	collisions: true,
 	sprite: ['effects', [96, 0], [32, 32], 10, [0, 1, 2]],
 	type: ObjectTypes.SpellElement,

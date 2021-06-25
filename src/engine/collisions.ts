@@ -1,6 +1,10 @@
-import type { GameObject } from './core/object';
+import type { GameObject } from "./object";
 
-export const bootstrapCollisions = (config: { n: number; width: number; height: number }) => {
+export const bootstrapCollisions = (config: {
+  n: number;
+  width: number;
+  height: number;
+}) => {
   const n = config.n || 6;
   const width = config.width || 800;
   const height = config.height || 600;
@@ -88,11 +92,9 @@ export const bootstrapCollisions = (config: { n: number; width: number; height: 
                   objects[l].size
                 )
               ) {
-                objects[k].collisions.objects.indexOf(objects[l]) ===
-                  -1 &&
+                objects[k].collisions.objects.indexOf(objects[l]) === -1 &&
                   objects[k].collisions.objects.push(objects[l]);
-                objects[l].collisions.objects.indexOf(objects[k]) ===
-                  -1 &&
+                objects[l].collisions.objects.indexOf(objects[k]) === -1 &&
                   objects[l].collisions.objects.push(objects[k]);
               }
             }
@@ -111,10 +113,7 @@ export const bootstrapCollisions = (config: { n: number; width: number; height: 
     y2: number,
     width2: number,
     height2: number
-  ) => (x < x2 + width2 &&
-    x + width > x2 &&
-    y < y2 + height2 &&
-    y + height > y2);
+  ) => x < x2 + width2 && x + width > x2 && y < y2 + height2 && y + height > y2;
 
   const boxCollides = (
     pos: Phaser.Point,

@@ -4,8 +4,7 @@ import { moveWithSpeed } from './utils';
 
 import { ObjectTypes } from '../objects/constants';
 
-import type { GameObject } from '../../engine/core/object';
-import type { GameRule } from './types';
+import type { GameObject, GameRule } from '../../engine';
 
 export const playerDeath: GameRule = {
 	update(obj: GameObject) {

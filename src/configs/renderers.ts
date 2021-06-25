@@ -1,7 +1,7 @@
 import { ObjectTypes } from './objects/constants';
 import { Effects } from './rules/constants';
 
-import type { GameObject } from '../engine/core/object';
+import type { Render } from '../engine';
 
 const ellipse = (
 	context: CanvasRenderingContext2D,
@@ -256,5 +256,3 @@ export const text: Render = (obj) => {
 
 	ctx.translate(obj.layer.translate.x, obj.layer.translate.y);
 };
-
-export type Render = (obj: GameObject, dt: number) => void;

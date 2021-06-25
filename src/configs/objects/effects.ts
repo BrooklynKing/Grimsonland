@@ -1,14 +1,15 @@
 import * as rules from '../rules';
 import { ObjectTypes } from './constants';
+import { object as objectRender, fog as fogRender, sprite as spriteRender } from '../renderers';
 
-import type { GameObjectConfig } from '../../engine/core/object';
+import type { GameObjectConfig } from '../../engine';
 
 export const mbullet: GameObjectConfig = {
 	zIndex: 3,
 	collisions: true,
 	sprite: ['darkblast', [0, 0], [38, 38], 12, [0, 1, 2, 3]],
 	type: ObjectTypes.MonsterSpellElement,
-	render: 'object',
+	render: objectRender,
 	size: [32, 32],
 	conditions: [rules.damageOnPlayerCollision, rules.destroyOnPlayerCollision],
 	parameters: {
@@ -27,7 +28,7 @@ export const mbullet2: GameObjectConfig = {
 	collisions: true,
 	sprite: ['bossSpell', [0, 0], [30, 26], 10, [0, 1, 2]],
 	type: ObjectTypes.MonsterSpellElement,
-	render: 'object',
+	render: objectRender,
 	size: [28, 24],
 	conditions: [rules.monsterBoss2Bullet],
 	parameters: {
@@ -45,6 +46,7 @@ export const mbullet2: GameObjectConfig = {
 };
 
 export const blood: GameObjectConfig = {
+	render: spriteRender,
 	type: ObjectTypes.Effect,
 	zIndex: 2,
 	sprite: ['monsterBlood', [0, 0], [32, 13]],
@@ -55,6 +57,7 @@ export const blood: GameObjectConfig = {
 };
 
 export const bloodSpray: GameObjectConfig = {
+	render: spriteRender,
 	type: ObjectTypes.Effect,
 	zIndex: 2,
 	sprite: [
@@ -72,7 +75,7 @@ export const bloodSpray: GameObjectConfig = {
 
 export const explosion: GameObjectConfig = {
 	type: ObjectTypes.Effect,
-	render: 'object',
+	render: objectRender,
 	size: [39, 39],
 	sprite: [
 		'explosions',
@@ -87,7 +90,7 @@ export const explosion: GameObjectConfig = {
 };
 
 export const monsterExplosion: GameObjectConfig = {
-	render: 'object',
+	render: objectRender,
 	collisions: true,
 	type: ObjectTypes.SpellEffect,
 	conditions: [rules.monsterExplosion],
@@ -105,7 +108,7 @@ export const monsterExplosion: GameObjectConfig = {
 };
 
 export const spellExplosion: GameObjectConfig = {
-	render: 'object',
+	render: objectRender,
 	collisions: true,
 	type: ObjectTypes.SpellEffect,
 	conditions: [rules.spellExplosion],
@@ -123,7 +126,7 @@ export const spellExplosion: GameObjectConfig = {
 };
 
 export const fog: GameObjectConfig = {
-	render: 'fog',
+	render: fogRender,
 	zIndex: 2500,
 	type: ObjectTypes.Effect,
 };

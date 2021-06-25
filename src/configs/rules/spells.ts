@@ -4,8 +4,7 @@ import { ObjectTypes } from '../objects/constants';
 import { moveWithSpeed } from './utils';
 import { Effects } from './constants';
 
-import type { GameObject } from '../../engine/core/object';
-import type { GameRule } from './types';
+import type { GameObject, GameRule } from '../../engine';
 
 export const fireball: GameRule = {
 	update(obj: GameObject) {
