@@ -1,7 +1,7 @@
-import { Sprite } from "./sprite";
+import { Sprite } from './sprite';
 
-import type { GameObjectConfig, GameRule, Render } from "./types";
-import type { GameLayer } from "./layer";
+import type { GameObjectConfig, GameRule, Render } from './types';
+import type { GameLayer } from './layer';
 
 export class GameObject {
   id: string;
@@ -58,7 +58,7 @@ export class GameObject {
       this.size = config.size;
     }
 
-    this.type = config.type || "default";
+    this.type = config.type || 'default';
 
     this.zIndex = config.zIndex || 0;
     this.parameters = (config.parameters && { ...config.parameters }) || {};

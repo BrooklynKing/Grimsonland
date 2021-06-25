@@ -1,9 +1,12 @@
 import Phaser from 'phaser';
 
-import { bootstrapCollisions } from '../engine/collisions';
-import { GameLayer } from '../engine';
-
-import * as rules from '../configs/rules/layers';
+import { bootstrapCollisions, GameLayer } from '../engine';
+import {
+  randomTrees,
+  spawnExp,
+  spawnHeart,
+  goWithPlayer,
+} from '../configs/rules/layers';
 
 import type { GameLayerConfig } from '../engine';
 
@@ -30,12 +33,7 @@ const LAYER_CONFIG: Omit<GameLayerConfig, 'ctx' | 'state' | 'init'> = {
     x: -150,
     y: -150,
   },
-  rules: [
-    rules.randomTrees,
-    rules.spawnHeart,
-    rules.spawnExp,
-    rules.goWithPlayer,
-  ],
+  rules: [randomTrees, spawnExp, spawnHeart, goWithPlayer],
 };
 
 export class Battle extends Phaser.State {
@@ -148,7 +146,7 @@ export class Battle extends Phaser.State {
     this.restartButton.revive();
     this.restartText.revive();
     this.game.renderer.view.classList.remove('no-pointer');
-    
+
     this.pauseFlag = true;
   }
 
