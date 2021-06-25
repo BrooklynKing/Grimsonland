@@ -115,24 +115,6 @@ export const dynamicZIndex: GameRule = {
 	},
 };
 
-export const collisions: GameRule = {
-	init(obj: GameObject) {
-		const collisions: {
-			objects: GameObject[];
-			cells: any[];
-		} = {
-			objects: [],
-			cells: [],
-		};
-
-		obj.parameters.collisions = collisions;
-		obj.layer.state.collisions.updateObject(obj);
-	},
-	update(obj: GameObject) {
-		obj.parameters.collisions.objects.splice(0);
-		obj.layer.state.collisions.updateObject(obj);
-	},
-};
 
 export const rotateToMouse: GameRule = {
 	update(obj: GameObject) {

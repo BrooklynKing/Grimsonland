@@ -2,7 +2,6 @@ import { Sprite } from '../sprite';
 
 import { IMAGES_LIST } from '../../assets/list';
 
-import { collisions as collisionRule } from '../../configs/rules/etc';
 import * as renders from '../../configs/renderers';
 
 import type { GameRule } from '../../configs/rules/types';
@@ -40,11 +39,12 @@ export class GameObject {
   shouldCheckCollisions: boolean;
   zIndex: number;
 
-  private collisions?: GameRule;
+  collisions: {
+    objects: GameObject[];
+    cells: any[];
+  };
   private rules: GameRule[];
-  private _rulesForInit: GameObjectConfig['rules'];
   private conditions: GameRule[];
-  private _conditionsForInit: GameObjectConfig['conditions'];
   private renderers: (keyof typeof renders)[] | false;
 
   parameters: { [key: string]: any };
@@ -87,15 +87,10 @@ export class GameObject {
 
     this.type = config.type || 'default';
 
-    this.shouldCheckCollisions = Boolean(config.collisions);
+
     this.zIndex = config.zIndex || 0;
     this.parameters = (config.parameters && { ...config.parameters }) || {};
     this.defaultParameters = { ...this.parameters };
-
-    this.rules = [];
-    this.conditions = [];
-    this._rulesForInit = config.rules || [];
-    this._conditionsForInit = config.conditions || [];
 
     this.renderers =
       config.render === false
@@ -104,16 +99,27 @@ export class GameObject {
         ? config.render
         : [config.render || 'sprite'];
 
-    if (this.shouldCheckCollisions) {
-      this.collisions = collisionRule;
-      this.collisions.init?.(this);
-    }
-    this._rulesForInit.forEach((rule) => {
+    this.rules = [];
+    const rulesForInit = config.rules || [];
+    rulesForInit.forEach((rule) => {
       this.addRule(rule);
     });
-    this._conditionsForInit.forEach((condition) => {
+
+    this.conditions = [];
+    const conditionsForInit = config.conditions || [];
+    conditionsForInit.forEach((condition) => {
       this.addCondition(condition);
     });
+
+    this.collisions = {
+      objects: [],
+      cells: [],
+    };
+    this.shouldCheckCollisions = Boolean(config.collisions);
+
+    if (this.shouldCheckCollisions) {
+      this.layer.state.collisions.updateObject(this);
+    }
   }
 
   render(dt: number) {
@@ -130,8 +136,11 @@ export class GameObject {
     this.conditions.forEach((condition) => condition.update?.(this, dt));
   }
 
-  updateCollisions(dt: number) {
-    this.collisions && this.collisions.update?.(this, dt);
+  updateCollisions() {
+    if (this.shouldCheckCollisions) {
+      this.collisions.objects = [];
+		  this.layer.state.collisions.updateObject(this);
+    }
   }
 
   setPosition(point: Phaser.Point) {

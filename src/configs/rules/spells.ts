@@ -98,7 +98,7 @@ export const hellfire: GameRule = {
 
 export const slowEnemies: GameRule = {
 	update(obj: GameObject) {
-		const { objects } = obj.parameters.collisions;
+		const { objects } = obj.collisions;
 
 		for (let i = 0; i < objects.length; i++) {
 			if (objects[i].type == 'monster') {
@@ -205,7 +205,7 @@ export const frostShard: GameRule = {
 
 export const bulletMonsterCollision: GameRule = {
 	update(obj: GameObject) {
-		const { objects } = obj.parameters.collisions;
+		const { objects } = obj.collisions;
 
 		for (let i = 0, l = objects.length; i < l; i++) {
 			if (objects[i].type == 'monster') {
@@ -229,7 +229,7 @@ export const bulletMonsterCollision: GameRule = {
 
 export const hellTubeMonsterCollision: GameRule = {
 	update(obj: GameObject) {
-		const { objects } = obj.parameters.collisions;
+		const { objects } = obj.collisions;
 
 		for (let i = 0, l = objects.length; i < l; i++) {
 			if (objects[i].type == 'monster') {

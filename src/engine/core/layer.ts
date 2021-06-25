@@ -132,7 +132,7 @@ export class GameLayer {
     }
 
     for (let i in this.objects) {
-      this.objects[i].updateCollisions(dt);
+      this.objects[i].updateCollisions();
     }
 
     this.state.collisions.check();

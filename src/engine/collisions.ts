@@ -19,7 +19,7 @@ export const bootstrapCollisions = (config: { n: number; width: number; height: 
   };
 
   const removeObject = (object: GameObject) => {
-    const oldCells = object.parameters.collisions.cells;
+    const oldCells = object.collisions.cells;
 
     for (let i = 0; i < oldCells.length; i++) {
       cellGrid[oldCells[i]] &&
@@ -50,7 +50,7 @@ export const bootstrapCollisions = (config: { n: number; width: number; height: 
 
   const updateObject = (object: GameObject) => {
     const cells = getPointsOfObject(object);
-    const oldCells = object.parameters.collisions.cells;
+    const oldCells = object.collisions.cells;
 
     for (let i = 0; i < cells.length; i++) {
       if (oldCells[i] !== cells[i]) {
@@ -88,12 +88,12 @@ export const bootstrapCollisions = (config: { n: number; width: number; height: 
                   objects[l].size
                 )
               ) {
-                objects[k].parameters.collisions.objects.indexOf(objects[l]) ===
+                objects[k].collisions.objects.indexOf(objects[l]) ===
                   -1 &&
-                  objects[k].parameters.collisions.objects.push(objects[l]);
-                objects[l].parameters.collisions.objects.indexOf(objects[k]) ===
+                  objects[k].collisions.objects.push(objects[l]);
+                objects[l].collisions.objects.indexOf(objects[k]) ===
                   -1 &&
-                  objects[l].parameters.collisions.objects.push(objects[k]);
+                  objects[l].collisions.objects.push(objects[k]);
               }
             }
           }

@@ -17,7 +17,7 @@ export const playerDeath: GameRule = {
 
 export const damageOnPlayerCollision: GameRule = {
 	update(obj: GameObject) {
-		const { objects } = obj.parameters.collisions;
+		const { objects } = obj.collisions;
 
 		for (let i = 0; i < objects.length; i++) {
 			if (objects[i].type == 'player') {
@@ -31,7 +31,7 @@ export const damageOnPlayerCollision: GameRule = {
 
 export const destroyOnPlayerCollision: GameRule = {
 	update(obj: GameObject) {
-		const { objects } = obj.parameters.collisions;
+		const { objects } = obj.collisions;
 
 		for (let i = 0; i < objects.length; i++) {
 			if (objects[i].type == 'player') {
@@ -47,7 +47,7 @@ export const destroyOnPlayerCollision: GameRule = {
 
 export const triggerOnPlayerCollision: GameRule = {
 	update(obj: GameObject) {
-		const { objects } = obj.parameters.collisions;
+		const { objects } = obj.collisions;
 
 		for (let i = 0; i < objects.length; i++) {
 			if (objects[i].type == 'player') {
@@ -75,7 +75,7 @@ export const triggerOnPlayerCollision: GameRule = {
 export const meleeAttack: GameRule = {
 	update(obj: GameObject) {
 		if (!obj.parameters.meleeCooldown) {
-			const { objects } = obj.parameters.collisions;
+			const { objects } = obj.collisions;
 
 			for (let i = 0; i < objects.length; i++) {
 				if (objects[i].type == 'player') {
@@ -99,7 +99,7 @@ export const meleeAttack: GameRule = {
 export const spellExplosion: GameRule = {
 	update(obj: GameObject) {
 		if (!obj.parameters.exploded) {
-			const { objects } = obj.parameters.collisions;
+			const { objects } = obj.collisions;
 
 			for (let i = 0, l = objects.length; i < l; i++) {
 				if (objects[i].parameters.health && objects[i].type !== 'player') {
@@ -117,7 +117,7 @@ export const spellExplosion: GameRule = {
 export const monsterExplosion: GameRule = {
 	update(obj: GameObject) {
 		if (!obj.parameters.exploded) {
-			const { objects } = obj.parameters.collisions;
+			const { objects } = obj.collisions;
 
 			for (let i = 0, l = objects.length; i < l; i++) {
 				if (objects[i].parameters.health) {
@@ -177,7 +177,7 @@ export const monsterExplosionCondition: GameRule = {
 		if (obj.parameters.health <= 0) {
 			generateExplosions(obj);
 		} else {
-			const { objects } = obj.parameters.collisions;
+			const { objects } = obj.collisions;
 
 			for (let i = 0; i < objects.length; i++) {
 				if (objects[i].type == 'player') {
@@ -192,7 +192,7 @@ export const monsterExplosionCondition: GameRule = {
 
 export const stopOnCollisionWithPlayer: GameRule = {
 	update(obj: GameObject) {
-		const { objects } = obj.parameters.collisions;
+		const { objects } = obj.collisions;
 
 		for (let i = 0, l = objects.length; i < l; i++) {
 			if (objects[i].type == 'player') {
@@ -341,7 +341,7 @@ const createExplosion = (obj: GameObject) => {
 export const monsterBoss2Bullet: GameRule = {
 	update(obj: GameObject) {
 		const cooldown = obj.parameters.cooldown;
-		const { objects } = obj.parameters.collisions;
+		const { objects } = obj.collisions;
 
 		if (cooldown == 0) {
 			obj.layer.removeObjectOnNextTick(obj.id);
@@ -403,7 +403,7 @@ export const selectSpellWithKeyboard: GameRule = {
 
 export const triggerOnPlayerCollisionPowerUp: GameRule = {
 	update(obj: GameObject) {
-		const { objects } = obj.parameters.collisions;
+		const { objects } = obj.collisions;
 
 		for (let i = 0; i < objects.length; i++) {
 			if (objects[i].type == 'player') {
